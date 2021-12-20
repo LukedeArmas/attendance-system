@@ -1,0 +1,23 @@
+<% layout('./layouts/boilerplate.ejs') %>
+<h1>Student</h1>
+<p><strong>Name: </strong><%= student.firstName %> <%= student.lastName %></p>
+<p><strong>Student ID: </strong> <%= student.studentId %></p>
+<p>
+  <strong>Currently Enrolled Classes: </strong>
+  <ul>
+      <% for (let singleClass of student.classesEnrolled) { %> 
+        <li>
+       <%= singleClass.className %>
+        </li>
+      <% } %>
+  </ul>
+</p>
+<a class="btn btn-primary" href="/student/<%= student._id %>/edit"
+  >Edit Student</a
+>
+<br />
+<br />
+<form action="/student/<%= student._id %>?_method=DELETE" method="POST">
+  <button class="btn btn-danger" type="submit">Delete</button>
+</form>
+<br />

@@ -1,0 +1,75 @@
+<% layout('./layouts/boilerplate.ejs') %>
+<div class="row">
+  <div class="col-6 offset-3">
+    <h1 class="text-center">Edit Class</h1>
+    <form
+      class="validated"
+      action="/class/<%= singleClass._id %>?_method=PUT"
+      method="POST"
+      novalidate
+    >
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="id">Teacher</label>
+        <input
+          class="form-control"
+          type="text"
+          id="id"
+          name="myClass[teacher]"
+          value="<%= singleClass.teacher %>"
+          required
+        />
+      </div>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="CName">Class Name</label>
+        <input
+          class="form-control"
+          type="text"
+          id="CName"
+          name="myClass[className]"
+          value="<%= singleClass.className %>"
+          required
+        />
+      </div>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="CCode">Class Code</label>
+        <input
+          class="form-control"
+          type="text"
+          id="CCode"
+          name="myClass[classCode]"
+          value="<%= singleClass.classCode %>"
+          required
+        />
+      </div>
+      <% const sections = [1,2,3,4] %>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="section">Section</label>
+        <select class="form-select" id="section" name="myClass[section]">
+          <% for (let section of sections) { var selectedSection =
+          (singleClass.section == section) ? 'selected' : '' %>
+          <option <%- selectedSection %>
+            value="<%= section %>" ><%= section %>
+          </option>
+          <% } %>
+        </select>
+      </div>
+      <% const subjects = ['General', 'Computer Science', 'Mathematics',
+      'Political Science', 'History'] %>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="subject">Subject</label>
+        <select class="form-select" id="subject" name="myClass[subject]">
+          <% for (let subject of subjects) { var selectedSubject =
+          (singleClass.subject == subject) ? 'selected' : '' %>
+          <option <%- selectedSubject %>
+            value="<%= subject %>" ><%= subject %>
+          </option>
+          <% } %>
+        </select>
+      </div>
+      <br />
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <button class="btn btn-primary" type="submit">Edit</button>
+      </div>
+    </form>
+  </div>
+</div>

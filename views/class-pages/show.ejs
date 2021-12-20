@@ -1,0 +1,50 @@
+<% layout('./layouts/boilerplate.ejs') %>
+
+<h1><%= singleClass.className %>
+</h1>
+<p>
+  <strong>Teacher:</strong> <%= singleClass.teacher %>
+  <br />
+  <strong>Class Code: </strong> <%= singleClass.classCode %>
+  <br>
+  <strong>Section: </strong> <%= singleClass.section %>
+  <br>
+  <strong>Subject: </strong> <%= singleClass.subject %>
+  <br>
+  <a class="btn btn-primary btn-sm" href="/class/<%= singleClass._id %>/edit"
+  >Edit Class</a
+>
+<a class="btn btn-primary btn-sm" href="/class/<%= singleClass._id %>/addStudent">Add Students</a>
+<a class="btn btn-primary btn-sm" href="/class/<%= singleClass._id %>/removeStudent">Remove Students</a>
+<form action="/class/<%= singleClass._id %>?_method=DELETE" method="POST">
+  <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+</form>
+  <br>
+  <strong>Students:</strong>
+        <table class="table table-light table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Student ID</th>
+          <th scope="col">First</th>
+          <th scope="col">Last</th>
+          <th scope="col">Options</th>
+        </tr>
+      </thead>
+  <% if (singleClass.studentsInClass.length) { %> 
+      <tbody>
+    <% for (let student of singleClass.studentsInClass) { %>
+        <tr>
+          <th scope="row"><%= student.studentId %></th>
+          <td><%= student.firstName %></td>
+          <td><%= student.lastName %></td>
+          <td>
+            <a class="btn btn-primary" href="/student/<%= student._id %>"
+              >View</a
+            >
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+   <% } %> 
+</p>

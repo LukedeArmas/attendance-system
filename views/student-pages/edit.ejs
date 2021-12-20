@@ -1,0 +1,49 @@
+<% layout('./layouts/boilerplate.ejs') %>
+<div class="row">
+  <div class="col-6 offset-3">
+    <h1 class="text-center">Edit Student</h1>
+    <form
+      class="validated"
+      action="/student/<%= student._id %>?_method=PUT"
+      method="POST"
+      novalidate
+    >
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="id">Student ID</label>
+        <input
+          class="form-control"
+          type="text"
+          id="id"
+          name="student[studentId]"
+          value="<%= student.studentId %>"
+          required
+        />
+      </div>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="fName">First Name</label>
+        <input
+          class="form-control"
+          type="text"
+          id="fName"
+          name="student[firstName]"
+          value="<%= student.firstName %>"
+          required
+        />
+      </div>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="lName">Last Name</label>
+        <input
+          class="form-control"
+          type="text"
+          id="lName"
+          name="student[lastName]"
+          value="<%= student.lastName %>"
+          required
+        />
+      </div>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <button class="btn btn-primary" type="submit">Edit</button>
+      </div>
+    </form>
+  </div>
+</div>

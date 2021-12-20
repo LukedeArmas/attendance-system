@@ -1,0 +1,55 @@
+<% layout('./layouts/boilerplate.ejs') %>
+<h1 class="text-center mb-3">
+  Remove Students from <%= singleClass.className %>
+</h1>
+<div class="row">
+  <div class="col-sm-10 offset-sm-1">
+    <form
+      action="/class/<%= singleClass._id %>/removeStudent?_method=PUT"
+      method="POST"
+    >
+      <table class="table table-light table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Student ID</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Options</th>
+            <th scope="col">Remove Student</th>
+          </tr>
+        </thead>
+        <% if (singleClass.studentsInClass.length) { %>
+        <tbody>
+          <% for (let student of singleClass.studentsInClass) { %>
+          <tr>
+            <th scope="row"><%= student.studentId %></th>
+            <td><%= student.firstName %></td>
+            <td><%= student.lastName %></td>
+            <td>
+              <a class="btn btn-primary" href="/student/<%= student._id %>"
+                >View</a
+              >
+            </td>
+            <td>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  name="studentList[]"
+                  value="<%= student._id %>"
+                  type="checkbox"
+                  id="removeStudent"
+                />
+                <label class="form-check-label" for="removeStudent">
+                  Remove
+                </label>
+              </div>
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <% } %>
+      <button class="btn btn-primary" type="submit">Remove Students</button>
+    </form>
+  </div>
+</div>
