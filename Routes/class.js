@@ -1,24 +1,23 @@
 const express = require('express')
 const router = express.Router()
-const mongoose = require('mongoose')
 const Class = require('../models/class.js')
 const Student = require('../models/student.js')
 const asyncError = require('../utils/asyncError.js')
 const myError = require('../utils/myError.js')
-const {validateClass} = require('../middleware.js')
-const { studentSchema } = require('../joi-schemas.js')
-const { updateMany } = require('../models/class.js')
+const {validateClass, validateAddStudentToClass, validateRemoveStudentFromClass, checkSearch} = require('../middleware.js')
 
 
 router.get('/', asyncError(async (req, res) => {
-    const classes = await Class.find().populate({
+    const {search} = req.query
+    const query = checkSearch(search)
+    const classes = await Class.find(query).populate({
         path: 'attendance',
         populate: {
             path: 'studentsPresent'
         }
     })
     .populate('studentsInClass')
-    res.render('class-pages/home', {classes})
+    res.render('class-pages/home', {classes, query})
 }))
 
 router.post('/', validateClass, asyncError(async (req, res) => {
@@ -67,14 +66,18 @@ router.delete('/:id', asyncError(async (req, res) => {
     res.redirect('/class')
 }))
 
-router.get('/:id/addStudent', asyncError(async (req, res) => {
+router.use(function(req, res, next) {
+    res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0')
+    next()
+})
+.get('/:id/addStudent', asyncError(async (req, res) => {
     const {id} = req.params
     const singleClass = await Class.findById(id)
     const students = await Student.find({classesEnrolled: {$ne: id}})
-    res.render('class-pages/class-student-pages/add-student', {singleClass, students})
+    res.render('class-student-pages/add-student', {singleClass, students})
 }))
 
-router.put('/:id/addStudent', asyncError(async (req, res) => {
+router.put('/:id/addStudent', validateAddStudentToClass, asyncError(async (req, res, next) => {
     const {id} = req.params
     const {studentList} = req.body
     const singleClass = await Class.findById(id)
@@ -85,7 +88,11 @@ router.put('/:id/addStudent', asyncError(async (req, res) => {
     res.redirect(`/class/${id}`)
 }))
 
-router.get('/:id/removeStudent', asyncError(async (req, res) => {
+router.use(function(req, res, next) {
+    res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0')
+    next()
+})
+.get('/:id/removeStudent', asyncError(async (req, res) => {
     const {id} = req.params
     const singleClass = await Class.findById(id).populate({
         path: 'attendance',
@@ -97,10 +104,10 @@ router.get('/:id/removeStudent', asyncError(async (req, res) => {
     if (!singleClass) {
         return next(new myError(404, "This class does not exist"))
     }
-    res.render('class-pages/class-student-pages/remove-student', {singleClass})
+    res.render('class-student-pages/remove-student', {singleClass})
 }))
 
-router.put('/:id/removeStudent', asyncError(async (req, res) => {
+router.put('/:id/removeStudent', validateRemoveStudentFromClass, asyncError(async (req, res, next) => {
     const {id} = req.params
     const {studentList} = req.body
     const singleClass = await Class.findById(id)

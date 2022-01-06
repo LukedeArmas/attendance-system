@@ -1,0 +1,57 @@
+<% layout('./layouts/boilerplate.ejs') %>
+<!-- <h1 class="text-center mb-3"><%= singleClass.className %></h1> -->
+<div
+  class="d-flex justify-content-center justify-content-md-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+  <h1 class="h2 text-nowrap"><%= singleClass.className %></h1>
+</div>
+<form
+  action="/class/<%= singleClass._id %>/addStudent?_method=PUT"
+  method="POST"
+  enctype="raw"
+>
+  <table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col" class="px-0"></th>
+        <th scope="col">Student ID</th>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th class="text-center" scope="col">Options</th>
+        <th scope="col">Add Student</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% var num = 1; for (let student of students) { %>
+      <tr>
+        <th scope="row" class="text-center ps-0"><%= num %>.</th>
+        <td><%= student.studentId %></td>
+        <td><%= student.firstName %></td>
+        <td><%= student.lastName %></td>
+        <td class="text-center">
+          <a
+            class="btn btn-outline-secondary px-3 py-1"
+            href="/student/<%= student._id %>"
+            ><i class="fa fa-user"></i
+          ></a>
+        </td>
+        <td class="ps-4">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              name="studentList[]"
+              value="<%= student._id %>"
+              type="checkbox"
+              id="addStudent"
+            />
+            <label class="form-check-label" for="addStudent"> Add </label>
+          </div>
+        </td>
+      </tr>
+      <% num++ } %>
+    </tbody>
+  </table>
+  <button class="btn btn-outline-primary mb-3" type="submit">
+    Add Students
+  </button>
+</form>

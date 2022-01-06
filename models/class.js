@@ -48,6 +48,9 @@ const classSchema = new Schema({
     ]
 })
 
+classSchema.index({teacher: 'text', className: 'text', classCode: 'text', subject: 'text'})
+
+
 classSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
         await mongoose.model('Student').updateMany({

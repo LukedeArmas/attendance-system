@@ -1,23 +1,33 @@
-<% layout('./layouts/boilerplate.ejs') %>
-<h1>Student</h1>
-<p><strong>Name: </strong><%= student.firstName %> <%= student.lastName %></p>
+<% layout('./layouts/boilerplate.ejs') %> <%-
+include('../partials/show-header.ejs', {type: student, typeName: 'student',
+name: `${student.firstName} ${student.lastName}`}) %>
 <p><strong>Student ID: </strong> <%= student.studentId %></p>
-<p>
-  <strong>Currently Enrolled Classes: </strong>
-  <ul>
-      <% for (let singleClass of student.classesEnrolled) { %> 
-        <li>
-       <%= singleClass.className %>
-        </li>
-      <% } %>
-  </ul>
-</p>
-<a class="btn btn-primary" href="/student/<%= student._id %>/edit"
-  >Edit Student</a
->
-<br />
-<br />
-<form action="/student/<%= student._id %>?_method=DELETE" method="POST">
-  <button class="btn btn-danger" type="submit">Delete</button>
-</form>
-<br />
+<p class="h4 mb-3">Currently Enrolled Classes:</p>
+<table class="table table-light table-hover mb-3">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col" class="px-0"></th>
+      <th scope="col">Class Code</th>
+      <th scope="col">Class Name</th>
+      <th scope="col">Teacher</th>
+      <th scope="col" class="text-center">Options</th>
+    </tr>
+  </thead>
+  <tbody class="table">
+    <% var num=1; for (let singleClass of student.classesEnrolled) { %>
+    <tr>
+      <th scope="row" class="text-center"><%= num %>.</th>
+      <td><%= singleClass.classCode %></td>
+      <td><%= singleClass.className %></td>
+      <td><%= singleClass.teacher %></td>
+      <td class="text-center">
+        <a
+          class="btn btn-outline-secondary px-3 py-1"
+          href="/class/<%= singleClass._id %>"
+          ><i class="fas fa-school"></i
+        ></a>
+      </td>
+    </tr>
+    <% num++ } %>
+  </tbody>
+</table>

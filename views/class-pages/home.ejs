@@ -1,10 +1,35 @@
-<% layout('./layouts/boilerplate.ejs') %>
-
-<h1>Class Home Page</h1>
-<% for (let singleClass of classes) { %>
-<p>
-  <strong>Class:</strong> <%= singleClass.className %>
-  <br />
-  <a class="btn btn-primary" href="/class/<%= singleClass._id %>">View</a>
-</p>
+<% layout('./layouts/boilerplate.ejs') %> <%-
+include('../partials/home-header.ejs', {section: 'class'}) %> <% if
+(Object.keys(query).length > 0) { %>
+<a href="/class" class="btn btn-primary mb-3 text-nowrap">Show All</a>
 <% } %>
+<table class="table table-light table-hover">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col" class="px-0"></th>
+      <th scope="col">Class Code</th>
+      <th scope="col">Class Name</th>
+      <th scope="col">Subject</th>
+      <th scope="col">Teacher</th>
+      <th scope="col" class="text-center">Options</th>
+    </tr>
+  </thead>
+  <tbody class="table">
+    <% var num = 1; for (let singleClass of classes) { %>
+    <tr>
+      <th scope="row" class="text-center"><%= num %>.</th>
+      <td><%= singleClass.classCode %></td>
+      <td><%= singleClass.className %></td>
+      <td><%= singleClass.subject %></td>
+      <td><%= singleClass.teacher %></td>
+      <td class="text-center">
+        <a
+          class="btn btn-outline-secondary px-3 py-1"
+          href="/class/<%= singleClass._id %>"
+          ><i class="fas fa-school"></i
+        ></a>
+      </td>
+    </tr>
+    <% num++ } %>
+  </tbody>
+</table>

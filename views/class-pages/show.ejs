@@ -1,50 +1,50 @@
-<% layout('./layouts/boilerplate.ejs') %>
+<% layout('./layouts/boilerplate.ejs') %> <%-
+include('../partials/show-header.ejs', {typeName: 'class', type: singleClass,
+name: `${singleClass.className}`}) %>
 
-<h1><%= singleClass.className %>
-</h1>
 <p>
   <strong>Teacher:</strong> <%= singleClass.teacher %>
   <br />
   <strong>Class Code: </strong> <%= singleClass.classCode %>
-  <br>
+  <br />
   <strong>Section: </strong> <%= singleClass.section %>
-  <br>
+  <br />
   <strong>Subject: </strong> <%= singleClass.subject %>
-  <br>
-  <a class="btn btn-primary btn-sm" href="/class/<%= singleClass._id %>/edit"
-  >Edit Class</a
->
-<a class="btn btn-primary btn-sm" href="/class/<%= singleClass._id %>/addStudent">Add Students</a>
-<a class="btn btn-primary btn-sm" href="/class/<%= singleClass._id %>/removeStudent">Remove Students</a>
-<form action="/class/<%= singleClass._id %>?_method=DELETE" method="POST">
-  <button class="btn btn-danger btn-sm" type="submit">Delete</button>
-</form>
-  <br>
-  <strong>Students:</strong>
-        <table class="table table-light table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Student ID</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th scope="col">Options</th>
-        </tr>
-      </thead>
-  <% if (singleClass.studentsInClass.length) { %> 
-      <tbody>
-    <% for (let student of singleClass.studentsInClass) { %>
-        <tr>
-          <th scope="row"><%= student.studentId %></th>
-          <td><%= student.firstName %></td>
-          <td><%= student.lastName %></td>
-          <td>
-            <a class="btn btn-primary" href="/student/<%= student._id %>"
-              >View</a
-            >
-          </td>
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
-   <% } %> 
+  <br />
 </p>
+<div class="d-flex flex-wrap justify-content-between align-items-center">
+  <p class="h4 mb-3">Students:</p>
+  <div
+    class="d-flex justify-content-end justify-content-md-between btn-toolbar mb-2"
+  >
+    <a
+      class="btn btn-outline-primary mx-2 mb-2 mb-sm-0 align-middle"
+      href="/class/<%= singleClass._id %>/addStudent"
+      >Add</a
+    >
+    <% if (singleClass.studentsInClass.length > 0) { %>
+    <a
+      class="btn btn-outline-danger me-sm-2 mb-2 mb-sm-0"
+      href="/class/<%= singleClass._id %>/removeStudent"
+      >Remove</a
+    >
+    <% } %>
+    <form action="/class/<%= singleClass._id %>" Method="GET">
+      <div class="container-fluid input-group d-flex flex-nowrap px-0">
+        <div class="form-outline">
+          <input
+            type="search"
+            name="search"
+            class="form-control"
+            placeholder="Search Student"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa fa-search"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<%- include('../partials/student-table.ejs', {students:
+singleClass.studentsInClass, num: 1}) %>

@@ -1,20 +1,30 @@
 <% layout('./layouts/boilerplate.ejs') %>
-<h1 class="text-center mb-3">
-  Remove Students from <%= singleClass.className %>
-</h1>
-<div class="row">
-  <div class="col-sm-10 offset-sm-1">
+<div
+  class="
+    d-flex
+    justify-content-center justify-content-md-between
+    flex-wrap flex-md-nowrap
+    align-items-center
+    pt-3
+    pb-2
+    mb-3
+    border-bottom
+  "
+>
+  <h1 class="h2 text-nowrap"><%= singleClass.className %></h1>
+</div>
     <form
       action="/class/<%= singleClass._id %>/removeStudent?_method=PUT"
       method="POST"
     >
-      <table class="table table-light table-striped">
-        <thead>
+      <table class="table table-hover">
+        <thead class="thead-light">
           <tr>
+            <th scope="col" class="px-0"></th>
             <th scope="col">Student ID</th>
             <th scope="col">First</th>
             <th scope="col">Last</th>
-            <th scope="col">Options</th>
+            <th scope="col" class="text-center">Options</th>
             <th scope="col">Remove Student</th>
           </tr>
         </thead>
@@ -22,13 +32,16 @@
         <tbody>
           <% for (let student of singleClass.studentsInClass) { %>
           <tr>
-            <th scope="row"><%= student.studentId %></th>
+            <th scope="row" class="text-center ps-0"></th>
+            <td><%= student.studentId %></th>
             <td><%= student.firstName %></td>
             <td><%= student.lastName %></td>
-            <td>
-              <a class="btn btn-primary" href="/student/<%= student._id %>"
-                >View</a
-              >
+            <td class="text-center">
+                <a
+                  class="btn btn-outline-secondary px-3 py-1"
+                  href="/student/<%= student._id %>"
+                  ><i class="fa fa-user"></i
+                ></a>
             </td>
             <td>
               <div class="form-check">
@@ -47,9 +60,9 @@
           </tr>
           <% } %>
         </tbody>
+        <% } %>
       </table>
-      <% } %>
-      <button class="btn btn-primary" type="submit">Remove Students</button>
+      <button class="btn btn-outline-danger" type="submit">
+        Remove Students
+      </button>
     </form>
-  </div>
-</div>

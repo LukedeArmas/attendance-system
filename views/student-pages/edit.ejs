@@ -1,7 +1,20 @@
 <% layout('./layouts/boilerplate.ejs') %>
+
+<div
+  class="
+    d-flex
+    justify-content-center
+    align-items-center
+    pt-3
+    pb-2
+    mb-3
+    border-bottom
+  "
+>
+  <h1 class="h1 text-nowrap">Edit Student</h1>
+</div>
 <div class="row">
   <div class="col-6 offset-3">
-    <h1 class="text-center">Edit Student</h1>
     <form
       class="validated"
       action="/student/<%= student._id %>?_method=PUT"

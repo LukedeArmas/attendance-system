@@ -3,22 +3,14 @@ const router = express.Router()
 const Student = require('../models/student.js')
 const asyncError = require('../utils/asyncError.js')
 const myError = require('../utils/myError.js')
-const {validateStudent} = require('../middleware.js')
+const {validateStudent, checkSearch} = require('../middleware.js')
 
 
 router.get('/', asyncError(async (req, res) => {
     const {search} = req.query
-    let allStudents = true
-    let query = {}
-    if (search) {
-    // Need to add some fixes for cross site scripting. This is a band aid
-        if (!(search.includes("$"))) {
-        query = {$text: {$search: search}}
-        allStudents = false
-        }
-    }
+    const query = checkSearch(search)
     const students = await Student.find(query)
-    res.render('student-pages/home', {students, allStudents})
+    res.render('student-pages/home', {students, query})
 }))
 
 router.post('/', validateStudent, asyncError(async (req, res) => {

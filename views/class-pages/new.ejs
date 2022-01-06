@@ -1,7 +1,19 @@
 <% layout('./layouts/boilerplate.ejs') %>
+<div
+  class="
+    d-flex
+    justify-content-center
+    align-items-center
+    pt-3
+    pb-2
+    mb-3
+    border-bottom
+  "
+>
+  <h1 class="h1 text-nowrap">Add Class</h1>
+</div>
 <div class="row">
   <div class="col-6 offset-3">
-    <h1 class="text-center">Add Class</h1>
     <form class="validated" action="/class" method="POST" novalidate>
       <div class="mb-3 col-sm-8 offset-sm-2">
         <label class="form-label" for="id">Teacher</label>
@@ -53,7 +65,7 @@
         </select>
       </div>
       <br />
-      <div class="col-sm-8 offset-sm-2">
+      <div class="mb-3 col-sm-8 offset-sm-2">
         <button class="btn btn-primary" type="submit">Add</button>
       </div>
     </form>

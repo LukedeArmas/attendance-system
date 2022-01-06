@@ -1,0 +1,33 @@
+<div
+  class="
+    d-flex
+    justify-content-center justify-content-md-between
+    flex-wrap flex-md-nowrap
+    align-items-center
+    pt-3
+    pb-2
+    mb-3
+    border-bottom
+  "
+>
+  <h1 class="h2 text-nowrap">
+    <%= section.charAt(0).toUpperCase() + section.slice(1) %> Dashboard
+  </h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <form action="/<%= section %>" Method="GET">
+      <div class="container-fluid input-group d-flex flex-nowrap">
+        <div class="form-outline">
+          <input
+            type="search"
+            name="search"
+            class="form-control"
+            placeholder="Search <%= section.charAt(0).toUpperCase() + section.slice(1) %>"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa fa-search"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+body {
+  font-family: Open Sans, sans-serif !important;
+}
+
+.table .thead-light th {
+  color: #8898aa;
+  border-color: #e9ecef;
+  background-color: #f6f9fc;
+  border: none;
+}

@@ -14,14 +14,16 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-    <link rel="stylesheet" href="../stylesheets/sidebar.css">
+    <script src="https://kit.fontawesome.com/f4385e0704.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="../../stylesheets/sidebar.css">
+    <link rel="stylesheet" href="../../stylesheets/table.css">
     <title>Attendance Management System</title>
   </head>
   <script src="https://unpkg.com/feather-icons"></script>
   <body class="">
-    <!-- <%- include('../partials/navbar') %> -->
-    <header class="navbar navbar-dark sticky-top bg-primary flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">My University</a>
+    <header class="navbar sticky-top navbar-light bg-light flex-md-nowrap p-0 shadow">
+  <a class="display-1 fs-5 navbar-brand bg-light text-dark col-md-3 col-lg-2 me-0 px-3" href="#">UniTracker</a>
     <div class="navbar-nav flex-row">
       <div class="nav-item">
         <button class="navbar-toggler d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,14 +46,14 @@
         </h6>
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/student">
+            <a class="nav-link active text-nowrap" aria-current="page" href="/student">
               <span data-feather="home"></span>
               Student Dashboard
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/student/new">
-              <span data-feather="file"></span>
+              <span data-feather="plus"></span>
               Add Student
             </a>
           </li>
@@ -69,26 +71,24 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/class/new">
-              <span data-feather="file"></span>
+              <span data-feather="plus"></span>
               Add Class
             </a>
           </li>
         </ul>
       </div>
     </nav>
-
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
     <section class="container-fluid mt-3"><%- body -%></section>
       </main>
       
-    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
           <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-          <script src="../scripts/sidebar.js"></script>
+          <script src="../../scripts/sidebar.js"></script>
     <script src="/scripts/validateForm.js"></script>
   </body>
 </html>

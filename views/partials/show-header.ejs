@@ -1,0 +1,27 @@
+<div
+  class="
+    d-flex
+    justify-content-center justify-content-sm-between
+    flex-wrap flex-md-nowrap
+    align-items-center
+    pt-3
+    pb-2
+    mb-3
+    border-bottom
+  "
+>
+  <h1 class="h1 text-nowrap"><%= name %></h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <a
+      class="btn btn-outline-secondary mx-2"
+      href="/<%= typeName %>/<%= type._id %>/edit"
+      >Edit <%= `${typeName.charAt(0).toUpperCase()}${typeName.slice(1)}` %></a
+    >
+    <form
+      action="/<%= typeName %>/<%= type._id %>?_method=DELETE"
+      method="POST"
+    >
+      <button class="btn btn-outline-danger" type="submit">Delete</button>
+    </form>
+  </div>
+</div>
