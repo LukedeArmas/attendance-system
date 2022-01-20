@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const {Schema} = mongoose
+const uniqueValidator = require('mongoose-unique-validator')
 
 const classSchema = new Schema({
     teacher: {
@@ -8,13 +9,17 @@ const classSchema = new Schema({
     },
     className: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     classCode: {
         type: String,
         required: true,
-        unique: true
+        uppercase: true,
+        trim: true,
+        set: function (value) {
+            let temp = value
+            return temp.replace(/\s+/g, '')
+        }
     },
     section: {
         type: Number,
@@ -48,9 +53,13 @@ const classSchema = new Schema({
     ]
 })
 
+// Index made for composite uniqueness check
+classSchema.index({ classCode: 1, section: 1 }, { unique: true })
+
+// Index made for searching classes
 classSchema.index({teacher: 'text', className: 'text', classCode: 'text', subject: 'text'})
 
-
+// If we delete a Class we remove the class from every student's (who is in the class) classesEnrolled array 
 classSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
         await mongoose.model('Student').updateMany({
@@ -64,5 +73,7 @@ classSchema.post('findOneAndDelete', async function(doc) {
     }
 })
 
+// Makes the unique attribute a validator
+classSchema.plugin(uniqueValidator, { message: '{PATH} already exists'})
 
 module.exports = mongoose.model('Class', classSchema)

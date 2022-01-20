@@ -1,0 +1,36 @@
+<% layout('./layouts/boilerplate.ejs') %>
+<div
+  class="d-flex justify-content-center justify-content-md-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+  <h1 class="h1 text-nowrap">Monitor</h1>
+</div>
+<div class="container">
+  <div class="row">
+    <a
+      href="/student"
+      class="d-block col-xl-3 col-lg-4 offset-md-0 col-sm-6 offset-sm-3 border border-2 rounded px-4 py-3"
+    >
+      <h4 class="h4 fw-lighter">Students</h4>
+      <p class="fs-2"><%= numStudents %></p>
+    </a>
+    <a
+      href="/class"
+      class="d-block col-xl-3 col-lg-4 offset-md-0 col-sm-6 offset-sm-3 border border-2 rounded px-4 py-3"
+    >
+      <h4 class="h4 fw-lighter">Classes</h4>
+      <p class="fs-2"><%= numClasses %></p>
+    </a>
+    <div
+      class="d-block col-xl-3 col-lg-4 offset-md-0 col-sm-6 offset-sm-3 border border-2 rounded px-4 py-3"
+    >
+      <h4 class="h4 fw-lighter">Subjects</h4>
+      <p class="fs-2"><%= numSubjects %></p>
+    </div>
+    <div
+      class="d-block col-xl-3 col-lg-4 offset-md-0 col-sm-6 offset-sm-3 border border-2 rounded px-4 py-3"
+    >
+      <h4 class="h4 fw-lighter">Teachers</h4>
+      <p class="fs-2"><%= numTeachers %></p>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,12 @@
           <th scope="col">First</th>
           <th scope="col">Last</th>
           <th class="text-center" scope="col">Options</th>
+          <% if (typeof add !== 'undefined') { %>
+          <th scope="col">Add Student</th>
+            <% } %>
+          <% if (typeof remove !== 'undefined') { %>
+            <th scope="col">Remove Student</th>
+            <% } %>
         </tr>
       </thead>
       <% if (students.length) { %>
@@ -22,6 +28,36 @@
               ><i class="fa fa-user"></i></a
             >
           </td>
+          <% if (typeof add !== 'undefined') { %>
+            <td class="ps-4">
+            <div class="form-check">
+                <input
+                class="form-check-input"
+                name="studentList[]"
+                value="<%= student._id %>"
+                type="checkbox"
+                id="addStudent"
+                />
+                <label class="form-check-label" for="addStudent"> Add </label>
+            </div>
+            </td>
+        <% } %>
+          <% if (typeof remove !== 'undefined') { %>
+            <td>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  name="studentList[]"
+                  value="<%= student._id %>"
+                  type="checkbox"
+                  id="removeStudent"
+                />
+                <label class="form-check-label" for="removeStudent">
+                  Remove
+                </label>
+              </div>
+            </td>
+        <% } %>
         </tr>
         <% num++ 
       } %>

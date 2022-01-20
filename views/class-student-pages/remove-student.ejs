@@ -1,68 +1,14 @@
 <% layout('./layouts/boilerplate.ejs') %>
 <div
-  class="
-    d-flex
-    justify-content-center justify-content-md-between
-    flex-wrap flex-md-nowrap
-    align-items-center
-    pt-3
-    pb-2
-    mb-3
-    border-bottom
-  "
+  class="d-flex justify-content-center justify-content-md-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
 >
   <h1 class="h2 text-nowrap"><%= singleClass.className %></h1>
 </div>
-    <form
-      action="/class/<%= singleClass._id %>/removeStudent?_method=PUT"
-      method="POST"
-    >
-      <table class="table table-hover">
-        <thead class="thead-light">
-          <tr>
-            <th scope="col" class="px-0"></th>
-            <th scope="col">Student ID</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col" class="text-center">Options</th>
-            <th scope="col">Remove Student</th>
-          </tr>
-        </thead>
-        <% if (singleClass.studentsInClass.length) { %>
-        <tbody>
-          <% for (let student of singleClass.studentsInClass) { %>
-          <tr>
-            <th scope="row" class="text-center ps-0"></th>
-            <td><%= student.studentId %></th>
-            <td><%= student.firstName %></td>
-            <td><%= student.lastName %></td>
-            <td class="text-center">
-                <a
-                  class="btn btn-outline-secondary px-3 py-1"
-                  href="/student/<%= student._id %>"
-                  ><i class="fa fa-user"></i
-                ></a>
-            </td>
-            <td>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  name="studentList[]"
-                  value="<%= student._id %>"
-                  type="checkbox"
-                  id="removeStudent"
-                />
-                <label class="form-check-label" for="removeStudent">
-                  Remove
-                </label>
-              </div>
-            </td>
-          </tr>
-          <% } %>
-        </tbody>
-        <% } %>
-      </table>
-      <button class="btn btn-outline-danger" type="submit">
-        Remove Students
-      </button>
-    </form>
+<form
+  action="/class/<%= singleClass._id %>/removeStudent?_method=PUT"
+  method="POST"
+>
+  <%- include('../partials/student-table.ejs', {students:
+  singleClass.studentsInClass, num: 1, remove: true}) %>
+  <button class="btn btn-outline-danger" type="submit">Remove Students</button>
+</form>

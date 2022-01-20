@@ -1,12 +1,20 @@
 const mongoose = require('mongoose')
 const {Schema} = mongoose
 const Class = require('./class.js')
+const uniqueValidator = require('mongoose-unique-validator')
+
 
 const studentSchema = mongoose.Schema({
     studentId:{
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase: true,
+        trim: true,
+        set: function (value) {
+            let temp = value
+            return temp.replace(/\s+/g, '')
+        }
     },
     firstName:{
         type: String,
@@ -24,8 +32,10 @@ const studentSchema = mongoose.Schema({
     ]
 })
 
+// Index made for searching students
 studentSchema.index({studentId: 'text', firstName: 'text', lastName: 'text'})
 
+// If we delete a student we remove the student from all of his or her classes
 studentSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
         await Class.updateMany({
@@ -39,6 +49,6 @@ studentSchema.post('findOneAndDelete', async function(doc) {
     }
 })
 
-
+studentSchema.plugin(uniqueValidator, { message: 'Student already exists'})
 
 module.exports = mongoose.model('Student', studentSchema)

@@ -55,10 +55,7 @@ module.exports.validateRemoveStudentFromClass = async (req, res, next) => {
 module.exports.checkSearch = (search) => {
     let query = {}
     if (search) {
-    // Need to add some fixes for cross site scripting. This is a band aid
-        if (!(search.includes("$"))) {
         query = {$text: {$search: search}}
-        }
     }
     return query
 }

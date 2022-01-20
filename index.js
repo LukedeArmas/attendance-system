@@ -5,6 +5,9 @@ const methodOverride = require('method-override')
 const studentRoutes = require('./Routes/student.js')
 const classRoutes = require('./Routes/class.js')
 const myError = require('./utils/myError.js')
+const Student = require('./models/student')
+const Class = require('./models/class')
+const mongoSanitize = require('express-mongo-sanitize')
 
 
 const mongoose = require('mongoose')
@@ -25,11 +28,25 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '/views'))
 app.use(express.urlencoded( {extended: true}))
-// app.use(express.json())
+app.use(
+    mongoSanitize({
+        replaceWith: '_'
+    }))
+
+const teachers = ['Testing', 'Testing 2']
 
 app.use('/student', studentRoutes)
 app.use('/class', classRoutes)
 
+app.get('/home', async (req, res, next) => {
+    const numStudents = await Student.countDocuments()
+    const numClasses = await Class.countDocuments()
+    const numSubjects = await Class.schema.path('subject').enumValues.length
+    const teachers = await Class.find().distinct('teacher')
+    const numTeachers = teachers.length
+
+    res.render('home.ejs', {numStudents, numClasses, numSubjects, numTeachers})
+})
 
 app.get('/error', (req, res, next) => {
     next(new myError(500,"Testing express error class"))

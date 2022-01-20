@@ -8,3 +8,19 @@ body {
   background-color: #f6f9fc;
   border: none;
 }
+
+a,
+a:hover,
+a:focus,
+a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+a.d-block {
+  transition: box-shadow 0.2s;
+}
+
+a.d-block:hover {
+  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+}
