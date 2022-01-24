@@ -163,6 +163,7 @@ router.get('/:id/attendance/:dateId', asyncError(async (req, res, next) => {
     const { id, dateId } = req.params
     const singleClass = await Class.findById(id)
     .populate('studentsInClass')
+    // Will have to change this if I make a Model for attendance records
     if (!singleClass.attendance) {
         return next(new myError(404, "No attendance has been taken yet"))
     }
@@ -175,5 +176,59 @@ router.get('/:id/attendance/:dateId', asyncError(async (req, res, next) => {
         }
     }
 }))
+
+router.get('/:id/attendance/:dateId/edit', asyncError(async (req, res, next) => {
+    const { id, dateId } = req.params
+    const singleClass = await Class.findById(id)
+    .populate('studentsInClass')
+    // Will have to change this if I make a Model for attendance records
+    if (!singleClass.attendance) {
+        return next(new myError(404, "No attendance has been taken yet"))
+    }
+    else {
+        const attendanceDay = singleClass.attendance.find(element => element.id === dateId)
+        if (!attendanceDay) {
+            return next(new myError(404, "Attendance for this date does not exist"))
+        } else {
+            res.render('class-pages/attendance-pages/edit', { singleClass, attendanceDay, moment })
+        }
+    }
+}))
+
+router.put('/:id/attendance/:dateId', asyncError(async (req, res, next) => {
+    const { id, dateId } = req.params
+    const { attendanceList } = req.body
+    const singleClass = await Class.findById(id)
+    // Will have to change this if I make a Model for attendance records
+    if (!singleClass.attendance) {
+        return next(new myError(404, "No attendance has been taken yet"))
+    }
+    else {
+        const attendanceDay = singleClass.attendance.find(element => element.id === dateId)
+        if (!attendanceDay) {
+            return next(new myError(404, "Cannot edit attendance for a date that has not been recorded yet"))
+        } else {
+            attendanceDay.studentsPresent = attendanceList
+            await singleClass.save()
+            return res.redirect(`/class/${id}/attendance`) 
+        }
+    }
+}))
+
+router.delete('/:id/attendance/:dateId', asyncError(async (req, res, next) => {
+    const { id, dateId } = req.params
+    const singleClass = await Class.findById(id)
+    if (!singleClass.attendance) {
+        return next(new myError(404, "No attendance has been taken yet"))
+    }
+    else {
+        singleClass.attendance = singleClass.attendance.filter(attendanceDay => attendanceDay.id !== dateId)
+        await singleClass.save()
+        res.redirect(`/class/${id}/attendance`)
+    }
+}))
+
+
+
 
 module.exports = router

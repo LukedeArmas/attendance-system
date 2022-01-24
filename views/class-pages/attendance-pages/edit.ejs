@@ -1,0 +1,21 @@
+<% layout('./layouts/boilerplate.ejs') %>
+<div
+  class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+  <h1 class="h1 text-nowrap">
+    <%= moment(attendanceDay.date).format('L') %> Edit Attendance: <%=
+    singleClass.className %>
+  </h1>
+</div>
+
+<form
+  action="/class/<%= singleClass._id %>/attendance/<%= attendanceDay._id %>?_method=PUT"
+  method="POST"
+  enctype="raw"
+>
+  <%- include('../../partials/student-table.ejs', {students:
+  singleClass.studentsInClass, num: 1, attendanceEdit: true, attendanceDay}) %>
+  <button class="btn btn-outline-primary mb-3" type="submit">
+    Edit Attendance
+  </button>
+</form>

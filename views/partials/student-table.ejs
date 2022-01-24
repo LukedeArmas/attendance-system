@@ -17,7 +17,10 @@
             <% } %>
           <% if (typeof attendanceShow !== 'undefined') { %>
           <th class="text-center" scope="col">Present</th>
-            <% } %>                                    
+            <% } %>  
+          <% if (typeof attendanceEdit !== 'undefined') { %>
+          <th scope="col">Mark Present</th>
+            <% } %>                                  
         </tr>
       </thead>
       <% if (students.length) { %>
@@ -80,13 +83,30 @@
         <% } %>    
           <% if (typeof attendanceShow !== 'undefined') { %>
           <td class="text-center">
-            <% if (attendanceDay.studentsPresent.includes(student._id)) { %> 
+            <% if (attendanceDay.studentsPresent && attendanceDay.studentsPresent.includes(student._id)) { %> 
             Yes
             <% } else { %>
               No
               <% } %>
           </td>
-            <% } %>                                    
+            <% } %>  
+          <% if (typeof attendanceEdit !== 'undefined') { %>
+            <td class="ps-4">
+            <div class="form-check">
+                <input
+                class="form-check-input"
+                name="attendanceList[]"
+                value="<%= student._id %>"
+                type="checkbox"
+                id="attendance"
+            <% if (attendanceDay.studentsPresent.includes(student._id)) { %> 
+                checked="true"
+            <% } %>                
+                />
+                <label class="form-check-label" for="attendance"> Present </label>
+            </div>
+            </td>
+        <% } %>                                      
         </tr>
         <% num++ 
       } %>
