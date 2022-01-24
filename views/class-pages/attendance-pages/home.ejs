@@ -1,0 +1,46 @@
+<% layout('./layouts/boilerplate.ejs') %>
+<div
+  class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+  <h1 class="h1 text-nowrap">Attendance: <%= singleClass.className %></h1>
+  <a
+    class="btn btn-outline-primary"
+    href="/class/<%= singleClass._id %>/attendance/new"
+    >Mark New Attendance</a
+  >
+</div>
+
+<% var num = 1 %>
+<table class="table table-hover">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col" class="px-0"></th>
+      <th scope="col">Date</th>
+      <th scope="col">Last Updated</th>
+      <th scope="col" class="text-center">Attendance Options</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for (let attendanceDay of singleClass.attendance) { %>
+    <tr>
+      <th scope="row" class="text-center ps-0"><%= num++ %>.</th>
+      <td><%= moment(attendanceDay.date).format('LL') %></td>
+      <td>placeholder</td>
+      <td class="text-center">
+        <a
+          href="/class/<%= singleClass._id %>/attendance/<%= attendanceDay._id %>"
+          class="btn btn-outline-primary me-1"
+        >
+          <i class="fas fa-eye"></i>
+        </a>
+        <button class="btn btn-outline-secondary me-1">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn btn-outline-danger">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </td>
+    </tr>
+    <% } %>
+  </tbody>
+</table>

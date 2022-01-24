@@ -20,16 +20,16 @@ name: `${singleClass.className}`}) %>
     <a
       class="btn btn-outline-primary mx-2 mb-2 mb-sm-0 align-middle"
       href="/class/<%= singleClass._id %>/addStudent"
-      >Add</a
+      >Add Students</a
     >
     <% if (singleClass.studentsInClass.length > 0) { %>
     <a
       class="btn btn-outline-danger me-sm-2 mb-2 mb-sm-0"
       href="/class/<%= singleClass._id %>/removeStudent"
-      >Remove</a
+      >Remove Students</a
     >
     <% } %>
-    <form action="/class/<%= singleClass._id %>" Method="GET">
+    <!-- <form action="/class/<%= singleClass._id %>" Method="GET">
       <div class="container-fluid input-group d-flex flex-nowrap px-0">
         <div class="form-outline">
           <input
@@ -43,7 +43,7 @@ name: `${singleClass.className}`}) %>
           <i class="fa fa-search"></i>
         </button>
       </div>
-    </form>
+    </form> -->
   </div>
 </div>
 <%- include('../partials/student-table.ejs', {students:

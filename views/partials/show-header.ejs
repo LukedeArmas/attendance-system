@@ -1,19 +1,19 @@
 <div
-  class="
-    d-flex
-    justify-content-center justify-content-sm-between
-    flex-wrap flex-md-nowrap
-    align-items-center
-    pt-3
-    pb-2
-    mb-3
-    border-bottom
-  "
+  class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
 >
   <h1 class="h1 text-nowrap"><%= name %></h1>
-  <div class="btn-toolbar mb-2 mb-md-0">
+  <div
+    class="d-flex flex-column flex-sm-row align-items-center flex-sm-nowrap btn-toolbar mb-2 mb-md-0"
+  >
+    <% if (typeName === 'class' && type.studentsInClass.length > 0) { %>
     <a
-      class="btn btn-outline-secondary mx-2"
+      class="btn btn-outline-primary mb-2 mb-sm-0"
+      href="/<%= typeName %>/<%= type._id %>/attendance"
+      >Attendance</a
+    >
+    <% } %>
+    <a
+      class="btn btn-outline-secondary mx-2 mb-2 mb-sm-0"
       href="/<%= typeName %>/<%= type._id %>/edit"
       >Edit <%= `${typeName.charAt(0).toUpperCase()}${typeName.slice(1)}` %></a
     >

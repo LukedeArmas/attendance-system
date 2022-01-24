@@ -1,25 +1,43 @@
+const { boolean } = require('joi')
 const mongoose = require('mongoose')
 const {Schema} = mongoose
 const uniqueValidator = require('mongoose-unique-validator')
 
+const replaceWhitespace = function (value) {
+            let temp = value
+            return temp.replace(/\s+/g, '')
+        }
+
+const attendanceSchema = new Schema({
+       date: {
+                type: Date,
+                required: true
+            },
+            studentsPresent: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Student'
+                }
+            ]
+})
+
 const classSchema = new Schema({
     teacher: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     className: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     classCode: {
         type: String,
         required: true,
         uppercase: true,
         trim: true,
-        set: function (value) {
-            let temp = value
-            return temp.replace(/\s+/g, '')
-        }
+        set: replaceWhitespace
     },
     section: {
         type: Number,
@@ -37,20 +55,7 @@ const classSchema = new Schema({
             ref: 'Student'
         }
     ],
-    attendance: [
-        {
-            date: {
-                type: Date,
-                required: true
-            },
-            studentsPresent: [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: 'Student',
-                }
-            ]
-        }
-    ]
+    attendance: [attendanceSchema]
 })
 
 // Index made for composite uniqueness check
@@ -74,6 +79,6 @@ classSchema.post('findOneAndDelete', async function(doc) {
 })
 
 // Makes the unique attribute a validator
-classSchema.plugin(uniqueValidator, { message: '{PATH} already exists'})
+// classSchema.plugin(uniqueValidator, { message: '{PATH} already exists What is happening'})
 
 module.exports = mongoose.model('Class', classSchema)

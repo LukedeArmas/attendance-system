@@ -3,6 +3,10 @@ const {Schema} = mongoose
 const Class = require('./class.js')
 const uniqueValidator = require('mongoose-unique-validator')
 
+const replaceWhitespace = function (value) {
+            let temp = value
+            return temp.replace(/\s+/g, '')
+        }
 
 const studentSchema = mongoose.Schema({
     studentId:{
@@ -11,18 +15,19 @@ const studentSchema = mongoose.Schema({
         unique: true,
         lowercase: true,
         trim: true,
-        set: function (value) {
-            let temp = value
-            return temp.replace(/\s+/g, '')
-        }
+        set: replaceWhitespace
     },
     firstName:{
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        set: replaceWhitespace
     },
     lastName:{
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        set: replaceWhitespace
     },
     classesEnrolled:[
         {

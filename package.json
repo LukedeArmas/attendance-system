@@ -16,6 +16,7 @@
     "feather-icons": "^4.28.0",
     "joi": "^17.4.2",
     "method-override": "^3.0.0",
+    "moment": "^2.29.1",
     "mongoose": "^6.0.13",
     "mongoose-unique-validator": "^3.0.0",
     "nodemon": "^2.0.15",

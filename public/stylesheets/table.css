@@ -24,3 +24,7 @@ a.d-block {
 a.d-block:hover {
   box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
 }
+
+.input-group-append {
+  cursor: pointer;
+}

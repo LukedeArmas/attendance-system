@@ -29,6 +29,9 @@ module.exports.validateAddStudentToClass = async (req, res, next) => {
     const {id} = req.params
     const {studentList} = req.body
     const singleClass = await Class.findById(id)
+    if (!studentList) {
+        return next(new myError(500, "Cannot add zero students"))
+    }
     if (studentList.every(elementId => !(singleClass.studentsInClass.includes(elementId))) === false) {
         return next(new myError(500, "Cannot add student multiple times to the same class"))
     }

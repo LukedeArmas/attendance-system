@@ -12,6 +12,12 @@
           <% if (typeof remove !== 'undefined') { %>
             <th scope="col">Remove Student</th>
             <% } %>
+          <% if (typeof attendance !== 'undefined') { %>
+          <th scope="col">Mark Present</th>
+            <% } %>
+          <% if (typeof attendanceShow !== 'undefined') { %>
+          <th class="text-center" scope="col">Present</th>
+            <% } %>                                    
         </tr>
       </thead>
       <% if (students.length) { %>
@@ -58,6 +64,29 @@
               </div>
             </td>
         <% } %>
+          <% if (typeof attendance !== 'undefined') { %>
+            <td class="ps-4">
+            <div class="form-check">
+                <input
+                class="form-check-input"
+                name="attendanceList[]"
+                value="<%= student._id %>"
+                type="checkbox"
+                id="attendance"
+                />
+                <label class="form-check-label" for="attendance"> Present </label>
+            </div>
+            </td>
+        <% } %>    
+          <% if (typeof attendanceShow !== 'undefined') { %>
+          <td class="text-center">
+            <% if (attendanceDay.studentsPresent.includes(student._id)) { %> 
+            Yes
+            <% } else { %>
+              No
+              <% } %>
+          </td>
+            <% } %>                                    
         </tr>
         <% num++ 
       } %>
