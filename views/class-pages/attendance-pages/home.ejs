@@ -21,7 +21,8 @@
     </tr>
   </thead>
   <tbody>
-    <% for (let attendanceDay of singleClass.attendance) { %>
+    <% for (let attendanceDay of singleClass.attendance.sort(function(a,b) {
+    return new Date(b.date) - new Date(a.date) })) { %>
     <tr>
       <th scope="row" class="text-center ps-0"><%= num++ %>.</th>
       <td><%= moment(attendanceDay.date).format('LL') %></td>

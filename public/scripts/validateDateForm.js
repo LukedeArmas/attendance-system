@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function (e) {
-  console.log("Is this showing up at all")
     const fv = FormValidation.formValidation(document.getElementById('attendanceForm'), {
         fields: {
             date: {
@@ -26,13 +25,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
         },
     })
 
-
-    $('#datepicker').datepicker({
-      endDate: '0d',
-      autoclose: 'true'
-    })
-    .on('changeDate', function (e) {
-      fv.revalidateField('date')
-    })
-
+    $('[name="date"]')
+        .datepicker({
+            format: 'mm/dd/yyyy',
+        })
+        .on('changeDate', function (e) {
+            // Revalidate the date field
+            fv.revalidateField('date');
+        });
 })

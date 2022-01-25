@@ -4,7 +4,7 @@ const Class = require('../models/class.js')
 const Student = require('../models/student.js')
 const asyncError = require('../utils/asyncError.js')
 const myError = require('../utils/myError.js')
-const {validateClass, validateAddStudentToClass, validateRemoveStudentFromClass, checkSearch} = require('../middleware.js')
+const {validateClass, validateAddStudentToClass, validateRemoveStudentFromClass, checkSearch, validateAttendance} = require('../middleware.js')
 const moment = require('moment')
 
 
@@ -142,15 +142,22 @@ router.get('/:id/attendance/new', asyncError(async (req, res, next) => {
 
 }))
 
-router.post('/:id/attendance', asyncError(async (req, res, next) => {
+router.post('/:id/attendance', validateAttendance, asyncError(async (req, res, next) => {
     const { id } = req.params
-    const { date, attendanceList } = req.body
+    const { date, studentsPresent } = req.body
     const newDate = new Date(date)
-    const attendanceObj = {date: newDate, studentsPresent: attendanceList}
+    const attendanceObj = {date: newDate, studentsPresent: studentsPresent}
     const singleClass = await Class.findOne({ $and: [ { _id: id}, { 'attendance.date': { $ne: newDate } } ] })
     if (singleClass) {
-        await singleClass.attendance.push(attendanceObj)
-        await singleClass.save()
+        // Try catch handles if user tries to put information other than student object ids in the studentsPresent array
+        try {
+            await singleClass.attendance.push(attendanceObj)
+            await singleClass.save()
+        }
+        catch(e) {
+            return next(new myError(400, "The list of students present must contain students"))
+        }
+
     }
     else {
         return next(new myError(500, "Cannot mark attendance for the same date"))
@@ -197,7 +204,7 @@ router.get('/:id/attendance/:dateId/edit', asyncError(async (req, res, next) => 
 
 router.put('/:id/attendance/:dateId', asyncError(async (req, res, next) => {
     const { id, dateId } = req.params
-    const { attendanceList } = req.body
+    const { studentsPresent } = req.body
     const singleClass = await Class.findById(id)
     // Will have to change this if I make a Model for attendance records
     if (!singleClass.attendance) {
@@ -208,8 +215,14 @@ router.put('/:id/attendance/:dateId', asyncError(async (req, res, next) => {
         if (!attendanceDay) {
             return next(new myError(404, "Cannot edit attendance for a date that has not been recorded yet"))
         } else {
-            attendanceDay.studentsPresent = attendanceList
-            await singleClass.save()
+            try {
+                attendanceDay.studentsPresent = studentsPresent
+                await singleClass.save()
+            }
+            catch(e) {
+                return next(new myError(400, "The list of students present must contain students"))
+            }
+
             return res.redirect(`/class/${id}/attendance`) 
         }
     }

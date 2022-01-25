@@ -1,13 +1,13 @@
 const myError = require('./utils/myError.js')
-const {studentSchema} = require('./joi-schemas.js')
-const {classSchema} = require('./joi-schemas.js')
+const {studentSchema, classSchema, attendanceSchema, checkDate } = require('./joi-schemas.js')
 const Class = require('./models/class.js')
+const moment = require('moment')
 
 module.exports.validateStudent = (req, res, next) => {
     const {error} = studentSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
-        throw new myError(400, msg);
+        return next(new myError(400, msg))
     }
     else {
         return next()
@@ -18,7 +18,7 @@ module.exports.validateClass = (req, res, next) => {
     const {error} = classSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
-        throw new myError(400, msg);
+        return next(new myError(400, msg))
     }
     else {
         return next()
@@ -61,4 +61,15 @@ module.exports.checkSearch = (search) => {
         query = {$text: {$search: search}}
     }
     return query
+}
+
+module.exports.validateAttendance = async (req, res, next) => {
+    const {error} = attendanceSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',');
+        return next(new myError(400, msg))
+    }
+    else {
+        return next()
+    }
 }
