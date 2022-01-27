@@ -131,14 +131,20 @@ router.get('/:id/attendance', asyncError(async (req, res, next) => {
 
 router.get('/:id/attendance/new', asyncError(async (req, res, next) => {
     const { id } = req.params
+    const notValidDates = []
     const singleClass = await Class.findById(id)
     .populate('studentsInClass')
     if (!singleClass) {
         return next(new myError(404, "This class does not exist"))
     }
+    if (singleClass.attendance) {
+        singleClass.attendance.forEach(entry => {
+            notValidDates.push(moment(entry.date).format('L'))
+        })
+    }
     const unformattedDate = Date.now()
     const date = moment(unformattedDate).format('L')
-    res.render('class-pages/attendance-pages/new', {singleClass, date})
+    res.render('class-pages/attendance-pages/new', {singleClass, date, notValidDates})
 
 }))
 

@@ -40,14 +40,50 @@
         >
           <i class="fas fa-edit"></i>
         </a>
+
+        <button
+          class="btn btn-outline-danger"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteModal"
+        >
+          <i class="fas fa-trash-alt"></i>
+        </button>
+
         <form
           class="d-inline"
           action="/class/<%= singleClass._id %>/attendance/<%= attendanceDay._id %>?_method=DELETE"
           method="POST"
         >
-          <button class="btn btn-outline-danger" type="submit">
-            <i class="fas fa-trash-alt"></i>
-          </button>
+          <div
+            class="modal fade"
+            id="deleteModal"
+            tabindex="-1"
+            aria-labelledby="deleteModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteModalLabel">
+                    Delete Attendance: <%=
+                    moment(attendanceDay.date).format('LL') %>
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body text-start">
+                  Are you sure you want to delete?
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </form>
       </td>
     </tr>

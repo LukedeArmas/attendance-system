@@ -10,6 +10,7 @@
   method="POST"
   enctype="raw"
   id="attendanceForm"
+  novalidate
 >
   <section class="d-flex justify-content-end container mb-3">
     <!-- <button class="btn btn-primary mx-2" type="submit">Submit</button> -->
@@ -27,6 +28,7 @@
             <i class="fa fa-calendar"></i>
           </span>
         </span>
+        <div class="invalid-feedback">Must choose a valid date</div>
       </div>
     </div>
   </section>
@@ -36,3 +38,7 @@
     Mark Attendance
   </button>
 </form>
+<script>
+  // We have to convert the array to JSON to pass data from EJS/server to a script
+  let invalidDates = <%- JSON.stringify(notValidDates) %>
+</script>
