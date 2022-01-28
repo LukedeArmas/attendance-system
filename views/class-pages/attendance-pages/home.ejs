@@ -10,23 +10,30 @@
   >
 </div>
 
-<% var num = 1 %>
+<% if (attendances.length) { %>
+<p class="h4 mb-4">
+  <strong class="fw-lighter">Average Class Attendance: </strong><%=
+  averageClassAttendance %>%
+</p>
+<% } %> <% var num = 1 %>
 <table class="table table-hover">
   <thead class="thead-light">
     <tr>
       <th scope="col" class="px-0"></th>
       <th scope="col">Date</th>
       <th scope="col">Last Updated</th>
+      <th scope="col" class="text-center">Percent Present</th>
       <th scope="col" class="text-center">Attendance Options</th>
     </tr>
   </thead>
   <tbody>
-    <% for (let attendanceDay of singleClass.attendance.sort(function(a,b) {
-    return new Date(b.date) - new Date(a.date) })) { %>
+    <% for (let attendanceDay of attendances.sort(function(a,b) { return new
+    Date(b.date) - new Date(a.date) })) { %>
     <tr>
       <th scope="row" class="text-center ps-0"><%= num++ %>.</th>
       <td><%= moment(attendanceDay.date).format('LL') %></td>
-      <td>placeholder</td>
+      <td><%= moment(attendanceDay.dateUpdated).format('LL') %></td>
+      <td class="text-center"><%= attendanceDay.percentagePresent %>%</td>
       <td class="text-center">
         <a
           href="/class/<%= singleClass._id %>/attendance/<%= attendanceDay._id %>"
@@ -65,8 +72,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="deleteModalLabel">
-                    Delete Attendance: <%=
-                    moment(attendanceDay.date).format('LL') %>
+                    Delete Attendance
                   </h5>
                   <button
                     type="button"

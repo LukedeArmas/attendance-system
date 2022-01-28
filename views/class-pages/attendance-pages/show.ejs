@@ -8,5 +8,10 @@
   </h1>
 </div>
 
+<p class="h4 mb-4">
+  <strong class="fw-lighter">Class Attendance: </strong><%=
+  attendanceDay.percentagePresent %>%
+</p>
+
 <%- include('../../partials/student-table.ejs', {students:
 singleClass.studentsInClass, num: 1, attendanceShow: true, attendanceDay}) %>

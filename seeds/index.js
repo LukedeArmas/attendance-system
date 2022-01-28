@@ -1,5 +1,7 @@
 const Student = require('../models/student.js')
 const Class = require('../models/class.js')
+const Attendance = require('../models/attendance.js')
+
 
 
 const mongoose = require('mongoose')
@@ -74,9 +76,37 @@ async function addClassStudent(newClass, newStudent) {
 
 }
 
-addClassStudent(newClass, newStudent).then(() => {
-    mongoose.connection.close()
-})
+const newAttendance = async () => {
+    return {
+        class: await Class.find({className: 'Health'}),
+        dateUpdated: new Date('01/27/2022'),
+        date: new Date('01/27/2022'),
+        numStudentsInClass: 2
+    }
+}
+
+async function addNewAttendance() {
+    try {
+        const singleClass = await Class.findOne({className: 'Health'})
+        const attendanceObject = {
+            class: singleClass,
+            dateUpdated: new Date('01/28/2022'),
+            date: new Date('01/28/2022'),
+            numStudentsInClass: singleClass.studentsInClass.length
+        }
+        const newAttendance = await new Attendance(attendanceObject)
+        await newAttendance.save()
+    }
+    catch(e) {
+        console.log(e)
+    }
+
+}
+
+addNewAttendance().then(() => mongoose.connection.close())
+// addClassStudent(newClass, newStudent).then(() => {
+//     mongoose.connection.close()
+// })
 
 
 // addClass(newClass).then(() => {

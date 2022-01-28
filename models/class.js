@@ -1,4 +1,3 @@
-const { boolean } = require('joi')
 const mongoose = require('mongoose')
 const {Schema} = mongoose
 const uniqueValidator = require('mongoose-unique-validator')
@@ -8,18 +7,19 @@ const replaceWhitespace = function (value) {
             return temp.replace(/\s+/g, '')
         }
 
-const attendanceSchema = new Schema({
-       date: {
-                type: Date,
-                required: true
-            },
-            studentsPresent: [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: 'Student'
-                }
-            ]
-})
+// TO ERASE
+// const attendanceSchema = new Schema({
+//        date: {
+//                 type: Date,
+//                 required: true
+//             },
+//             studentsPresent: [
+//                 {
+//                     type: Schema.Types.ObjectId,
+//                     ref: 'Student'
+//                 }
+//             ]
+// })
 
 const classSchema = new Schema({
     teacher: {
@@ -55,7 +55,8 @@ const classSchema = new Schema({
             ref: 'Student'
         }
     ],
-    attendance: [attendanceSchema]
+    // TO ERASE
+    // attendance: [attendanceSchema]
 })
 
 // Index made for composite uniqueness check

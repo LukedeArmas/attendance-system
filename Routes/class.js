@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Class = require('../models/class.js')
 const Student = require('../models/student.js')
+const Attendance = require('../models/attendance.js')
 const asyncError = require('../utils/asyncError.js')
 const myError = require('../utils/myError.js')
 const {validateClass, validateAddStudentToClass, validateRemoveStudentFromClass, checkSearch, validateAttendance} = require('../middleware.js')
@@ -11,12 +12,7 @@ const moment = require('moment')
 router.get('/', asyncError(async (req, res) => {
     const {search} = req.query
     const query = checkSearch(search)
-    const classes = await Class.find(query).sort({ classCode: 1 }).populate({
-        path: 'attendance',
-        populate: {
-            path: 'studentsPresent'
-        }
-    })
+    const classes = await Class.find(query).sort({ classCode: 1 })
     .populate('studentsInClass')
     res.render('class-pages/home', {classes, query})
 }))
@@ -34,12 +30,7 @@ router.get('/new', (req, res) => {
 
 router.get('/:id', asyncError(async (req, res, next) => {
     const {id} = req.params
-    const singleClass = await Class.findById(id).populate({
-        path: 'attendance',
-        populate: {
-            path: 'studentsPresent'
-        }
-    })
+    const singleClass = await Class.findById(id)
     .populate('studentsInClass')
     if (!singleClass) {
         return next(new myError(404, "This class does not exist"))
@@ -67,6 +58,7 @@ router.delete('/:id', asyncError(async (req, res) => {
     res.redirect('/class')
 }))
 
+// Stops caching so the page is refreshed if the user clicks the back arrow to go back to this page
 router.use(function(req, res, next) {
     res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0')
     next()
@@ -95,12 +87,7 @@ router.use(function(req, res, next) {
 })
 .get('/:id/removeStudent', asyncError(async (req, res) => {
     const {id} = req.params
-    const singleClass = await Class.findById(id).populate({
-        path: 'attendance',
-        populate: {
-            path: 'studentsPresent'
-        }
-    })
+    const singleClass = await Class.findById(id)
     .populate('studentsInClass')
     if (!singleClass) {
         return next(new myError(404, "This class does not exist"))
@@ -122,25 +109,29 @@ router.put('/:id/removeStudent', validateRemoveStudentFromClass, asyncError(asyn
 router.get('/:id/attendance', asyncError(async (req, res, next) => {
     const { id } = req.params
     const singleClass = await Class.findById(id)
+    const attendances = await Attendance.find({ class: singleClass._id })
+    // We only access the object on b because that is the current value. a is the previous value (which is the building sum) and starts with the value of 0. So if we tried to access an object from 0 it will result in NaN
+    const averageClassAttendance = Number(Math.round( (attendances.reduce((a, b) => {
+        return a + b.percentagePresent 
+    }, 0) / attendances.length) + 'e2') + 'e-2')
     if (!singleClass) {
         return next(new myError(404, "This class does not exist"))
     }
 
-    res.render('class-pages/attendance-pages/home', {singleClass, moment})
+    res.render('class-pages/attendance-pages/home', {singleClass, attendances, moment, averageClassAttendance})
 }))
 
 router.get('/:id/attendance/new', asyncError(async (req, res, next) => {
     const { id } = req.params
-    const notValidDates = []
+    let notValidDates = []
     const singleClass = await Class.findById(id)
     .populate('studentsInClass')
+    const attendances = await Attendance.find({ class: singleClass._id })
     if (!singleClass) {
         return next(new myError(404, "This class does not exist"))
     }
-    if (singleClass.attendance) {
-        singleClass.attendance.forEach(entry => {
-            notValidDates.push(moment(entry.date).format('L'))
-        })
+    if (attendances) {
+        notValidDates = attendances.map(entry => moment(entry.date).format('L') )
     }
     const unformattedDate = Date.now()
     const date = moment(unformattedDate).format('L')
@@ -152,13 +143,15 @@ router.post('/:id/attendance', validateAttendance, asyncError(async (req, res, n
     const { id } = req.params
     const { date, studentsPresent } = req.body
     const newDate = new Date(date)
-    const attendanceObj = {date: newDate, studentsPresent: studentsPresent}
-    const singleClass = await Class.findOne({ $and: [ { _id: id}, { 'attendance.date': { $ne: newDate } } ] })
-    if (singleClass) {
+    // Checks if the attendance date for this class exists already
+    if (!(await Attendance.exists({ class: id, date: newDate }))) {
+        const nowDate = new Date(Date.now())
+        const singleClass = await Class.findById(id)
+        const attendanceObj = { class: id, dateUpdated: nowDate, date: newDate, studentsPresent: studentsPresent, percentagePresent: studentsPresent ? 100*(studentsPresent.length / singleClass.studentsInClass.length) : 0, numStudentsInClass: singleClass.studentsInClass.length }
         // Try catch handles if user tries to put information other than student object ids in the studentsPresent array
         try {
-            await singleClass.attendance.push(attendanceObj)
-            await singleClass.save()
+            const newAttendance = await new Attendance(attendanceObj)
+            await newAttendance.save()
         }
         catch(e) {
             return next(new myError(400, "The list of students present must contain students"))
@@ -176,75 +169,48 @@ router.get('/:id/attendance/:dateId', asyncError(async (req, res, next) => {
     const { id, dateId } = req.params
     const singleClass = await Class.findById(id)
     .populate('studentsInClass')
-    // Will have to change this if I make a Model for attendance records
-    if (!singleClass.attendance) {
-        return next(new myError(404, "No attendance has been taken yet"))
+    const attendanceDay = await Attendance.findById(dateId)
+    if (!attendanceDay) {
+        return next(new myError(404, "No attendance has been taken yet for this date"))
     }
-    else {
-        const attendanceDay = singleClass.attendance.find(element => element.id === dateId)
-        if (!attendanceDay) {
-            return next(new myError(404, "Attendance for this date does not exist"))
-        } else {
-            res.render('class-pages/attendance-pages/show', { singleClass, attendanceDay, moment })
-        }
-    }
+    res.render('class-pages/attendance-pages/show', { singleClass, attendanceDay, moment })
 }))
 
 router.get('/:id/attendance/:dateId/edit', asyncError(async (req, res, next) => {
     const { id, dateId } = req.params
     const singleClass = await Class.findById(id)
     .populate('studentsInClass')
-    // Will have to change this if I make a Model for attendance records
-    if (!singleClass.attendance) {
-        return next(new myError(404, "No attendance has been taken yet"))
+    const attendanceDay = await Attendance.findById(dateId)
+    if (!attendanceDay) {
+        return next(new myError(404, "No attendance has been taken yet for this date"))
     }
-    else {
-        const attendanceDay = singleClass.attendance.find(element => element.id === dateId)
-        if (!attendanceDay) {
-            return next(new myError(404, "Attendance for this date does not exist"))
-        } else {
-            res.render('class-pages/attendance-pages/edit', { singleClass, attendanceDay, moment })
-        }
-    }
+    res.render('class-pages/attendance-pages/edit', { singleClass, attendanceDay, moment })
 }))
 
 router.put('/:id/attendance/:dateId', asyncError(async (req, res, next) => {
     const { id, dateId } = req.params
     const { studentsPresent } = req.body
-    const singleClass = await Class.findById(id)
-    // Will have to change this if I make a Model for attendance records
-    if (!singleClass.attendance) {
-        return next(new myError(404, "No attendance has been taken yet"))
+    const attendanceDay = await Attendance.findById(dateId)
+    if (!attendanceDay) {
+        return next(new myError(404, "Cannot edit attendance for a date that has not been recorded yet"))
     }
     else {
-        const attendanceDay = singleClass.attendance.find(element => element.id === dateId)
-        if (!attendanceDay) {
-            return next(new myError(404, "Cannot edit attendance for a date that has not been recorded yet"))
-        } else {
             try {
                 attendanceDay.studentsPresent = studentsPresent
-                await singleClass.save()
+                attendanceDay.percentagePresent = studentsPresent ? 100*(studentsPresent.length / attendanceDay.numStudentsInClass) : 0
+                await attendanceDay.save()
             }
             catch(e) {
-                return next(new myError(400, "The list of students present must contain students"))
+                return next(new myError(400, "The list of students must contain students"))
             }
-
             return res.redirect(`/class/${id}/attendance`) 
         }
-    }
 }))
 
 router.delete('/:id/attendance/:dateId', asyncError(async (req, res, next) => {
     const { id, dateId } = req.params
-    const singleClass = await Class.findById(id)
-    if (!singleClass.attendance) {
-        return next(new myError(404, "No attendance has been taken yet"))
-    }
-    else {
-        singleClass.attendance = singleClass.attendance.filter(attendanceDay => attendanceDay.id !== dateId)
-        await singleClass.save()
-        res.redirect(`/class/${id}/attendance`)
-    }
+    await Attendance.findByIdAndDelete(dateId)
+    res.redirect(`/class/${id}/attendance`)
 }))
 
 
