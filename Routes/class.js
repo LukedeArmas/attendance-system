@@ -61,7 +61,7 @@ router.put('/:id', validateClass, asyncError(async (req, res) => {
 router.delete('/:id', asyncError(async (req, res) => {
     const {id} = req.params
     const deletedClass = await Class.findByIdAndDelete(id)
-    .then(m => console.log('Deleted Class', m))
+    console.log("is this what's running")
     res.redirect('/class')
 }))
 
@@ -132,7 +132,8 @@ router.get('/:id/attendance', asyncError(async (req, res, next) => {
     const attendances = await Attendance.find({ class: singleClass._id })
     // We only access the object on b because that is the current value. a is the previous value (which is the building sum) and starts with the value of 0. So if we tried to access an object from 0 it will result in NaN
     const averageClassAttendance = Number(Math.round( (attendances.reduce((a, b) => {
-        return a + b.percentagePresent 
+        return a + 100*(b.numStudentsPresent /
+        singleClass.numStudentsInClass) 
     }, 0) / attendances.length) + 'e2') + 'e-2')
     if (!singleClass) {
         return next(new myError(404, "This class does not exist"))
@@ -175,7 +176,10 @@ router.post('/:id/attendance', validateAttendance, asyncError(async (req, res, n
     if (!(await Attendance.exists({ class: id, date: newDate }))) {
         const nowDate = new Date(Date.now())
         const singleClass = await Class.findById(id)
-        const attendanceObj = { class: id, dateUpdated: nowDate, date: newDate, studentsPresent: studentsPresent, percentagePresent: studentsPresent ? 100*(studentsPresent.length / singleClass.studentsInClass.length) : 0, numStudentsInClass: singleClass.studentsInClass.length }
+        if (singleClass.studentsInClass.length < 1) {
+            return next(new myError(400, "There are no students in this class"))
+        }
+        const attendanceObj = { class: id, dateUpdated: nowDate, date: newDate, studentsPresent: studentsPresent }
         // Try catch handles if user tries to put information other than student object ids in the studentsPresent array
         try {
             const newAttendance = await new Attendance(attendanceObj)
@@ -240,7 +244,6 @@ router.put('/:id/attendance/:dateId', asyncError(async (req, res, next) => {
     else {
             try {
                 attendanceDay.studentsPresent = studentsPresent
-                attendanceDay.percentagePresent = studentsPresent ? 100*(studentsPresent.length / attendanceDay.numStudentsInClass) : 0
                 await attendanceDay.save()
             }
             catch(e) {

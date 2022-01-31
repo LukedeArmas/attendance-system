@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const {Schema} = mongoose
 const Class = require('./class.js')
+const Attendance = require('./attendance.js')
 const uniqueValidator = require('mongoose-unique-validator')
 
 const replaceWhitespace = function (value) {
@@ -35,6 +36,7 @@ const studentSchema = mongoose.Schema({
 studentSchema.index({studentId: 'text', firstName: 'text', lastName: 'text'})
 
 // THIS HAS BEEN UPDATED PROPERLY FOR NEW MODEL
+// WE NEED TO UPDATE FOR ATTENDANCE
 // If we delete a student we remove the student from all of his or her classes
 studentSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
@@ -47,6 +49,17 @@ studentSchema.post('findOneAndDelete', async function(doc) {
         {runValidators: true, new: true}
         )
         .then(m => console.log("The student was deleted from all its classes after we deleted the student", m))
+
+        // const attendances = await Attendance.find({ studentsPresent: { $eq: doc } })
+        // console.log(attendances)
+        await Attendance.updateMany({
+            studentsPresent: {
+                $eq: doc
+            }
+        },
+        { $pull: { studentsPresent: doc._id } },
+        {runValidators: true, new: true}
+        ).then(m => console.log("The student was deleted from all its attendances after it was deleted"))
     }
 })
 

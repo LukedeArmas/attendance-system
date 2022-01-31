@@ -33,7 +33,10 @@
       <th scope="row" class="text-center ps-0"><%= num++ %>.</th>
       <td><%= moment(attendanceDay.date).format('LL') %></td>
       <td><%= moment(attendanceDay.dateUpdated).format('LL') %></td>
-      <td class="text-center"><%= attendanceDay.percentagePresent %>%</td>
+      <td class="text-center">
+        <%= 100*(attendanceDay.numStudentsPresent /
+        singleClass.numStudentsInClass) %>%
+      </td>
       <td class="text-center">
         <a
           href="/class/<%= singleClass._id %>/attendance/<%= attendanceDay._id %>"

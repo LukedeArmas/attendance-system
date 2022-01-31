@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const {Schema} = mongoose
+const asyncError = require('../utils/asyncError.js')
 const uniqueValidator = require('mongoose-unique-validator')
 
 const replaceWhitespace = function (value) {
@@ -47,28 +48,22 @@ const classSchema = new Schema({
 }]
 })
 
+classSchema.virtual('numStudentsInClass').get(function () {
+    return this.studentsInClass.length
+})
+
+
 // Index made for composite uniqueness check
 classSchema.index({ classCode: 1, section: 1 }, { unique: true })
 
 // Index made for searching classes
 classSchema.index({teacher: 'text', className: 'text', classCode: 'text', subject: 'text'})
 
-// WE HAVE TO CHANGE THIS TO REMOVING THE ATTENDANCE
-// If we delete a Class we remove the class from every student's (who is in the class) classesEnrolled array 
-// classSchema.post('findOneAndDelete', async function(doc) {
-//     if (doc) {
-//         await mongoose.model('Student').updateMany({
-//             _id: {
-//                 $in: doc.studentsInClass
-//             }
-//         },
-//         {$pull: {classesEnrolled: doc._id}}
-//         )
-//         .then(m => console.log("The Class was removed from our student after we deleted the class", m))
-//     }
-// })
-
-// Makes the unique attribute a validator
-// classSchema.plugin(uniqueValidator, { message: '{PATH} already exists What is happening'})
+// If we delete a Class we delete all the attendances associated with this class
+classSchema.post('findOneAndDelete', async function(doc) {
+    if (doc) {
+        await mongoose.model('Attendance').deleteMany({ class: doc }).then(m => console.log("All of the attendances associated with this class were deleted after this class was deleted"))
+    }
+})
 
 module.exports = mongoose.model('Class', classSchema)

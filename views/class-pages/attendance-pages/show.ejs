@@ -10,7 +10,7 @@
 
 <p class="h4 mb-4">
   <strong class="fw-lighter">Class Attendance: </strong><%=
-  attendanceDay.percentagePresent %>%
+  100*(attendanceDay.numStudentsPresent / singleClass.numStudentsInClass) %>%
 </p>
 
 <%- include('../../partials/student-table.ejs', {students:

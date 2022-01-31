@@ -20,17 +20,15 @@ const attendanceSchema = new Schema({
                 type: Schema.Types.ObjectId,
                 ref: 'Student'
             }
-        ],
-       percentagePresent: {
-           type: Number,
-           default: 0,
-           required: true
-       },
-    //    We're including this in case we add students mid way through the course. It would affect the percentage of students present if we used the number of students currently in the class instead of the number of students in the class when the attendance was taken (this honestly may be beyond the scope of this project but we'll see. There's the whole other issue of tracking an individual student's attendance if they are added midway through the course. This may not be feasible which is why colleges usually don't start attendance until the student list is finalized)
-       numStudentsInClass: {
-           type: Number,
-           required: true
-       }
+        ]
 })
+
+attendanceSchema.set('toJSON', { virtuals: true })
+attendanceSchema.set('toObject', { virtuals: true })
+
+attendanceSchema.virtual('numStudentsPresent').get(function () {
+    return this.studentsPresent.length
+})
+
 
 module.exports = mongoose.model('Attendance', attendanceSchema)
