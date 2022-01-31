@@ -32,7 +32,8 @@ module.exports.validateAddStudentToClass = async (req, res, next) => {
     if (!studentList) {
         return next(new myError(500, "Cannot add zero students"))
     }
-    if (studentList.every(elementId => !(singleClass.studentsInClass.includes(elementId))) === false) {
+    // Checks if there we are adding students that are already in the class (which we cannot allow). Basically every student in the request body is checked to see if they are in the class already
+    if (studentList.every(elementId => !(singleClass.studentsInClass.map((entry) => entry.student.toString()).includes(elementId))) === false) {
         return next(new myError(500, "Cannot add student multiple times to the same class"))
     }
     else {
@@ -47,7 +48,8 @@ module.exports.validateRemoveStudentFromClass = async (req, res, next) => {
     if (!studentList) {
         return next(new myError(500, "Cannot remove no one from a class"))
     }
-    if (studentList.every(elementId => singleClass.studentsInClass.includes(elementId)) === false) {
+    // Check every student in the request body and see if they are in the class. We are only allowed to remove the student if they are already in the class
+    if (studentList.every(elementId => singleClass.studentsInClass.map((entry) => entry.student.toString()).includes(elementId)) === false) {
         return next(new myError(500, "Cannot remove students who are not a member of the class"))
     }
     else {

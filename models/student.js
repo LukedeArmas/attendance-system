@@ -28,27 +28,23 @@ const studentSchema = mongoose.Schema({
         required: true,
         trim: true,
         set: replaceWhitespace
-    },
-    classesEnrolled:[
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Class'
-        }
-    ]
+    }
 })
 
 // Index made for searching students
 studentSchema.index({studentId: 'text', firstName: 'text', lastName: 'text'})
 
+// THIS HAS BEEN UPDATED PROPERLY FOR NEW MODEL
 // If we delete a student we remove the student from all of his or her classes
 studentSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
         await Class.updateMany({
-            _id: {
-                $in: doc.classesEnrolled
+            'studentsInClass.student': {
+                $eq: doc
             }
         },
-        {$pull: {studentsInClass: doc._id}}
+        { $pull: { studentsInClass: { student: { $eq: doc } } } },
+        {runValidators: true, new: true}
         )
         .then(m => console.log("The student was deleted from all its classes after we deleted the student", m))
     }

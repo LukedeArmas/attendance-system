@@ -3,5 +3,4 @@ include('../partials/show-header.ejs', {type: student, typeName: 'student',
 name: `${student.firstName} ${student.lastName}`}) %>
 <p><strong>Student ID: </strong> <%= student.studentId %></p>
 <p class="h4 mb-3">Currently Enrolled Classes:</p>
-<%- include('../partials/class-table.ejs', {classes: student.classesEnrolled,
-num: 1}) %>
+<%- include('../partials/class-table.ejs', {classes: classes, num: 1}) %>

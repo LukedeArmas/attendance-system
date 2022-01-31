@@ -8,7 +8,9 @@
   action="/class/<%= singleClass._id %>/removeStudent?_method=PUT"
   method="POST"
 >
+  <!-- We have to map the studentsInClass array so it only includes students and not attendance percentage -->
   <%- include('../partials/student-table.ejs', {students:
-  singleClass.studentsInClass, num: 1, remove: true}) %>
+  singleClass.studentsInClass.map((entry) => entry.student), num: 1, remove:
+  true}) %>
   <button class="btn btn-outline-danger" type="submit">Remove Students</button>
 </form>

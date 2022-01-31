@@ -33,7 +33,8 @@
     </div>
   </section>
   <%- include('../../partials/student-table.ejs', {students:
-  singleClass.studentsInClass, num: 1, attendance: true}) %>
+  singleClass.studentsInClass.map((entry) => entry.student), num: 1, attendance:
+  true}) %>
   <button class="btn btn-outline-primary mb-3" type="submit">
     Mark Attendance
   </button>

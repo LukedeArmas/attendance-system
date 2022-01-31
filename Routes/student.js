@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Student = require('../models/student.js')
+const Class = require('../models/class.js')
 const asyncError = require('../utils/asyncError.js')
 const myError = require('../utils/myError.js')
 const {validateStudent, checkSearch} = require('../middleware.js')
@@ -26,11 +27,13 @@ router.get('/new', (req, res) => {
 
 router.get('/:id', asyncError(async (req, res, next) => {
     const {id} = req.params
-    const student = await Student.findById(id).populate('classesEnrolled')
+    const student = await Student.findById(id)
+    // This is how you query for documents that have an array of embedded documents where at least one of the sub documents contains our match
+    const classes = await Class.find({ 'studentsInClass.student': { $eq: student } })
     if (!student) {
         return next(new myError(404, "This student does not exist"))
     }
-    res.render('student-pages/show', {student})
+    res.render('student-pages/show', {student, classes})
 }))
 
 router.get('/:id/edit', asyncError(async (req, res) => {

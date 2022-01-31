@@ -14,7 +14,8 @@
   enctype="raw"
 >
   <%- include('../../partials/student-table.ejs', {students:
-  singleClass.studentsInClass, num: 1, attendanceEdit: true, attendanceDay}) %>
+  singleClass.studentsInClass.map((entry) => entry.student), num: 1,
+  attendanceEdit: true, attendanceDay}) %>
   <button class="btn btn-outline-primary mb-3" type="submit">
     Edit Attendance
   </button>
