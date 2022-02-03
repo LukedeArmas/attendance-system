@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 const {Schema} = mongoose
-const asyncError = require('../utils/asyncError.js')
-const uniqueValidator = require('mongoose-unique-validator')
 
 const replaceWhitespace = function (value) {
             let temp = value
@@ -34,7 +32,7 @@ const classSchema = new Schema({
     subject: {
         type: String,
         required: true,
-        enum: ['General','Computer Science', 'Mathematics', 'Political Science', 'History']
+        enum: ['General','Computer Science', 'Mathematics', 'Political Science', 'History', 'Communications', 'Psychology', 'English', 'Education', 'Physics', 'Music']
     },
     studentsInClass: [{
     student: {
@@ -66,7 +64,7 @@ classSchema.index({teacher: 'text', className: 'text', classCode: 'text', subjec
 // If we delete a Class we delete all the attendances associated with this class
 classSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
-        await mongoose.model('Attendance').deleteMany({ class: doc }).then(m => console.log("All of the attendances associated with this class were deleted after this class was deleted"))
+        await mongoose.model('Attendance').deleteMany({ class: doc })
     }
 })
 

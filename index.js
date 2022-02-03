@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config()
+}
+
 const express = require('express')
 const path = require('path')
 const ejsMate = require('ejs-mate')
@@ -12,10 +16,14 @@ const mongoSanitize = require('express-mongo-sanitize')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const flash = require('connect-flash')
-
+// const User = require('./models/user')
+// const passport = require('passport')
+// const passportLocal = require('passport-local')
+const databaseUrl = process.env.DB_URL || 'mongodb://localhost:27017/attendance'
+const MongoStore = require('connect-mongo')
 
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost:27017/attendance')
+mongoose.connect(databaseUrl)
 .catch(e => console.log('Error', e))
 
 const db = mongoose.connection;
@@ -37,18 +45,33 @@ app.use(
         replaceWith: '_'
     }))
 app.use(cookieParser())
+
+const secret = process.env.SECRET || 'temporarysecret'
+
 const sessionConfig = {
-    secret: 'temporarysecret',
+    name: 'mySession',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
-    }
+    },
+    store: MongoStore.create({
+        mongoUrl: databaseUrl,
+        secret,
+        touchAfter: 24 * 60 * 60
+    })
 }
 app.use(session(sessionConfig))
 app.use(flash())
+
+// app.use(passport.initialize())
+// app.use(passport.session())
+// passport.use(new passportLocal(User.authenticate()))
+// passport.serializeUser(User.serializeUser())
+// passport.deserializeUser(User.deserializeUser())
 
 app.use((req, res, next) => {
     res.locals.message = req.flash('success')

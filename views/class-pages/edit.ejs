@@ -1,15 +1,7 @@
 <% layout('./layouts/boilerplate.ejs') %>
 
 <div
-  class="
-    d-flex
-    justify-content-center
-    align-items-center
-    pt-3
-    pb-2
-    mb-3
-    border-bottom
-  "
+  class="d-flex justify-content-center align-items-center pt-3 pb-2 mb-3 border-bottom"
 >
   <h1 class="h1 text-nowrap">Edit Class</h1>
 </div>
@@ -67,7 +59,8 @@
         </select>
       </div>
       <% const subjects = ['General', 'Computer Science', 'Mathematics',
-      'Political Science', 'History'] %>
+      'Political Science', 'History', 'Communications', 'Psychology', 'English',
+      'Education', 'Physics', 'Music'] %>
       <div class="mb-3 col-sm-8 offset-sm-2">
         <label class="form-label" for="subject">Subject</label>
         <select class="form-select" id="subject" name="myClass[subject]">

@@ -35,9 +35,7 @@ const studentSchema = mongoose.Schema({
 // Index made for searching students
 studentSchema.index({studentId: 'text', firstName: 'text', lastName: 'text'})
 
-// THIS HAS BEEN UPDATED PROPERLY FOR NEW MODEL
-// WE NEED TO UPDATE FOR ATTENDANCE
-// If we delete a student we remove the student from all of his or her classes
+// If we delete a student we remove the student from all of his or her classes and attendance records
 studentSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
         await Class.updateMany({
@@ -48,7 +46,6 @@ studentSchema.post('findOneAndDelete', async function(doc) {
         { $pull: { studentsInClass: { student: { $eq: doc } } } },
         {runValidators: true, new: true}
         )
-        .then(m => console.log("The student was deleted from all its classes after we deleted the student", m))
         await Attendance.updateMany({
             studentsPresent: {
                 $eq: doc
@@ -56,7 +53,7 @@ studentSchema.post('findOneAndDelete', async function(doc) {
         },
         { $pull: { studentsPresent: doc._id } },
         {runValidators: true, new: true}
-        ).then(m => console.log("The student was deleted from all its attendances after it was deleted"))
+        )
     }
 })
 

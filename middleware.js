@@ -1,8 +1,8 @@
 const myError = require('./utils/myError.js')
-const {studentSchema, classSchema, attendanceSchema, checkDate } = require('./joi-schemas.js')
+const {studentSchema, classSchema, attendanceSchema } = require('./joi-schemas.js')
 const Class = require('./models/class.js')
-const moment = require('moment')
 const mongoose = require("mongoose")
+
 
 module.exports.validateStudent = (req, res, next) => {
     const {error} = studentSchema.validate(req.body);
@@ -59,14 +59,6 @@ module.exports.validateRemoveStudentFromClass = async (req, res, next) => {
     else {
         return next()
     }
-}
-
-module.exports.checkSearch = (search) => {
-    let query = {}
-    if (search) {
-        query = {$text: {$search: search}}
-    }
-    return query
 }
 
 module.exports.validateAttendance = async (req, res, next) => {

@@ -1,5 +1,5 @@
 <% layout('./layouts/boilerplate.ejs') %> <%-
-include('../../partials/show-header.ejs', {typeName: 'class', type: singleClass,
+include('../partials/show-header.ejs', {typeName: 'class', type: singleClass,
 name: `${singleClass.className}`, attendance: true, attendanceDay:
 attendanceDay}) %>
 
@@ -18,6 +18,6 @@ attendanceDay}) %>
   >
 </div>
 
-<%- include('../../partials/student-table.ejs', {students:
+<%- include('../partials/student-table.ejs', {students:
 singleClass.studentsInClass.map((entry) => entry.student), num: 1,
 attendanceShow: true, attendanceDay}) %>

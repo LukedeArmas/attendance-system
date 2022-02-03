@@ -38,7 +38,7 @@ module.exports.classSchema = Joi.object({
         className: Joi.string().required().escapeHTML(),
         classCode: Joi.string().required().escapeHTML(),
         section: Joi.number().required().valid(1,2,3,4),
-        subject: Joi.string().required().valid('General','Computer Science', 'Mathematics', 'Political Science', 'History').escapeHTML()
+        subject: Joi.string().required().valid('General','Computer Science', 'Mathematics', 'Political Science', 'History', 'Communications', 'Psychology', 'English', 'Education', 'Physics', 'Music').escapeHTML()
     }).required()
 })
 
