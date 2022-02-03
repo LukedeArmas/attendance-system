@@ -40,19 +40,19 @@ name: `${singleClass.className}`}) %>
           <th scope="col">First</th>
           <th scope="col">Last</th>
           <th class="text-center" scope="col">Attendance</th>
-          <th class="text-center" scope="col">Options</th>                                
+          <th class="text-center" scope="col">View</th>                                
         </tr>
       </thead>
       <% if (singleClass.studentsInClass.length) { %>
       <tbody>
         <% 
-        for (let { student, attendancePercentage } of singleClass.studentsInClass) { %>
+        for (let { student, numAttendancesPresent } of singleClass.studentsInClass) { %>
         <tr>
           <th scope="row" class="text-center ps-0"><%= num %>.</th>
           <td><%= student.studentId %></th>
           <td><%= student.firstName %></td>
           <td><%= student.lastName %></td>
-          <td class="text-center"><%= attendancePercentage %>%</td>
+          <td class="text-center"><%= singleClass.numAttendancesTaken > 0 ? Number(Math.round( 100*(numAttendancesPresent / singleClass.numAttendancesTaken) + 'e2') + 'e-2') : 0 %>%</td>
           <td class="text-center">
             <a class="btn btn-outline-secondary px-3 py-1" href="/student/<%= student._id %>"
               ><i class="fa fa-user"></i></a

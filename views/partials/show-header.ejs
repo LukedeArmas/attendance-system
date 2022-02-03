@@ -1,11 +1,15 @@
 <div
   class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
 >
-  <h1 class="h1 text-nowrap"><%= name %></h1>
+  <h1 class="h1 text-nowrap">
+    <% if (typeof attendance !== 'undefined') { %> <%=
+    moment(attendanceDay.date).format('LL') %> Attendance: <% } %> <%= name %>
+  </h1>
   <div
     class="d-flex flex-column flex-sm-row align-items-center flex-sm-nowrap btn-toolbar mb-2 mb-md-0"
   >
-    <% if (typeName === 'class' && type.studentsInClass.length > 0) { %>
+    <% if (typeName === 'class' && type.studentsInClass.length > 0 && typeof
+    attendance === "undefined") { %>
     <a
       class="btn btn-outline-primary mb-2 mb-sm-0"
       href="/<%= typeName %>/<%= type._id %>/attendance"
@@ -14,7 +18,7 @@
     <% } %>
     <a
       class="btn btn-outline-secondary mx-2 mb-2 mb-sm-0"
-      href="/<%= typeName %>/<%= type._id %>/edit"
+      href="/<%= typeName %>/<%= type._id %>/<% if (typeof attendance !== "undefined") { %>attendance/<%= attendanceDay.id %>/<% } %>edit"
       >Edit</a
     >
     <button
@@ -25,7 +29,7 @@
       Delete
     </button>
     <form
-      action="/<%= typeName %>/<%= type._id %>?_method=DELETE"
+      action="/<%= typeName %>/<%= type._id %>/<% if (typeof attendance !== "undefined") { %>attendance/<%= attendanceDay.id %><% } %>?_method=DELETE"
       method="POST"
     >
       <div
@@ -39,7 +43,12 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="deleteModalLabel">
-                Delete <%= name %>
+                Delete
+                <% if (typeof attendance !== "undefined") { %>
+                  <%= moment(attendanceDay.date).format('LL') %> Attendance
+                <% } else { %>
+                <%= name %>
+                <% } %>
               </h5>
               <button
                 type="button"

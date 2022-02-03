@@ -45,7 +45,7 @@
         </h6>
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active text-nowrap" aria-current="page" href="/home">
+            <a class="nav-link text-nowrap" aria-current="page" href="/home">
               <span data-feather="home"></span>
               Home
             </a>
@@ -57,7 +57,7 @@
         </h6>
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active text-nowrap" aria-current="page" href="/student">
+            <a class="nav-link text-nowrap" aria-current="page" href="/student">
               <span data-feather="home"></span>
               Student Dashboard
             </a>
@@ -75,7 +75,7 @@
         </h6>
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/class">
+            <a class="nav-link" aria-current="page" href="/class">
               <span data-feather="home"></span>
               Class Dashboard
             </a>
@@ -88,22 +88,22 @@
           </li>
         </ul>
 
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center mt-4 px-3 mb-1 text-muted">
+        <!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center mt-4 px-3 mb-1 text-muted">
             <span>Attendance</span>
         </h6>
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active text-nowrap" aria-current="page" href="/student">
+            <a class="nav-link text-nowrap" aria-current="page" href="/student">
               <span data-feather="home"></span>
               Mark Attendance
             </a>
           </li>
-        </ul>
+        </ul> -->
       </div>
     </nav>
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <section class="container-fluid mt-3"><%- body -%></section>
-      </main>
+      <section class="container-fluid mt-3"><%- include('../partials/flash-error') %><%- include('../partials/flash-success') %> <%- body -%></section>
+    </main>
       
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/js/bootstrap.bundle.min.js"></script> 
     <script
@@ -122,5 +122,6 @@
     <script src="/scripts/validateForm.js"></script>
     <script src="/scripts/datePicker.js"></script>
     <script src="/scripts/validateDateForm.js"></script>
+    <script src="/scripts/activeNavigation.js"></script>
   </body>
 </html>

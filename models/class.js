@@ -41,11 +41,15 @@ const classSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Student'
     },
-    attendancePercentage: {
+    numAttendancesPresent: {
         type: Number,
         default: 0
     }
-}]
+}],
+    numAttendancesTaken: {
+        type: Number,
+        default: 0
+    }
 })
 
 classSchema.virtual('numStudentsInClass').get(function () {

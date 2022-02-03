@@ -5,9 +5,12 @@
       <th scope="col">Class Code</th>
       <th scope="col">Class Name</th>
       <th scope="col">Subject</th>
-      <th scope="col">Teacher</th>
-      <th class="text-center" scope="col">Attendance</th>
-      <th scope="col" class="text-center">Options</th>
+      <th scope="col" class="text-center">Section</th>
+      <th scope="col" class="text-center">Teacher</th>
+      <% if (typeof studentShow !== 'undefined') { %>
+      <th scope="col" class="text-center">Attendance</th>
+      <% } %>
+      <th scope="col" class="text-center">View</th>
     </tr>
   </thead>
   <tbody class="table">
@@ -17,8 +20,17 @@
       <td><%= singleClass.classCode %></td>
       <td><%= singleClass.className %></td>
       <td><%= singleClass.subject %></td>
-      <td><%= singleClass.teacher %></td>
-      <td class="text-center">temp%</td>
+      <td class="text-center"><%= singleClass.section %></td>
+      <td class="text-center"><%= singleClass.teacher %></td>
+      <% if (typeof studentShow !== 'undefined') { %> <% for (let studentEntry
+      of singleClass.studentsInClass) { if (studentEntry.student._id.toString()
+      === student._id.toString()) { %>
+      <td class="text-center">
+        <%= singleClass.numAttendancesTaken > 0 ? Number(Math.round(
+        100*(studentEntry.numAttendancesPresent /
+        singleClass.numAttendancesTaken) + 'e2') + 'e-2') : 0 %>%
+      </td>
+      <% } } } %>
       <td class="text-center">
         <a
           class="btn btn-outline-secondary px-3 py-1"

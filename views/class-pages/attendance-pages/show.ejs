@@ -1,17 +1,22 @@
-<% layout('./layouts/boilerplate.ejs') %>
-<div
-  class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
->
-  <h1 class="h1 text-nowrap">
-    <%= moment(attendanceDay.date).format('L') %> Attendance: <%=
-    singleClass.className %>
-  </h1>
-</div>
+<% layout('./layouts/boilerplate.ejs') %> <%-
+include('../../partials/show-header.ejs', {typeName: 'class', type: singleClass,
+name: `${singleClass.className}`, attendance: true, attendanceDay:
+attendanceDay}) %>
 
-<p class="h4 mb-4">
-  <strong class="fw-lighter">Class Attendance: </strong><%=
-  100*(attendanceDay.numStudentsPresent / singleClass.numStudentsInClass) %>%
-</p>
+<div
+  class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center mb-3"
+>
+  <p class="h4">
+    <strong class="fw-lighter">Class Attendance: </strong><%= Number(Math.round(
+    100*(attendanceDay.numStudentsPresent / singleClass.numStudentsInClass) +
+    'e2') + 'e-2') %>%
+  </p>
+  <a
+    class="btn btn-outline-primary"
+    href="/class/<%= singleClass._id %>/attendance"
+    >Back to Class Attendance</a
+  >
+</div>
 
 <%- include('../../partials/student-table.ejs', {students:
 singleClass.studentsInClass.map((entry) => entry.student), num: 1,

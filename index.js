@@ -4,10 +4,14 @@ const ejsMate = require('ejs-mate')
 const methodOverride = require('method-override')
 const studentRoutes = require('./Routes/student.js')
 const classRoutes = require('./Routes/class.js')
+const attendanceRoutes = require('./Routes/attendance.js')
 const myError = require('./utils/myError.js')
 const Student = require('./models/student')
 const Class = require('./models/class')
 const mongoSanitize = require('express-mongo-sanitize')
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
+const flash = require('connect-flash')
 
 
 const mongoose = require('mongoose')
@@ -32,11 +36,29 @@ app.use(
     mongoSanitize({
         replaceWith: '_'
     }))
+app.use(cookieParser())
+const sessionConfig = {
+    secret: 'temporarysecret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+app.use(session(sessionConfig))
+app.use(flash())
 
-const teachers = ['Testing', 'Testing 2']
+app.use((req, res, next) => {
+    res.locals.message = req.flash('success')
+    res.locals.error = req.flash('error')
+    next()
+})
 
 app.use('/student', studentRoutes)
 app.use('/class', classRoutes)
+app.use('/class/:id/attendance', attendanceRoutes)
 
 app.get('/home', async (req, res, next) => {
     const numStudents = await Student.countDocuments()

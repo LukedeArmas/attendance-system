@@ -49,9 +49,6 @@ studentSchema.post('findOneAndDelete', async function(doc) {
         {runValidators: true, new: true}
         )
         .then(m => console.log("The student was deleted from all its classes after we deleted the student", m))
-
-        // const attendances = await Attendance.find({ studentsPresent: { $eq: doc } })
-        // console.log(attendances)
         await Attendance.updateMany({
             studentsPresent: {
                 $eq: doc
