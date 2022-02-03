@@ -83,7 +83,7 @@ app.use('/student', studentRoutes)
 app.use('/class', classRoutes)
 app.use('/class/:id/attendance', attendanceRoutes)
 
-app.get('/home', async (req, res, next) => {
+app.get('/', async (req, res, next) => {
     const numStudents = await Student.countDocuments()
     const numClasses = await Class.countDocuments()
     const numSubjects = await Class.schema.path('subject').enumValues.length
