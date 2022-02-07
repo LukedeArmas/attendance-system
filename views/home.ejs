@@ -7,19 +7,30 @@
 <div class="container">
   <div class="row">
     <a
+      href="/class"
+      class="d-block col-xl-3 col-lg-4 offset-md-0 col-sm-6 offset-sm-3 border border-2 rounded px-4 py-3"
+    >
+      <h4 class="h4 fw-lighter">
+        <% if (currentUser.username !== 'admin') { %> My <% } %>Classes
+      </h4>
+      <p class="fs-2"><%= numClasses %></p>
+    </a>
+    <% if (currentUser.username === 'admin') { %>
+    <a
       href="/student"
       class="d-block col-xl-3 col-lg-4 offset-md-0 col-sm-6 offset-sm-3 border border-2 rounded px-4 py-3"
     >
       <h4 class="h4 fw-lighter">Students</h4>
       <p class="fs-2"><%= numStudents %></p>
     </a>
-    <a
-      href="/class"
+    <% } else { %>
+    <div
       class="d-block col-xl-3 col-lg-4 offset-md-0 col-sm-6 offset-sm-3 border border-2 rounded px-4 py-3"
     >
-      <h4 class="h4 fw-lighter">Classes</h4>
-      <p class="fs-2"><%= numClasses %></p>
-    </a>
+      <h4 class="h4 fw-lighter">Students</h4>
+      <p class="fs-2"><%= numStudents %></p>
+    </div>
+    <% } %>
     <div
       class="d-block col-xl-3 col-lg-4 offset-md-0 col-sm-6 offset-sm-3 border border-2 rounded px-4 py-3"
     >

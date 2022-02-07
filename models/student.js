@@ -9,6 +9,12 @@ const replaceWhitespace = function (value) {
             return temp.replace(/\s+/g, '')
         }
 
+const replaceWhitespaceAndCapitalize = function (value) {
+    let temp = value
+    temp = temp.replace(/\s+/g, '')
+    return temp.charAt(0).toUpperCase() + temp.slice(1)
+}
+
 const studentSchema = mongoose.Schema({
     studentId:{
         type: String,
@@ -22,13 +28,13 @@ const studentSchema = mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        set: replaceWhitespace
+        set: replaceWhitespaceAndCapitalize
     },
     lastName:{
         type: String,
         required: true,
         trim: true,
-        set: replaceWhitespace
+        set: replaceWhitespaceAndCapitalize
     }
 })
 

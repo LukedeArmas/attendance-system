@@ -1,24 +1,24 @@
 const express = require('express')
 const router = express.Router({ mergeParams: true })
 const asyncError = require('../utils/asyncError.js')
-const { validateAttendance, objectIdMiddleware } = require('../middleware.js')
+const { validateAttendance, objectIdMiddleware, isLoggedIn, verifyTeacher } = require('../middleware.js')
 const attendance = require('../controllers/attendance')
 
 
 router.route('/')
-    .get(objectIdMiddleware, asyncError(attendance.home))
-    .post(objectIdMiddleware, validateAttendance, asyncError(attendance.post))
+    .get(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.home))
+    .post(isLoggedIn, verifyTeacher, objectIdMiddleware, validateAttendance, asyncError(attendance.post))
 
 router.route('/new')
-    .get( objectIdMiddleware, asyncError(attendance.new))
+    .get(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.new))
 
 router.route('/:dateId')
-    .get(objectIdMiddleware, asyncError(attendance.show))
-    .put(objectIdMiddleware, asyncError(attendance.put))
-    .delete(objectIdMiddleware, asyncError(attendance.delete))
+    .get(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.show))
+    .put(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.put))
+    .delete(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.delete))
     
 router.route('/:dateId/edit')
-    .get(objectIdMiddleware, asyncError(attendance.edit))
+    .get(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.edit))
 
 
 module.exports = router

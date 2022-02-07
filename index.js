@@ -16,11 +16,13 @@ const mongoSanitize = require('express-mongo-sanitize')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const flash = require('connect-flash')
-// const User = require('./models/user')
-// const passport = require('passport')
-// const passportLocal = require('passport-local')
-const databaseUrl = process.env.DB_URL || 'mongodb://localhost:27017/attendance'
+const User = require('./models/user')
+const passport = require('passport')
+const passportLocal = require('passport-local')
+// const databaseUrl = process.env.DB_URL || 'mongodb://localhost:27017/attendance'
+const databaseUrl = 'mongodb://localhost:27017/attendance'
 const MongoStore = require('connect-mongo')
+const { isAdmin, isLoggedIn } = require('./middleware.js')
 
 const mongoose = require('mongoose')
 mongoose.connect(databaseUrl)
@@ -67,13 +69,14 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 app.use(flash())
 
-// app.use(passport.initialize())
-// app.use(passport.session())
-// passport.use(new passportLocal(User.authenticate()))
-// passport.serializeUser(User.serializeUser())
-// passport.deserializeUser(User.deserializeUser())
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new passportLocal(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user
     res.locals.message = req.flash('success')
     res.locals.error = req.flash('error')
     next()
@@ -84,17 +87,49 @@ app.use('/class', classRoutes)
 app.use('/class/:id/attendance', attendanceRoutes)
 
 app.get('/', async (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        return res.redirect('/login')
+    }
+    const numClasses = req.user.username === 'admin' ? await Class.countDocuments() : await Class.find({ teacher: req.user._id }).count()
     const numStudents = await Student.countDocuments()
-    const numClasses = await Class.countDocuments()
     const numSubjects = await Class.schema.path('subject').enumValues.length
-    const teachers = await Class.find().distinct('teacher')
-    const numTeachers = teachers.length
+    const numTeachers = await User.find({ username: { $ne: 'admin' }}).countDocuments()
 
     res.render('home.ejs', {numStudents, numClasses, numSubjects, numTeachers})
 })
 
-app.get('/error', (req, res, next) => {
-    next(new myError(500,"Testing express error class"))
+app.get('/register', isLoggedIn, isAdmin, (req, res, next) => {
+    res.render('auth/register')
+})
+
+app.post('/register', isLoggedIn, isAdmin, async (req, res, next) => {
+    try {
+        const { firstName, lastName, email, username, password } = req.body
+        const user = new User({ firstName, lastName, email, username })
+        const newUser = await User.register(user, password)
+        req.flash('success', 'Successfully added student')
+        res.redirect('/')
+    }
+    catch(e) {
+        req.flash('error', e.message)
+        res.redirect('/register')
+    }
+})
+
+app.get('/login', (req, res, next) => {
+    res.render('auth/login', {login: true})
+})
+
+app.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res, next) => {
+    const urlRedirect = req.session.oldUrl || '/'
+    req.flash('success', 'Welcome Back!')
+    res.redirect(urlRedirect)
+})
+
+app.get('/logout', (req, res, next) => {
+    req.logout()
+    req.flash('success', 'Goodbye!')
+    res.redirect('/login')
 })
 
 app.get('*', (req, res, next) => {

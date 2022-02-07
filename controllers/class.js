@@ -1,13 +1,13 @@
 const Class = require('../models/class.js')
 const Student = require('../models/student.js')
 const { checkSearch } = require('../helperFunctions.js')
+const User = require('../models/user.js')
 
 
 module.exports.home = async (req, res) => {
     const {search} = req.query
-    const query = checkSearch(search)
-    const classes = await Class.find(query).sort({ classCode: 1 })
-    .populate('studentsInClass')
+    let query = checkSearch(search)
+    const classes = req.user.username === 'admin' ? await Class.find(query).sort({ classCode: 1 }).populate('teacher').populate('studentsInClass') : await Class.find({ teacher: req.user._id, ...query }).sort({ classCode: 1 }).populate('teacher').populate('studentsInClass')
     res.render('class-pages/home', {classes, query})
 }
 
@@ -31,15 +31,17 @@ module.exports.post = async (req, res, next) => {
     res.redirect('/class')
 }
 
-module.exports.new = (req, res) => {
-    res.render('class-pages/new')
+module.exports.new = async (req, res, next) => {
+    const teachers = await User.find({ username: { $ne: 'admin' } }).sort({ firstName: 1 })
+    res.render('class-pages/new', { teachers })
 }
 
 module.exports.show = async (req, res, next) => {
     const {id} = req.params
     const singleClass = await Class.findById(id)
+    .populate('teacher')
     .populate({
-        path: 'studentsInClass',
+        path: 'studentsInClass', 
         populate: {
             path: 'student',
             model: 'Student'
@@ -56,11 +58,12 @@ module.exports.show = async (req, res, next) => {
 module.exports.edit = async (req, res) => {
     const {id} = req.params
     const singleClass = await Class.findById(id)
+    const teachers = await User.find({ username: { $ne: 'admin' } })
     if (!singleClass) {
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
     }
-    res.render('class-pages/edit', {singleClass})
+    res.render('class-pages/edit', {singleClass, teachers})
 }
 
 module.exports.put = async (req, res) => {

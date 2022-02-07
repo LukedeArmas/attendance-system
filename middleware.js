@@ -92,3 +92,30 @@ module.exports.objectIdMiddleware = function (req, res, next) {
   }
   next()
 }
+
+module.exports.isLoggedIn = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        req.session.oldUrl = req.originalUrl
+        req.flash('error', 'You must be logged in!')
+        return res.redirect('/login')
+    }
+    return next()
+}
+
+module.exports.verifyTeacher = async (req, res, next) => {
+    const { id } = req.params
+    const singleClass = await Class.findById(id)
+    if (!singleClass.teacher.equals(req.user._id) && req.user.username !== 'admin') {
+        req.flash('error', 'Access to this class is denied')
+        return res.redirect('/class')
+    }
+    return next()
+}
+
+module.exports.isAdmin = (req, res, next) => {
+    if (req.user.username !== 'admin') {
+        req.flash('error', 'This is an admin privilege')
+        return res.redirect('/')
+    }
+    return next()
+}

@@ -8,16 +8,6 @@
   <div class="col-6 offset-3">
     <form class="validated" action="/class" method="POST" novalidate>
       <div class="mb-3 col-sm-8 offset-sm-2">
-        <label class="form-label" for="id">Teacher</label>
-        <input
-          class="form-control"
-          type="text"
-          id="id"
-          name="myClass[teacher]"
-          required
-        />
-      </div>
-      <div class="mb-3 col-sm-8 offset-sm-2">
         <label class="form-label" for="CName">Class Name</label>
         <input
           class="form-control"
@@ -36,6 +26,14 @@
           name="myClass[classCode]"
           required
         />
+      </div>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="section">Teacher</label>
+        <select class="form-select" id="teacher" name="myClass[teacher]">
+          <% for (let teacher of teachers) { %>
+          <option value="<%= teacher._id %>"><%= teacher.fullName %></option>
+          <% } %>
+        </select>
       </div>
       <div class="mb-3 col-sm-8 offset-sm-2">
         <label class="form-label" for="section">Section</label>

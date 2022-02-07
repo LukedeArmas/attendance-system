@@ -14,17 +14,6 @@
       novalidate
     >
       <div class="mb-3 col-sm-8 offset-sm-2">
-        <label class="form-label" for="id">Teacher</label>
-        <input
-          class="form-control"
-          type="text"
-          id="id"
-          name="myClass[teacher]"
-          value="<%= singleClass.teacher %>"
-          required
-        />
-      </div>
-      <div class="mb-3 col-sm-8 offset-sm-2">
         <label class="form-label" for="CName">Class Name</label>
         <input
           class="form-control"
@@ -45,6 +34,14 @@
           value="<%= singleClass.classCode %>"
           required
         />
+      </div>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="section">Teacher</label>
+        <select class="form-select" id="teacher" name="myClass[teacher]">
+          <% for (let teacher of teachers) { %>
+          <option value="<%= teacher._id %>" <%= (singleClass.teacher.toString() === teacher._id.toString()) ? 'selected' : '' %>><%= teacher.fullName %></option>
+          <% } %>
+        </select>
       </div>
       <% const sections = [1,2,3,4] %>
       <div class="mb-3 col-sm-8 offset-sm-2">

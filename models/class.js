@@ -8,9 +8,8 @@ const replaceWhitespace = function (value) {
 
 const classSchema = new Schema({
     teacher: {
-        type: String,
-        required: true,
-        trim: true
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     className: {
         type: String,

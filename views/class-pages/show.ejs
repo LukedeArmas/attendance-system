@@ -3,7 +3,7 @@ include('../partials/show-header.ejs', {typeName: 'class', type: singleClass,
 name: `${singleClass.className}`}) %>
 
 <p>
-  <strong>Teacher:</strong> <%= singleClass.teacher %>
+  <strong>Teacher:</strong> <%= singleClass.teacher.fullName %>
   <br />
   <strong>Class Code: </strong> <%= singleClass.classCode %>
   <br />
@@ -14,6 +14,7 @@ name: `${singleClass.className}`}) %>
 </p>
 <div class="d-flex flex-wrap justify-content-between align-items-center">
   <p class="h4 mb-3">Students:</p>
+  <% if (currentUser.username === 'admin') { %>
   <div
     class="d-flex justify-content-end justify-content-md-between btn-toolbar mb-2"
   >
@@ -30,6 +31,7 @@ name: `${singleClass.className}`}) %>
     >
     <% } %>
   </div>
+  <% } %>
 </div>
 <% let num = 1 %>
     <table class="table table-hover">

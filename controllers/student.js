@@ -36,7 +36,7 @@ module.exports.show = async (req, res, next) => {
     const {id} = req.params
     const student = await Student.findById(id)
     // This is how you query for documents that have an array of embedded documents where at least one of the sub documents contains our match
-    const classes = await Class.find({ 'studentsInClass.student': { $eq: student } })
+    const classes = await Class.find({ 'studentsInClass.student': { $eq: student } }).populate('teacher')
     if (!student) {
         // return next(new myError(404, "This student does not exist"))
         req.flash('error', 'Student does not exist')
