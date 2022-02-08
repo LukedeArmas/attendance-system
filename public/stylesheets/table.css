@@ -28,3 +28,40 @@ a.d-block:hover {
 .input-group-append {
   cursor: pointer;
 }
+
+div.input-group input.form-control {
+  border-right: none;
+}
+
+.icon {
+  background-color: revert;
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.link-list {
+  word-spacing: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.link-list a {
+  color: #6c757d;
+  word-spacing: 0.1rem;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+  text-decoration-color: transparent;
+  transition: all 0.4s;
+}
+
+.link-list a:hover {
+  text-decoration-color: #6c757d;
+}
+
+.link-list a.link-active {
+  color: #2470dc;
+}
+
+.link-list a.link-active:hover {
+  text-decoration-color: #2470dc;
+}

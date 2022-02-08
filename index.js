@@ -76,6 +76,7 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 app.use((req, res, next) => {
+    res.locals.url = req.url
     res.locals.currentUser = req.user
     res.locals.message = req.flash('success')
     res.locals.error = req.flash('error')
@@ -95,7 +96,7 @@ app.get('/', async (req, res, next) => {
     const numSubjects = await Class.schema.path('subject').enumValues.length
     const numTeachers = await User.find({ username: { $ne: 'admin' }}).countDocuments()
 
-    res.render('home.ejs', {numStudents, numClasses, numSubjects, numTeachers})
+    res.render('home.ejs', {numStudents, numClasses, numSubjects, numTeachers })
 })
 
 app.get('/register', isLoggedIn, isAdmin, (req, res, next) => {

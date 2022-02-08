@@ -11,11 +11,6 @@ attendanceDay}) %>
     100*(attendanceDay.numStudentsPresent / singleClass.numStudentsInClass) +
     'e2') + 'e-2') %>%
   </p>
-  <a
-    class="btn btn-outline-primary"
-    href="/class/<%= singleClass._id %>/attendance"
-    >Back to Class Attendance</a
-  >
 </div>
 
 <%- include('../partials/student-table.ejs', {students:
