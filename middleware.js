@@ -1,6 +1,7 @@
 const myError = require('./utils/myError.js')
 const {studentSchema, classSchema, attendanceSchema } = require('./joi-schemas.js')
 const Class = require('./models/class.js')
+const User = require('./models/user.js')
 const mongoose = require("mongoose")
 
 
@@ -119,6 +120,15 @@ module.exports.verifyTeacher = async (req, res, next) => {
 module.exports.isAdmin = (req, res, next) => {
     if (req.user.username !== 'admin') {
         req.flash('error', 'This is an admin privilege')
+        return res.redirect('/')
+    }
+    return next()
+}
+
+module.exports.teacherExists = async (req, res, next) => {
+    const teachers = await User.find({ username: { $ne: 'admin' } })
+    if (teachers.length < 1) {
+        req.flash('error', 'A teacher must be added before a class can be added')
         return res.redirect('/')
     }
     return next()

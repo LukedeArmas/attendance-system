@@ -1,16 +1,16 @@
 const express = require('express')
 const router = express.Router()
 const asyncError = require('../utils/asyncError.js')
-const {validateClass, validateAddStudentToClass, validateRemoveStudentFromClass, objectIdMiddleware, isLoggedIn, verifyTeacher, isAdmin } = require('../middleware.js')
+const {validateClass, validateAddStudentToClass, validateRemoveStudentFromClass, objectIdMiddleware, isLoggedIn, verifyTeacher, isAdmin, teacherExists } = require('../middleware.js')
 const myClass = require('../controllers/class')
 
 
 router.route('/')
     .get(isLoggedIn, asyncError(myClass.home))
-    .post(isLoggedIn, isAdmin, validateClass, asyncError(myClass.post))
+    .post(isLoggedIn, isAdmin, asyncError(teacherExists), validateClass, asyncError(myClass.post))
 
 router.route('/new')
-    .get(isLoggedIn, isAdmin, asyncError(myClass.new))
+    .get(isLoggedIn, isAdmin, asyncError(teacherExists), asyncError(myClass.new))
 
 router.route('/:id')
     .get(isLoggedIn, asyncError(verifyTeacher), objectIdMiddleware, asyncError(myClass.show))
