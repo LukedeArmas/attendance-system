@@ -23,10 +23,10 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/stylesheets/sidebar.css" />
-    <link rel="stylesheet" href="/stylesheets/table.css" />
+    <link rel="stylesheet" href="/stylesheets/general.css" />
     <title>Attendance Management System</title>
   </head>
-  <body class="">
+  <body>
     <header
       class="navbar sticky-top navbar-light bg-light flex-md-nowrap p-0 shadow"
     >
@@ -50,13 +50,13 @@
         </div>
         <div class="d-flex flex-direction-column nav-item text-nowrap">
           <% if (currentUser) { %>
-          <a class="nav-link px-3" href="/logout">Logout</a>
+          <a class="nav-link px-3 logout" href="/logout">Logout</a>
           <% } %>
         </div>
       </div>
     </header>
 
-    <div class="row">
+    <div class="row body-container">
       <% if (currentUser) { %>
       <nav
         id="sidebarMenu"
@@ -135,7 +135,7 @@
               <a
                 class="nav-link text-nowrap"
                 aria-current="page"
-                href="/register"
+                href="/teacher/new"
               >
                 <span data-feather="plus"></span>
                 Add Teacher
@@ -150,10 +150,11 @@
         class="<% if (currentUser) { %> col-md-9 ms-sm-auto col-lg-10 px-md-4 <% } %>"
       >
         <section class="container-fluid mt-3">
-          <%- include('../partials/flash-error') %><%-
+          <%- include('../partials/flash-error') %> <%-
           include('../partials/flash-success') %> <% if (currentUser && url !==
-          '/') { %> <%- include('../partials/link-list.ejs') %> <% } %> <%- body
-          -%>
+          '/' && (currentUser.username === 'admin' ||
+          !(/^\/student\/[0-9a-fA-F]{24}$/.test(url)))) { %> <%-
+          include('../partials/link-list.ejs') %> <% } %> <%- body -%>
         </section>
       </main>
     </div>
@@ -194,5 +195,7 @@
     <script src="/scripts/activeNavigation.js"></script>
     <script src="/scripts/showPassword.js"></script>
     <script src="/scripts/linkList.js"></script>
+    <script src="/scripts/studentSearchBar.js"></script>
+    <script src="/scripts/classSearchBar.js"></script>
   </body>
 </html>

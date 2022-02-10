@@ -1,9 +1,5 @@
-<% layout('./layouts/boilerplate.ejs') %>
-<div
-  class="d-flex justify-content-center align-items-center pt-3 pb-2 mb-3 border-bottom"
->
-  <h1 class="h1 text-nowrap">Add Class</h1>
-</div>
+<% layout('./layouts/boilerplate.ejs') %> <%-
+include('../partials/add-header.ejs', { headerText: 'Add Class'}) %>
 <div class="row">
   <div class="col-6 offset-3">
     <form class="validated" action="/class" method="POST" novalidate>
@@ -58,6 +54,13 @@
           <option value="Education">Education</option>
           <option value="Physics">Physics</option>
           <option value="Music">Music</option>
+        </select>
+      </div>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="year">Year</label>
+        <select class="form-select" id="year" name="myClass[year]">
+          <option value="2022" selected>2022</option>
+          <option value="2023">2023</option>
         </select>
       </div>
       <br />

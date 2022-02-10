@@ -105,6 +105,10 @@ module.exports.isLoggedIn = (req, res, next) => {
 module.exports.verifyTeacher = async (req, res, next) => {
     const { id } = req.params
     const singleClass = await Class.findById(id)
+    if (!singleClass) {
+        req.flash('error', 'Class does not exist' )
+        return res.redirect('/class')
+    }
     if (!singleClass.teacher.equals(req.user._id) && req.user.username !== 'admin') {
         req.flash('error', 'Access to this class is denied')
         return res.redirect('/class')

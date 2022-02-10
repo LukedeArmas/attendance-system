@@ -26,10 +26,10 @@ const Joi = originalJoi.extend(extension)
 
 module.exports.studentSchema = Joi.object({
     student: Joi.object({
-        studentId: Joi.string().required().escapeHTML(),
         firstName: Joi.string().required().escapeHTML(),
         lastName: Joi.string().required().escapeHTML()
-    }).required()
+    }).required(),
+    middleName: Joi.string().required().escapeHTML()
 })
 
 module.exports.classSchema = Joi.object({
@@ -38,7 +38,8 @@ module.exports.classSchema = Joi.object({
         className: Joi.string().required().escapeHTML(),
         classCode: Joi.string().required().escapeHTML(),
         section: Joi.number().required().valid(1,2,3,4),
-        subject: Joi.string().required().valid('General','Computer Science', 'Mathematics', 'Political Science', 'History', 'Communications', 'Psychology', 'English', 'Education', 'Physics', 'Music').escapeHTML()
+        subject: Joi.string().required().valid('General','Computer Science', 'Mathematics', 'Political Science', 'History', 'Communications', 'Psychology', 'English', 'Education', 'Physics', 'Music').escapeHTML(),
+        year: Joi.number().required().valid(2022, 2023)
     }).required()
 })
 

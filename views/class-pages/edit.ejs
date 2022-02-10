@@ -36,7 +36,7 @@
         />
       </div>
       <div class="mb-3 col-sm-8 offset-sm-2">
-        <label class="form-label" for="section">Teacher</label>
+        <label class="form-label" for="teacher">Teacher</label>
         <select class="form-select" id="teacher" name="myClass[teacher]">
           <% for (let teacher of teachers) { %>
           <option value="<%= teacher._id %>" <%= (singleClass.teacher.toString() === teacher._id.toString()) ? 'selected' : '' %>><%= teacher.fullName %></option>
@@ -66,6 +66,15 @@
           <option <%- selectedSubject %>
             value="<%= subject %>" ><%= subject %>
           </option>
+          <% } %>
+        </select>
+      </div>
+      <% const years = [2022, 2023] %>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="year">Year</label>
+        <select class="form-select" id="year" name="myClass[year]">
+          <% for (let year of years) { %>
+          <option value="<%= year %>" <%= (singleClass.year === year) ? 'selected' : '' %>><%= year %></option>
           <% } %>
         </select>
       </div>

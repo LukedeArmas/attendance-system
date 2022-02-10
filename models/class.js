@@ -28,6 +28,11 @@ const classSchema = new Schema({
         required: true,
         enum: [1,2,3,4]
     },
+    year: {
+        type: Number,
+        require: true,
+        enum: [2022, 2023]
+    },
     subject: {
         type: String,
         required: true,

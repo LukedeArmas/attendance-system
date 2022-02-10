@@ -11,6 +11,8 @@ name: `${singleClass.className}`}) %>
   <br />
   <strong>Subject: </strong> <%= singleClass.subject %>
   <br />
+  <strong>Year: </strong> <%= singleClass.year %>
+  <br />
 </p>
 <div class="d-flex flex-wrap justify-content-between align-items-center">
   <p class="h4 mb-3">Students:</p>
@@ -34,6 +36,7 @@ name: `${singleClass.className}`}) %>
   <% } %>
 </div>
 <% let num = 1 %>
+<div class="table-responsive">
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
@@ -66,3 +69,4 @@ name: `${singleClass.className}`}) %>
       </tbody>
       <% } %>
     </table>
+  </div>

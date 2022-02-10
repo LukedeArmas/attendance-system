@@ -97,26 +97,26 @@ app.get('/', isLoggedIn, asyncError(async (req, res, next) => {
     res.render('home.ejs', {numStudents, numClasses, numSubjects, numTeachers })
 }))
 
-app.get('/register', isLoggedIn, isAdmin, (req, res, next) => {
-    res.render('auth/register')
+app.get('/teacher/new', isLoggedIn, isAdmin, (req, res, next) => {
+    res.render('teacher-pages/new')
 })
 
-app.post('/register', isLoggedIn, isAdmin, asyncError(async (req, res, next) => {
+app.post('/teacher', isLoggedIn, isAdmin, asyncError(async (req, res, next) => {
     try {
         const { firstName, lastName, email, username, password } = req.body
         const user = new User({ firstName, lastName, email, username })
         const newUser = await User.register(user, password)
-        req.flash('success', 'Successfully added student')
+        req.flash('success', 'Successfully added teacher')
         res.redirect('/')
     }
     catch(e) {
         req.flash('error', e.message)
-        res.redirect('/register')
+        res.redirect('/teacher/new')
     }
 }))
 
 app.get('/login', (req, res, next) => {
-    res.render('auth/login', {login: true})
+    res.render('login', {login: true})
 })
 
 app.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res, next) => {
@@ -133,7 +133,8 @@ app.get('/logout', (req, res, next) => {
 })
 
 app.get('*', (req, res, next) => {
-    next(new myError(404,"Page Not Found"))
+    req.flash('error', 'Page not found')
+    res.redirect('/')
 })
 
 app.use((err, req, res, next) => {

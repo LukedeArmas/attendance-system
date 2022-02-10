@@ -1,4 +1,5 @@
-    <table class="table table-hover">
+<div class="table-responsive">
+  <table class="table table-hover">
       <thead class="thead-light">
         <tr>
           <th scope="col" class="px-0"></th>
@@ -29,9 +30,9 @@
         for (let student of students) { %>
         <tr>
           <th scope="row" class="text-center ps-0"><%= num %>.</th>
-          <td><%= student.studentId %></th>
-          <td><%= student.firstName %></td>
-          <td><%= student.lastName %></td>
+          <td class="id"><%= student.studentId %></th>
+          <td class="firstName"><%= student.firstName %></td>
+          <td class="lastName"><%= student.lastName %></td>
           <td class="text-center">
             <a class="btn btn-outline-secondary px-3 py-1" href="/student/<%= student._id %>"
               ><i class="fa fa-user"></i></a
@@ -113,3 +114,4 @@
       </tbody>
       <% } %>
     </table>
+  </div>

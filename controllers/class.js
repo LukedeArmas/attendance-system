@@ -53,6 +53,11 @@ module.exports.show = async (req, res, next) => {
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
     }
+    singleClass.studentsInClass.sort((a,b) => {
+        if (a.student.studentId < b.student.studentId) { return -1 }
+        if (a.student.studentId > b.student.studentId) { return 1 }
+        return 0
+    })
     res.render('class-pages/show', {singleClass})
 }
 
@@ -102,12 +107,13 @@ module.exports.reloadPage = function(req, res, next) {
 module.exports.addStudentGet = async (req, res) => {
     const {id} = req.params
     const singleClass = await Class.findById(id)
+    let query = {}
     if (!singleClass) {
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
     }
-    const students = await Student.find({ _id: {$nin: singleClass.studentsInClass.map(entry => entry.student) }})
-    res.render('class-pages/add-students', {singleClass, students})
+    const students = await Student.find({ _id: {$nin: singleClass.studentsInClass.map(entry => entry.student) }}).sort({ studentId: 1 })
+    res.render('class-pages/add-students', {singleClass, students, query})
 }
 
 module.exports.addStudentPut = async (req, res, next) => {
@@ -137,6 +143,11 @@ module.exports.removeStudentGet = async (req, res) => {
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
     }
+    singleClass.studentsInClass.sort((a,b) => {
+        if (a.student.studentId < b.student.studentId) { return -1 }
+        if (a.student.studentId > b.student.studentId) { return 1 }
+        return 0
+    })
     res.render('class-pages/remove-students', {singleClass})
 }
 
@@ -153,7 +164,6 @@ module.exports.removeStudentPut = async (req, res, next) => {
     // Remove student from the Class
     const classAfter = await Class.findByIdAndUpdate(id, {$pull: {studentsInClass: { student: {$in: studentList}}}}, {runValidators: true, new: true})
     // If all students are removed from a class we delete all attendance records from the class
-    console.log(classAfter)
     if (classAfter.studentsInClass.length < 1) {
         await Attendance.deleteMany({ class: classAfter._id })
         classAfter.numAttendancesTaken = 0

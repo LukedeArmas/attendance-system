@@ -16,7 +16,6 @@ if (location.pathname === '/class' || location.pathname === '/student' || classI
 
     for (let subUrl of pathArray) {
         urlSoFar = urlSoFar + '/' + subUrl
-        console.log(urlSoFar)
         let a = document.createElement('a')
         linkList.innerHTML += ' / '
         linkList.appendChild(a)

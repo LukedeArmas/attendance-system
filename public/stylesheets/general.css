@@ -1,5 +1,10 @@
 body {
   font-family: Open Sans, sans-serif !important;
+  margin: 0;
+}
+
+.body-container {
+  margin: 0;
 }
 
 .table .thead-light th {
@@ -64,4 +69,12 @@ div.input-group input.form-control {
 
 .link-list a.link-active:hover {
   text-decoration-color: #2470dc;
+}
+
+.hide {
+  display: none;
+}
+
+.logout {
+  font-size: 1rem;
 }

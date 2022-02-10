@@ -1,32 +1,10 @@
 <div
   class="d-flex justify-content-center justify-content-md-between flex-wrap flex-lg-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
 >
-  <h1 class="h2 text-nowrap">
-    <%= section.charAt(0).toUpperCase() + section.slice(1) %> Dashboard
-  </h1>
+  <h1 class="h2 text-nowrap"><%= headerText %></h1>
   <div
     class="d-flex align-items-center flex-nowrap btn-toolbar mb-2 mb-md-0 ms-3"
   >
-    <% if (Object.keys(query).length > 0) { %>
-    <div class="link-list">
-      <a href="/<%= section %>" class="sidebar-heading text-nowrap">Show All</a>
-    </div>
-
-    <% } %>
-    <form action="/<%= section %>" Method="GET">
-      <div class="container-fluid input-group d-flex flex-nowrap">
-        <div class="form-outline">
-          <input
-            type="search"
-            name="search"
-            class="form-control"
-            placeholder="Search <%= section.charAt(0).toUpperCase() + section.slice(1) %>"
-          />
-        </div>
-        <button type="submit" class="btn btn-primary">
-          <i class="fa fa-search"></i>
-        </button>
-      </div>
-    </form>
+    <%- include('../partials/search-bar.ejs', { type: searchType }) %>
   </div>
 </div>

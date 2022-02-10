@@ -4,14 +4,14 @@ const { checkSearch } = require('../helperFunctions.js')
 
 
 module.exports.home = async (req, res) => {
-    const {search} = req.query
-    const query = checkSearch(search)
-    const students = await Student.find(query)
-    res.render('student-pages/home', {students, query})
+    const students = await Student.find().sort({ studentId: 1 })
+    res.render('student-pages/home', {students})
 }
 
 module.exports.post = async (req, res) => {
-    const {student} = req.body
+    const {student, middleName} = req.body
+    student.studentId = `${student.lastName.slice(0, student.lastName.length - 1)}${student.firstName.charAt(0)}${middleName.charAt(0)}`
+    student.studentId = student.studentId.toLowerCase()
     try {
         const newStudent = new Student(student)
         await newStudent.save()

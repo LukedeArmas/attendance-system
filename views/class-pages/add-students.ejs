@@ -1,10 +1,6 @@
-<% layout('./layouts/boilerplate.ejs') %>
-<!-- <h1 class="text-center mb-3"><%= singleClass.className %></h1> -->
-<div
-  class="d-flex justify-content-center justify-content-md-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
->
-  <h1 class="h2 text-nowrap"><%= singleClass.className %></h1>
-</div>
+<% layout('./layouts/boilerplate.ejs') %> <%-
+include('../partials/home-header.ejs', {headerText: `Add Students:
+${singleClass.className}`, searchType: 'Student'}) %>
 <form
   action="/class/<%= singleClass._id %>/addStudent?_method=PUT"
   method="POST"

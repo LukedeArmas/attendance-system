@@ -1,46 +1,50 @@
-<table class="table table-hover">
-  <thead class="thead-light">
-    <tr>
-      <th scope="col" class="px-0"></th>
-      <th scope="col">Class Code</th>
-      <th scope="col">Class Name</th>
-      <th scope="col">Subject</th>
-      <th scope="col" class="text-center">Section</th>
-      <th scope="col" class="text-center">Teacher</th>
-      <% if (typeof studentShow !== 'undefined') { %>
-      <th scope="col" class="text-center">Attendance</th>
-      <% } else { %>
-      <th scope="col" class="text-center">View</th>
-      <% } %>
-    </tr>
-  </thead>
-  <tbody class="table">
-    <% for (let singleClass of classes) { %>
-    <tr>
-      <th scope="row" class="text-center"><%= num %>.</th>
-      <td><%= singleClass.classCode %></td>
-      <td><%= singleClass.className %></td>
-      <td><%= singleClass.subject %></td>
-      <td class="text-center"><%= singleClass.section %></td>
-      <td class="text-center"><%= singleClass.teacher.fullName %></td>
-      <% if (typeof studentShow !== 'undefined') { %> <% for (let studentEntry
-      of singleClass.studentsInClass) { if (studentEntry.student._id.toString()
-      === student._id.toString()) { %>
-      <td class="text-center">
-        <%= singleClass.numAttendancesTaken > 0 ? Number(Math.round(
-        100*(studentEntry.numAttendancesPresent /
-        singleClass.numAttendancesTaken) + 'e2') + 'e-2') : 0 %>%
-      </td>
-      <% } } } else { %>
-      <td class="text-center">
-        <a
-          class="btn btn-outline-secondary px-3 py-1"
-          href="/class/<%= singleClass._id %>"
-          ><i class="fas fa-school"></i
-        ></a>
-      </td>
-      <% } %>
-    </tr>
-    <% num++ } %>
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col" class="px-0"></th>
+        <th scope="col">Class Code</th>
+        <th scope="col">Class Name</th>
+        <th scope="col">Subject</th>
+        <th scope="col" class="text-center">Section</th>
+        <th scope="col" class="text-center">Year</th>
+        <th scope="col" class="text-center">Teacher</th>
+        <% if (typeof studentShow !== 'undefined') { %>
+        <th scope="col" class="text-center">Attendance</th>
+        <% } else { %>
+        <th scope="col" class="text-center">View</th>
+        <% } %>
+      </tr>
+    </thead>
+    <tbody class="table">
+      <% for (let singleClass of classes) { %>
+      <tr>
+        <th scope="row" class="text-center"><%= num %>.</th>
+        <td class="classCode"><%= singleClass.classCode %></td>
+        <td class="name"><%= singleClass.className %></td>
+        <td class="subject"><%= singleClass.subject %></td>
+        <td class="text-center"><%= singleClass.section %></td>
+        <td class="text-center"><%= singleClass.year %></td>
+        <td class="teacher text-center"><%= singleClass.teacher.fullName %></td>
+        <% if (typeof studentShow !== 'undefined') { %> <% for (let studentEntry
+        of singleClass.studentsInClass) { if
+        (studentEntry.student._id.toString() === student._id.toString()) { %>
+        <td class="text-center">
+          <%= singleClass.numAttendancesTaken > 0 ? Number(Math.round(
+          100*(studentEntry.numAttendancesPresent /
+          singleClass.numAttendancesTaken) + 'e2') + 'e-2') : 0 %>%
+        </td>
+        <% } } } else { %>
+        <td class="text-center">
+          <a
+            class="btn btn-outline-secondary px-3 py-1"
+            href="/class/<%= singleClass._id %>"
+            ><i class="fas fa-school"></i
+          ></a>
+        </td>
+        <% } %>
+      </tr>
+      <% num++ } %>
+    </tbody>
+  </table>
+</div>
