@@ -4,6 +4,7 @@ const asyncError = require('../utils/asyncError.js')
 const {validateStudent, objectIdMiddleware, isLoggedIn, isAdmin } = require('../middleware.js')
 const student = require('../controllers/student')
 
+
 router.route('/')
     .get(isLoggedIn, isAdmin, asyncError(student.home))
     .post(isLoggedIn, isAdmin, validateStudent, asyncError(student.post))

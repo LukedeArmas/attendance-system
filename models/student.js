@@ -15,7 +15,7 @@ const replaceWhitespaceAndCapitalize = function (value) {
     return temp.charAt(0).toUpperCase() + temp.slice(1)
 }
 
-const studentSchema = mongoose.Schema({
+const studentSchema = new Schema({
     studentId:{
         type: String,
         required: true,
@@ -38,10 +38,7 @@ const studentSchema = mongoose.Schema({
     }
 })
 
-// Index made for searching students
-studentSchema.index({studentId: 'text', firstName: 'text', lastName: 'text'})
-
-// If we delete a student we remove the student from all of his or her classes and attendance records
+// If we delete a student we remove the student from all of their classes and attendance records
 studentSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
         await Class.updateMany({
@@ -64,5 +61,6 @@ studentSchema.post('findOneAndDelete', async function(doc) {
 })
 
 studentSchema.plugin(uniqueValidator, { message: 'Student already exists'})
+
 
 module.exports = mongoose.model('Student', studentSchema)

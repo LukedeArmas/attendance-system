@@ -9,7 +9,7 @@ const methodOverride = require('method-override')
 const studentRoutes = require('./Routes/student.js')
 const classRoutes = require('./Routes/class.js')
 const attendanceRoutes = require('./Routes/attendance.js')
-const myError = require('./utils/myError.js')
+const teacherRoutes = require('./Routes/teacher.js')
 const Student = require('./models/student')
 const Class = require('./models/class')
 const asyncError = require('./utils/asyncError.js')
@@ -23,7 +23,7 @@ const passportLocal = require('passport-local')
 // const databaseUrl = process.env.DB_URL || 'mongodb://localhost:27017/attendance'
 const databaseUrl = 'mongodb://localhost:27017/attendance'
 const MongoStore = require('connect-mongo')
-const { isAdmin, isLoggedIn, objectIdMiddleware } = require('./middleware.js')
+const { isLoggedIn } = require('./middleware.js')
 
 const mongoose = require('mongoose')
 mongoose.connect(databaseUrl)
@@ -87,8 +87,11 @@ app.use((req, res, next) => {
 app.use('/student', studentRoutes)
 app.use('/class', classRoutes)
 app.use('/class/:id/attendance', attendanceRoutes)
+app.use('/teacher', teacherRoutes)
+
 
 app.get('/', isLoggedIn, asyncError(async (req, res, next) => {
+    // We get these numbers to display on the monitor page
     const numClasses = req.user.username === 'admin' ? await Class.countDocuments() : await Class.find({ teacher: req.user._id }).count()
     const numStudents = await Student.countDocuments()
     const numSubjects = await Class.schema.path('subject').enumValues.length
@@ -97,82 +100,11 @@ app.get('/', isLoggedIn, asyncError(async (req, res, next) => {
     res.render('home.ejs', {numStudents, numClasses, numSubjects, numTeachers })
 }))
 
-
-app.get('/teacher', isLoggedIn, isAdmin, asyncError(async (req, res, next) => {
-    const teachers = await Teacher.find({ username: { $ne: 'admin' } }).sort({ lastName: 1 })
-    res.render('teacher-pages/home', { teachers })
-}))
-
-app.post('/teacher', isLoggedIn, isAdmin, asyncError(async (req, res, next) => {
-    try {
-        const { firstName, lastName, email, username, password } = req.body
-        const teacher = new Teacher({ firstName, lastName, email, username })
-        const newTeacher = await Teacher.register(teacher, password)
-    }
-    catch(e) {
-        req.flash('error', e.message)
-        res.redirect('/teacher/new')
-    }
-    req.flash('success', 'Successfully added teacher')
-    res.redirect('/')
-}))
-
-app.get('/teacher/new', isLoggedIn, isAdmin, (req, res, next) => {
-    res.render('teacher-pages/new')
-})
-
-app.get('/teacher/:id', isLoggedIn, isAdmin, objectIdMiddleware, asyncError(async (req, res, next) => {
-    const { id } = req.params
-    const teacher = await Teacher.findById(id)
-    if (!teacher) {
-        req.flash('error', 'Teacher does not exist')
-        return res.redirect('/teacher')
-    }
-    const classes = await Class.find({ teacher: teacher._id })
-    res.render('teacher-pages/show', { teacher, classes })
-}))
-
-app.get('/teacher/:id/edit', isLoggedIn, isAdmin, objectIdMiddleware, asyncError(async (req, res, next) => {
-    const { id } = req.params
-    const teacher = await Teacher.findById(id)
-    if (!teacher) {
-        req.flash('error', 'Teacher does not exist')
-        return res.redirect('/teacher')
-    }
-    res.render('teacher-pages/edit', { teacher })
-}))
-
-app.put('/teacher/:id', isLoggedIn, isAdmin, objectIdMiddleware, asyncError(async (req, res, next) => {
-    const { id } = req.params
-    const teacher = await Teacher.findById(id)
-    const { firstName, lastName, email, username } = req.body
-    try {
-        const updatedTeacher = await Teacher.findByIdAndUpdate(id, { firstName: firstName, lastName: lastName, email: email, username: username}, {runValidators: true, new: true })
-    }
-    catch(e) {
-        req.flash('error', 'This teacher account already exists')
-        console.log(e)
-        return res.redirect(`teacher/${id}/edit`)
-    }
-    req.flash('success', 'Successfully updated teacher')
-    res.redirect(`/teacher/${id}`)
-}))
-
-app.delete('/teacher/:id', isLoggedIn, isAdmin, objectIdMiddleware, asyncError(async (req, res, next) => {
-    const {id} = req.params
-    await Teacher.findByIdAndDelete(id)
-    req.flash('success', 'Successfully deleted class')
-    res.redirect('/teacher')
-}))
-
-
 app.get('/login', (req, res, next) => {
     res.render('login', {login: true})
 })
 
 app.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res, next) => {
-    // We actually don't need to redirect the user back to their original URL because the user can only use the application if they are logged in
-    // const urlRedirect = req.session.oldUrl || '/'
     req.flash('success', 'Welcome Back!')
     res.redirect('/')
 })

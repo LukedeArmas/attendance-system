@@ -23,9 +23,6 @@ const attendanceSchema = new Schema({
     ]
 })
 
-attendanceSchema.set('toJSON', { virtuals: true })
-attendanceSchema.set('toObject', { virtuals: true })
-
 attendanceSchema.virtual('numStudentsPresent').get(function () {
     return this.studentsPresent.length
 })

@@ -58,13 +58,8 @@ classSchema.virtual('numStudentsInClass').get(function () {
     return this.studentsInClass.length
 })
 
-
-// Index made for composite uniqueness check
+// Index made so two classes cannot have same classCode and section
 classSchema.index({ classCode: 1, section: 1 }, { unique: true })
-
-// Index made for searching classes
-// Don't use this anymore
-// classSchema.index({teacher: 'text', className: 'text', classCode: 'text', subject: 'text'})
 
 // If we delete a Class we delete all the attendances associated with this class
 classSchema.post('findOneAndDelete', async function(doc) {
@@ -72,5 +67,6 @@ classSchema.post('findOneAndDelete', async function(doc) {
         await mongoose.model('Attendance').deleteMany({ class: doc })
     }
 })
+
 
 module.exports = mongoose.model('Class', classSchema)

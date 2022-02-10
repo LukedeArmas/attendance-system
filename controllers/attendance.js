@@ -1,18 +1,19 @@
 const Class = require('../models/class.js')
 const Attendance = require('../models/attendance.js')
 const moment = require('moment')
+const { sortAlphabetically } = require('../helperFunctions')
 
 
 module.exports.home = async (req, res, next) => {
     const { id } = req.params
     const singleClass = await Class.findById(id)
     if (!singleClass) {
-        // return next(new myError(404, "This class does not exist"))
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
     }
+    // Find all attendances for the specific class
     const attendances = await Attendance.find({ class: singleClass._id })
-    // We only access the object on b because that is the current value. a is the previous value (which is the building sum) and starts with the value of 0. So if we tried to access an object from 0 it will result in NaN
+    // Reduce function calculates the class average for attendance and rounds to the second decimal
     const averageClassAttendance = Number(Math.round( (attendances.reduce((a, b) => {
         return a + 100*(b.numStudentsPresent /
         singleClass.numStudentsInClass) 
@@ -24,16 +25,15 @@ module.exports.post = async (req, res, next) => {
     const { id } = req.params
     const { date, studentsPresent } = req.body
     const newDate = new Date(date)
+    const nowDate = new Date(Date.now())
     // Checks if the attendance date for this class exists already
     if (await Attendance.exists({ class: id, date: newDate })) {
-        // return next(new myError(400, "Cannot mark attendance for the same date"))
         req.flash('error', 'Attendance has already been recorded for this date')
         return res.redirect(`/class/${id}/attendance/new`)
     }
-    const nowDate = new Date(Date.now())
     const singleClass = await Class.findById(id)
+    // Checks if there are any students in the class
     if (singleClass.studentsInClass.length < 1) {
-        // return next(new myError(400, "There are no students in this class"))
         req.flash('error', 'There are no students in this class')
         return res.redirect(`/class/${id}`)
     }
@@ -42,7 +42,9 @@ module.exports.post = async (req, res, next) => {
     try {
         const newAttendance = await new Attendance(attendanceObj)
         await newAttendance.save()
+        // Adds 1 to the number of attendances taken for the class
         singleClass.numAttendancesTaken++
+        // Adds 1 to the numAttendancesPresent property of every student that was present in this attendance record
         if (studentsPresent) {
             for (let studentEntry of singleClass.studentsInClass) {
                 if (studentsPresent.includes(studentEntry.student.toString())) {
@@ -53,7 +55,6 @@ module.exports.post = async (req, res, next) => {
         await singleClass.save()
     }
     catch(e) {
-        // return next(new myError(400, "The list of students present must contain students"))
         req.flash('error', 'Attendance record must contain students')
         return res.redirect(`/class/${id}/attendance/new`)
     }
@@ -73,19 +74,16 @@ module.exports.new = async (req, res, next) => {
         }
     })
     if (!singleClass) {
-        // return next(new myError(404, "This class does not exist"))
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
     }
-    singleClass.studentsInClass.sort((a,b) => {
-        if (a.student.studentId < b.student.studentId) { return -1 }
-        if (a.student.studentId > b.student.studentId) { return 1 }
-        return 0
-    })    
+    singleClass.studentsInClass = sortAlphabetically(singleClass.studentsInClass)   
     const attendances = await Attendance.find({ class: singleClass._id })
+    // Creates a list of the dates the user will not be able to record an attendance record for (because a record has already been recorded for all of these dates)
     if (attendances) {
         notValidDates = attendances.map(entry => moment(entry.date).format('L') )
     }
+    // Gets today's date
     const unformattedDate = Date.now()
     const date = moment(unformattedDate).format('L')
     res.render('attendance-pages/new', {singleClass, date, notValidDates})
@@ -102,18 +100,12 @@ module.exports.show = async (req, res, next) => {
         }
     })
     if (!singleClass) {
-        // return next(new myError(404, "This class does not exist"))
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
     }
-    singleClass.studentsInClass.sort((a,b) => {
-        if (a.student.studentId < b.student.studentId) { return -1 }
-        if (a.student.studentId > b.student.studentId) { return 1 }
-        return 0
-    })  
+    singleClass.studentsInClass = sortAlphabetically(singleClass.studentsInClass)   
     const attendanceDay = await Attendance.findById(dateId)
     if (!attendanceDay) {
-        // return next(new myError(404, "No attendance has been taken yet for this date"))
         req.flash('error', 'Attendance record does not exist' )
         return res.redirect(`/class/${id}/attendance`)
     }
@@ -131,18 +123,12 @@ module.exports.edit = async (req, res, next) => {
         }
     })
     if (!singleClass) {
-        // return next(new myError(404, "This class does not exist"))
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
     }
-    singleClass.studentsInClass.sort((a,b) => {
-        if (a.student.studentId < b.student.studentId) { return -1 }
-        if (a.student.studentId > b.student.studentId) { return 1 }
-        return 0
-    })  
+    singleClass.studentsInClass = sortAlphabetically(singleClass.studentsInClass)   
     const attendanceDay = await Attendance.findById(dateId)
     if (!attendanceDay) {
-        // return next(new myError(404, "No attendance has been taken yet for this date"))
         req.flash('error', 'Attendance record does not exist' )
         return res.redirect(`/class/${id}/attendance`)
     }
@@ -155,20 +141,21 @@ module.exports.put = async (req, res, next) => {
     const singleClass = await Class.findById(id)
     const attendanceDay = await Attendance.findById(dateId)
     if (!attendanceDay) {
-        // return next(new myError(404, "Cannot edit attendance for a date that has not been recorded yet"))
         req.flash('error', 'Attendance record does not exist')
         return res.redirect(`/class/${id}/attendance`)
     }
+    // Try catch handles if user tries to put information other than student object ids in the studentsPresent array
     try {
         attendanceDay.studentsPresent = studentsPresent
         await attendanceDay.save()
+        // Update the numAttendancesPresent property of every student (after we update the attendance record)
         for (let studentEntry of singleClass.studentsInClass) {
+            // Find the count of all attendance records of this class where the current student was present 
             studentEntry.numAttendancesPresent = await Attendance.find({ class: singleClass._id, studentsPresent: { $eq: studentEntry.student }}).count()
         }
         await singleClass.save()
     }
     catch(e) {
-        // return next(new myError(400, "The list of students must contain students"))
         req.flash('error', 'Attendance record must contain students')
         return res.redirect(`/class/${id}/attendance/${dateId}/edit`)
     }
@@ -180,7 +167,9 @@ module.exports.delete = async (req, res, next) => {
     const { id, dateId } = req.params
     const singleClass = await Class.findById(id)
     const attendance = await Attendance.findByIdAndDelete(dateId)
+    // Subtract 1 from the number of attendances taken for a class
     singleClass.numAttendancesTaken--
+    // Subtract 1 from the numAttendancesPresent property of all students who were present in this deleted attendance record
     for (let studentEntry of singleClass.studentsInClass) {
         if (attendance.studentsPresent.includes(studentEntry.student)) {
             studentEntry.numAttendancesPresent--

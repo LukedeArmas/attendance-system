@@ -11,9 +11,7 @@ module.exports.validateStudent = (req, res, next) => {
         const msg = error.details.map(el => el.message).join(',');
         return next(new myError(400, msg))
     }
-    else {
-        return next()
-    }
+    return next()
 };
 
 module.exports.validateClass = (req, res, next) => {
@@ -22,9 +20,7 @@ module.exports.validateClass = (req, res, next) => {
         const msg = error.details.map(el => el.message).join(',');
         return next(new myError(400, msg))
     }
-    else {
-        return next()
-    }
+    return next()
 };
 
 module.exports.validateAddStudentToClass = async (req, res, next) => {
@@ -32,7 +28,6 @@ module.exports.validateAddStudentToClass = async (req, res, next) => {
     const {studentList} = req.body
     const singleClass = await Class.findById(id)
     if (!studentList) {
-        // return next(new myError(500, "Cannot add zero students"))
         req.flash('error', 'Cannot add zero students to a class')
         return res.redirect(`/class/${id}`)
     }
@@ -40,9 +35,7 @@ module.exports.validateAddStudentToClass = async (req, res, next) => {
     if (studentList.every(elementId => !(singleClass.studentsInClass.map((entry) => entry.student.toString()).includes(elementId))) === false) {
         return next(new myError(400, "Cannot add student multiple times to the same class"))
     }
-    else {
-        return next()
-    }
+    return next()
 }
 
 module.exports.validateRemoveStudentFromClass = async (req, res, next) => {
@@ -57,9 +50,7 @@ module.exports.validateRemoveStudentFromClass = async (req, res, next) => {
     if (studentList.every(elementId => singleClass.studentsInClass.map((entry) => entry.student.toString()).includes(elementId)) === false) {
         return next(new myError(400, "Cannot remove students who are not a member of the class"))
     }
-    else {
-        return next()
-    }
+    return next()
 }
 
 module.exports.validateAttendance = async (req, res, next) => {
@@ -68,11 +59,10 @@ module.exports.validateAttendance = async (req, res, next) => {
         const msg = error.details.map(el => el.message).join(',');
         return next(new myError(400, msg))
     }
-    else {
-        return next()
-    }
+    return next()
 }
 
+// Checks if mongoose object Id is in valid form
 module.exports.objectIdMiddleware = function (req, res, next) {
     try {
         var paramKeys = Object.keys(req.params)
@@ -94,8 +84,6 @@ module.exports.objectIdMiddleware = function (req, res, next) {
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
-        // We actually don't need to redirect the user back to their original URL because the user can only use the application if they are logged in
-        // req.session.oldUrl = req.originalUrl
         if (req.originalUrl !== '/') {
             req.flash('error', 'You must be logged in!')
         }
@@ -111,6 +99,7 @@ module.exports.verifyTeacher = async (req, res, next) => {
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
     }
+    // Checks if the teacher is either the admin or teaches this class
     if (!singleClass.teacher.equals(req.user._id) && req.user.username !== 'admin') {
         req.flash('error', 'Access to this class is denied')
         return res.redirect('/class')
@@ -128,6 +117,7 @@ module.exports.isAdmin = (req, res, next) => {
 
 module.exports.teacherExists = async (req, res, next) => {
     const teachers = await Teacher.find({ username: { $ne: 'admin' } })
+    // Checks if a teacher exists, that's not the admin, before we can add a class
     if (teachers.length < 1) {
         req.flash('error', 'A teacher must be added before a class can be added')
         return res.redirect('/')

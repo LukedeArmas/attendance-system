@@ -32,7 +32,7 @@ teacherSchema.virtual('fullName').get(function() {
 })
 
 // If we delete a Teacher we delete all the classes taught by that teacher 
-// We have to delete the classes one by one so the findOneAndDelete Class middleware runs. This middleware deletes all attendance records associated with the delete Class
+// We have to delete the classes one by one so the findOneAndDelete Class middleware runs. This middleware deletes all attendance records associated with the deleted Class
 teacherSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
         const classes = await mongoose.model('Class').find({ teacher: doc })
@@ -42,7 +42,7 @@ teacherSchema.post('findOneAndDelete', async function(doc) {
     }
 })
 
-
 teacherSchema.plugin(passportLocalMongoose)
+
 
 module.exports = mongoose.model('Teacher', teacherSchema)
