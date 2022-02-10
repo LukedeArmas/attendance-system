@@ -12,6 +12,7 @@ const attendanceRoutes = require('./Routes/attendance.js')
 const myError = require('./utils/myError.js')
 const Student = require('./models/student')
 const Class = require('./models/class')
+const asyncError = require('./utils/asyncError.js')
 const mongoSanitize = require('express-mongo-sanitize')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
@@ -87,23 +88,20 @@ app.use('/student', studentRoutes)
 app.use('/class', classRoutes)
 app.use('/class/:id/attendance', attendanceRoutes)
 
-app.get('/', async (req, res, next) => {
-    if (!req.isAuthenticated()) {
-        return res.redirect('/login')
-    }
+app.get('/', isLoggedIn, asyncError(async (req, res, next) => {
     const numClasses = req.user.username === 'admin' ? await Class.countDocuments() : await Class.find({ teacher: req.user._id }).count()
     const numStudents = await Student.countDocuments()
     const numSubjects = await Class.schema.path('subject').enumValues.length
     const numTeachers = await User.find({ username: { $ne: 'admin' }}).countDocuments()
 
     res.render('home.ejs', {numStudents, numClasses, numSubjects, numTeachers })
-})
+}))
 
 app.get('/register', isLoggedIn, isAdmin, (req, res, next) => {
     res.render('auth/register')
 })
 
-app.post('/register', isLoggedIn, isAdmin, async (req, res, next) => {
+app.post('/register', isLoggedIn, isAdmin, asyncError(async (req, res, next) => {
     try {
         const { firstName, lastName, email, username, password } = req.body
         const user = new User({ firstName, lastName, email, username })
@@ -115,16 +113,17 @@ app.post('/register', isLoggedIn, isAdmin, async (req, res, next) => {
         req.flash('error', e.message)
         res.redirect('/register')
     }
-})
+}))
 
 app.get('/login', (req, res, next) => {
     res.render('auth/login', {login: true})
 })
 
 app.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res, next) => {
-    const urlRedirect = req.session.oldUrl || '/'
+    // We actually don't need to redirect the user back to their original URL because the user can only use the application if they are logged in
+    // const urlRedirect = req.session.oldUrl || '/'
     req.flash('success', 'Welcome Back!')
-    res.redirect(urlRedirect)
+    res.redirect('/')
 })
 
 app.get('/logout', (req, res, next) => {

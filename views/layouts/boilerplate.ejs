@@ -56,107 +56,106 @@
       </div>
     </header>
 
-    <% if (currentUser) { %>
-    <div class="container-fluid">
-      <div class="row">
-        <nav
-          id="sidebarMenu"
-          class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
-        >
-          <div class="position-sticky pt-3">
-            <h6
-              class="sidebar-heading d-flex justify-content-between align-items-center mt-2 px-3 mb-1 text-muted"
-            >
-              <span>General</span>
-            </h6>
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link text-nowrap" aria-current="page" href="/">
-                  <span data-feather="home"></span>
-                  Monitor
-                </a>
-              </li>
-            </ul>
-            <% if (currentUser && currentUser.username === 'admin') { %>
-            <h6
-              class="sidebar-heading d-flex justify-content-between align-items-center mt-4 px-3 mb-1 text-muted"
-            >
-              <span>Students</span>
-            </h6>
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a
-                  class="nav-link text-nowrap"
-                  aria-current="page"
-                  href="/student"
-                >
-                  <span data-feather="home"></span>
-                  Student Dashboard
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/student/new">
-                  <span data-feather="plus"></span>
-                  Add Student
-                </a>
-              </li>
-            </ul>
-            <% } %>
+    <div class="row">
+      <% if (currentUser) { %>
+      <nav
+        id="sidebarMenu"
+        class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
+      >
+        <div class="position-sticky pt-3">
+          <h6
+            class="sidebar-heading d-flex justify-content-between align-items-center mt-2 px-3 mb-1 text-muted"
+          >
+            <span>General</span>
+          </h6>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link text-nowrap" aria-current="page" href="/">
+                <span data-feather="home"></span>
+                Monitor
+              </a>
+            </li>
+          </ul>
+          <% if (currentUser && currentUser.username === 'admin') { %>
+          <h6
+            class="sidebar-heading d-flex justify-content-between align-items-center mt-4 px-3 mb-1 text-muted"
+          >
+            <span>Students</span>
+          </h6>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a
+                class="nav-link text-nowrap"
+                aria-current="page"
+                href="/student"
+              >
+                <span data-feather="home"></span>
+                Student Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/student/new">
+                <span data-feather="plus"></span>
+                Add Student
+              </a>
+            </li>
+          </ul>
+          <% } %>
 
-            <h6
-              class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
-            >
-              <span>Classes</span>
-            </h6>
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/class">
-                  <span data-feather="home"></span>
-                  Class Dashboard
-                </a>
-              </li>
-              <% if (currentUser && currentUser.username === 'admin') { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/class/new">
-                  <span data-feather="plus"></span>
-                  Add Class
-                </a>
-              </li>
-              <% } %>
-            </ul>
-
+          <h6
+            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
+          >
+            <span>Classes</span>
+          </h6>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/class">
+                <span data-feather="home"></span>
+                Class Dashboard
+              </a>
+            </li>
             <% if (currentUser && currentUser.username === 'admin') { %>
-            <h6
-              class="sidebar-heading d-flex justify-content-between align-items-center mt-4 px-3 mb-1 text-muted"
-            >
-              <span>Teachers</span>
-            </h6>
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a
-                  class="nav-link text-nowrap"
-                  aria-current="page"
-                  href="/register"
-                >
-                  <span data-feather="plus"></span>
-                  Add Teacher
-                </a>
-              </li>
-            </ul>
+            <li class="nav-item">
+              <a class="nav-link" href="/class/new">
+                <span data-feather="plus"></span>
+                Add Class
+              </a>
+            </li>
             <% } %>
-          </div>
-        </nav>
-        <main
-          class="<% if (currentUser) { %> col-md-9 ms-sm-auto col-lg-10 px-md-4 <% } %>"
-        >
-          <section class="container-fluid mt-3">
-            <%- include('../partials/flash-error') %><%-
-            include('../partials/flash-success') %> <% if (currentUser && url
-            !== '/') { %> <%- include('../partials/link-list.ejs') %> <% } %> <%
-            } %> <%- body -%>
-          </section>
-        </main>
-      </div>
+          </ul>
+
+          <% if (currentUser && currentUser.username === 'admin') { %>
+          <h6
+            class="sidebar-heading d-flex justify-content-between align-items-center mt-4 px-3 mb-1 text-muted"
+          >
+            <span>Teachers</span>
+          </h6>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a
+                class="nav-link text-nowrap"
+                aria-current="page"
+                href="/register"
+              >
+                <span data-feather="plus"></span>
+                Add Teacher
+              </a>
+            </li>
+          </ul>
+          <% } %>
+        </div>
+      </nav>
+      <% } %>
+      <main
+        class="<% if (currentUser) { %> col-md-9 ms-sm-auto col-lg-10 px-md-4 <% } %>"
+      >
+        <section class="container-fluid mt-3">
+          <%- include('../partials/flash-error') %><%-
+          include('../partials/flash-success') %> <% if (currentUser && url !==
+          '/') { %> <%- include('../partials/link-list.ejs') %> <% } %> <%- body
+          -%>
+        </section>
+      </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script

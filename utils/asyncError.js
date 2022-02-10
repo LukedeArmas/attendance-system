@@ -2,6 +2,6 @@
 module.exports = function asyncError(fn) {
     return function(req, res, next) {
         fn(req, res, next)
-        .catch(e => console.log("Async Error", next(e)))
+        .catch(e => next(e))
     }
 }

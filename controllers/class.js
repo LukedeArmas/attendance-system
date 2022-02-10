@@ -1,5 +1,6 @@
 const Class = require('../models/class.js')
 const Student = require('../models/student.js')
+const Attendance = require('../models/attendance.js')
 const { checkSearch } = require('../helperFunctions.js')
 const User = require('../models/user.js')
 
@@ -143,8 +144,21 @@ module.exports.removeStudentPut = async (req, res, next) => {
     const {id} = req.params
     const {studentList} = req.body
     const singleClass = await Class.findById(id)
-    const students = await Student.find({_id: {$in: studentList}})
-    await Class.findByIdAndUpdate(id, {$pull: {studentsInClass: { student: {$in: students}}}})
+    // Remove student from all the attendances of the Class that include the student
+    const removeStudentAttendances = await Attendance.find({ class: singleClass._id, studentsPresent: {  $in: studentList } } )
+    for (let attendance of removeStudentAttendances) {
+        attendance.studentsPresent = attendance.studentsPresent.filter(student => !studentList.includes(student.toString()))
+        await attendance.save()
+    }
+    // Remove student from the Class
+    const classAfter = await Class.findByIdAndUpdate(id, {$pull: {studentsInClass: { student: {$in: studentList}}}}, {runValidators: true, new: true})
+    // If all students are removed from a class we delete all attendance records from the class
+    console.log(classAfter)
+    if (classAfter.studentsInClass.length < 1) {
+        await Attendance.deleteMany({ class: classAfter._id })
+        classAfter.numAttendancesTaken = 0
+        await classAfter.save()
+    }
     req.flash('success', 'Successfully removed students from class')
     res.redirect(`/class/${id}`)
 }

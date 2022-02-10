@@ -3,24 +3,24 @@ const {Schema} = mongoose
 
 
 const attendanceSchema = new Schema({
-       class: {
-           type: Schema.Types.ObjectId,
-           ref: 'Class'
-       },
-       dateUpdated: {
-           type: Date,
-           required: true
-       },
-       date: {
-                type: Date,
-                required: true
-            },
-        studentsPresent: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'Student'
-            }
-        ]
+    class: {
+        type: Schema.Types.ObjectId,
+        ref: 'Class'
+    },
+    dateUpdated: {
+        type: Date,
+        required: true
+    },
+    date: {
+            type: Date,
+            required: true
+        },
+    studentsPresent: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Student'
+        }
+    ]
 })
 
 attendanceSchema.set('toJSON', { virtuals: true })

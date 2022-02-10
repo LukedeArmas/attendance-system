@@ -13,7 +13,7 @@ router.route('/new')
     .get(isLoggedIn, isAdmin, asyncError(myClass.new))
 
 router.route('/:id')
-    .get(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(myClass.show))
+    .get(isLoggedIn, asyncError(verifyTeacher), objectIdMiddleware, asyncError(myClass.show))
     .put(isLoggedIn, isAdmin, objectIdMiddleware, validateClass, asyncError(myClass.put))
     .delete(isLoggedIn, isAdmin, objectIdMiddleware, asyncError(myClass.delete))
     
@@ -22,11 +22,11 @@ router.route('/:id/edit')
 
 router.route('/:id/addStudent')
     .get(isLoggedIn, isAdmin, myClass.reloadPage, objectIdMiddleware, asyncError(myClass.addStudentGet))
-    .put(isLoggedIn, isAdmin, objectIdMiddleware, validateAddStudentToClass, asyncError(myClass.addStudentPut))
+    .put(isLoggedIn, isAdmin, objectIdMiddleware, asyncError(validateAddStudentToClass), asyncError(myClass.addStudentPut))
 
 router.route('/:id/removeStudent')
     .get(isLoggedIn, isAdmin, myClass.reloadPage, objectIdMiddleware, asyncError(myClass.removeStudentGet))
-    .put(isLoggedIn, isAdmin, objectIdMiddleware, validateRemoveStudentFromClass, asyncError(myClass.removeStudentPut))
+    .put(isLoggedIn, isAdmin, objectIdMiddleware, asyncError(validateRemoveStudentFromClass), asyncError(myClass.removeStudentPut))
 
 
 module.exports = router

@@ -6,19 +6,19 @@ const attendance = require('../controllers/attendance')
 
 
 router.route('/')
-    .get(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.home))
-    .post(isLoggedIn, verifyTeacher, objectIdMiddleware, validateAttendance, asyncError(attendance.post))
+    .get(isLoggedIn, asyncError(verifyTeacher), objectIdMiddleware, asyncError(attendance.home))
+    .post(isLoggedIn, asyncError(verifyTeacher), objectIdMiddleware, asyncError(validateAttendance), asyncError(attendance.post))
 
 router.route('/new')
-    .get(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.new))
+    .get(isLoggedIn, asyncError(verifyTeacher), objectIdMiddleware, asyncError(attendance.new))
 
 router.route('/:dateId')
-    .get(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.show))
-    .put(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.put))
-    .delete(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.delete))
+    .get(isLoggedIn, asyncError(verifyTeacher), objectIdMiddleware, asyncError(attendance.show))
+    .put(isLoggedIn, asyncError(verifyTeacher), objectIdMiddleware, asyncError(attendance.put))
+    .delete(isLoggedIn, asyncError(verifyTeacher), objectIdMiddleware, asyncError(attendance.delete))
     
 router.route('/:dateId/edit')
-    .get(isLoggedIn, verifyTeacher, objectIdMiddleware, asyncError(attendance.edit))
+    .get(isLoggedIn, asyncError(verifyTeacher), objectIdMiddleware, asyncError(attendance.edit))
 
 
 module.exports = router

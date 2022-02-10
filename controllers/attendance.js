@@ -148,7 +148,7 @@ module.exports.put = async (req, res, next) => {
         attendanceDay.studentsPresent = studentsPresent
         await attendanceDay.save()
         for (let studentEntry of singleClass.studentsInClass) {
-            studentEntry.numAttendancesPresent = await Attendance.find({ studentsPresent: { $eq: studentEntry.student }}).count()
+            studentEntry.numAttendancesPresent = await Attendance.find({ class: singleClass._id, studentsPresent: { $eq: studentEntry.student }}).count()
         }
         await singleClass.save()
     }

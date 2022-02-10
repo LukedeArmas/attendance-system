@@ -73,30 +73,30 @@ module.exports.validateAttendance = async (req, res, next) => {
 }
 
 module.exports.objectIdMiddleware = function (req, res, next) {
-  try {
-    var paramKeys = Object.keys(req.params)
-    var validKeys = paramKeys.filter(function (key) {
-      var validKey = key.substring(key.lastIndexOf("_") + 1)
-      return validKey == "id" || "Id"
-    });
-    for (let key of validKeys) {
-      if (
-        !req.params[key] ||
-        !mongoose.Types.ObjectId.isValid(req.params[key])
-      ) {
-        throw new Error()
-      }
+    try {
+        var paramKeys = Object.keys(req.params)
+        var validKeys = paramKeys.filter(function (key) {
+            var validKey = key.substring(key.lastIndexOf("_") + 1)
+            return validKey == "id" || "Id"
+        })
+        for (let key of validKeys) {
+            if (!req.params[key] || !mongoose.Types.ObjectId.isValid(req.params[key])) {
+                throw new Error()
+            }
+        }
+    } catch (error) {
+        return next(new myError(404, 'Page cannot be found'))
     }
-  } catch (error) {
-    return next(new myError(404, 'Page cannot be found'))
-  }
-  next()
+    next()
 }
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
-        req.session.oldUrl = req.originalUrl
-        req.flash('error', 'You must be logged in!')
+        // We actually don't need to redirect the user back to their original URL because the user can only use the application if they are logged in
+        // req.session.oldUrl = req.originalUrl
+        if (req.originalUrl !== '/') {
+            req.flash('error', 'You must be logged in!')
+        }
         return res.redirect('/login')
     }
     return next()
