@@ -20,8 +20,8 @@ const flash = require('connect-flash')
 const User = require('./models/user')
 const passport = require('passport')
 const passportLocal = require('passport-local')
-// const databaseUrl = process.env.DB_URL || 'mongodb://localhost:27017/attendance'
-const databaseUrl = 'mongodb://localhost:27017/attendance'
+const databaseUrl = process.env.DB_URL || 'mongodb://localhost:27017/attendance'
+// const databaseUrl = 'mongodb://localhost:27017/attendance'
 const MongoStore = require('connect-mongo')
 const { isAdmin, isLoggedIn } = require('./middleware.js')
 
