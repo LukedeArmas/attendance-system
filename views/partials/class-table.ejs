@@ -8,8 +8,9 @@
         <th scope="col">Subject</th>
         <th scope="col" class="text-center">Section</th>
         <th scope="col" class="text-center">Year</th>
+        <% if (typeof teacherShow === 'undefined') { %>
         <th scope="col" class="text-center">Teacher</th>
-        <% if (typeof studentShow !== 'undefined') { %>
+        <% } %> <% if (typeof studentShow !== 'undefined') { %>
         <th scope="col" class="text-center">Attendance</th>
         <% } else { %>
         <th scope="col" class="text-center">View</th>
@@ -25,9 +26,10 @@
         <td class="subject"><%= singleClass.subject %></td>
         <td class="text-center"><%= singleClass.section %></td>
         <td class="text-center"><%= singleClass.year %></td>
+        <% if (typeof teacherShow === 'undefined') { %>
         <td class="teacher text-center"><%= singleClass.teacher.fullName %></td>
-        <% if (typeof studentShow !== 'undefined') { %> <% for (let studentEntry
-        of singleClass.studentsInClass) { if
+        <% } %> <% if (typeof studentShow !== 'undefined') { %> <% for (let
+        studentEntry of singleClass.studentsInClass) { if
         (studentEntry.student._id.toString() === student._id.toString()) { %>
         <td class="text-center">
           <%= singleClass.numAttendancesTaken > 0 ? Number(Math.round(

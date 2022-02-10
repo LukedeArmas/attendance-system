@@ -1,15 +1,21 @@
 <% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/add-header.ejs', { headerText: 'Add Teacher'}) %>
+include('../partials/add-header.ejs', { headerText: 'Edit Teacher'}) %>
 
 <div class="row">
   <div class="col-6 offset-3">
-    <form action="/teacher" method="POST" class="validated" novalidate>
+    <form
+      action="/teacher/<%= teacher._id %>?_method=PUT"
+      method="POST"
+      class="validated"
+      novalidate
+    >
       <div class="mb-3 col-sm-8 offset-sm-2">
         <label class="form-label" for="username">First Name</label>
         <input
           class="form-control"
           type="text"
           name="firstName"
+          value="<%= teacher.firstName %>"
           id="firstName"
           autofocus
           required
@@ -22,6 +28,7 @@ include('../partials/add-header.ejs', { headerText: 'Add Teacher'}) %>
           class="form-control"
           type="text"
           name="lastName"
+          value="<%= teacher.lastName %>"
           id="lastName"
           autofocus
           required
@@ -34,6 +41,7 @@ include('../partials/add-header.ejs', { headerText: 'Add Teacher'}) %>
           class="form-control"
           type="email"
           name="email"
+          value="<%= teacher.email %>"
           id="email"
           required
         />
@@ -45,6 +53,7 @@ include('../partials/add-header.ejs', { headerText: 'Add Teacher'}) %>
           class="form-control"
           type="text"
           name="username"
+          value="<%= teacher.username %>"
           id="username"
           autofocus
           required
@@ -52,23 +61,7 @@ include('../partials/add-header.ejs', { headerText: 'Add Teacher'}) %>
         <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3 col-sm-8 offset-sm-2">
-        <label class="form-label" for="password">Password</label>
-        <div class="input-group">
-          <input
-            class="form-control"
-            type="password"
-            name="password"
-            id="password"
-            required
-          />
-          <span
-            class="d-flex align-items-center far fa-eye icon input-group-text"
-          ></span>
-        </div>
-        <div class="valid-feedback">Looks good!</div>
-      </div>
-      <div class="mb-3 col-sm-8 offset-sm-2">
-        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="submit" class="btn btn-primary">Edit</button>
       </div>
     </form>
   </div>

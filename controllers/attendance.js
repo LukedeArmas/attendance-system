@@ -76,7 +76,12 @@ module.exports.new = async (req, res, next) => {
         // return next(new myError(404, "This class does not exist"))
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
-    }    
+    }
+    singleClass.studentsInClass.sort((a,b) => {
+        if (a.student.studentId < b.student.studentId) { return -1 }
+        if (a.student.studentId > b.student.studentId) { return 1 }
+        return 0
+    })    
     const attendances = await Attendance.find({ class: singleClass._id })
     if (attendances) {
         notValidDates = attendances.map(entry => moment(entry.date).format('L') )
@@ -100,7 +105,12 @@ module.exports.show = async (req, res, next) => {
         // return next(new myError(404, "This class does not exist"))
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
-    }  
+    }
+    singleClass.studentsInClass.sort((a,b) => {
+        if (a.student.studentId < b.student.studentId) { return -1 }
+        if (a.student.studentId > b.student.studentId) { return 1 }
+        return 0
+    })  
     const attendanceDay = await Attendance.findById(dateId)
     if (!attendanceDay) {
         // return next(new myError(404, "No attendance has been taken yet for this date"))
@@ -124,7 +134,12 @@ module.exports.edit = async (req, res, next) => {
         // return next(new myError(404, "This class does not exist"))
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')
-    }  
+    }
+    singleClass.studentsInClass.sort((a,b) => {
+        if (a.student.studentId < b.student.studentId) { return -1 }
+        if (a.student.studentId > b.student.studentId) { return 1 }
+        return 0
+    })  
     const attendanceDay = await Attendance.findById(dateId)
     if (!attendanceDay) {
         // return next(new myError(404, "No attendance has been taken yet for this date"))

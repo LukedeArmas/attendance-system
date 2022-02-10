@@ -1,7 +1,7 @@
 const myError = require('./utils/myError.js')
 const {studentSchema, classSchema, attendanceSchema } = require('./joi-schemas.js')
 const Class = require('./models/class.js')
-const User = require('./models/user.js')
+const Teacher = require('./models/teacher.js')
 const mongoose = require("mongoose")
 
 
@@ -86,9 +86,10 @@ module.exports.objectIdMiddleware = function (req, res, next) {
             }
         }
     } catch (error) {
-        return next(new myError(404, 'Page cannot be found'))
+        req.flash('error', 'Page cannot be found')
+        return res.redirect('/')
     }
-    next()
+    return next()
 }
 
 module.exports.isLoggedIn = (req, res, next) => {
@@ -126,7 +127,7 @@ module.exports.isAdmin = (req, res, next) => {
 }
 
 module.exports.teacherExists = async (req, res, next) => {
-    const teachers = await User.find({ username: { $ne: 'admin' } })
+    const teachers = await Teacher.find({ username: { $ne: 'admin' } })
     if (teachers.length < 1) {
         req.flash('error', 'A teacher must be added before a class can be added')
         return res.redirect('/')

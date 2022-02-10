@@ -1,0 +1,11 @@
+<% layout('./layouts/boilerplate.ejs') %> <%-
+include('../partials/show-header.ejs', {type: teacher, typeName: 'teacher',
+name: teacher.fullName}) %>
+<p>
+  <strong>Username: </strong> <%= teacher.username %>
+  <br />
+  <strong>Email: </strong> <%= teacher.email %>
+</p>
+<p class="h4 mb-3">Classes:</p>
+<%- include('../partials/class-table.ejs', { classes, num: 1, teacherShow: true
+}) %>

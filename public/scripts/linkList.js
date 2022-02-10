@@ -1,9 +1,10 @@
 var classId = /^\/class\/[0-9a-fA-F]{24}$/
 var studentId = /^\/student\/[0-9a-fA-F]{24}$/
+var teacherId = /^\/teacher\/[0-9a-fA-F]{24}$/
 var attendanceDashboard = /^\/class\/[0-9a-fA-F]{24}\/attendance$/
 var attendance = /^\/class\/[0-9a-fA-F]{24}\/attendance\/[0-9a-fA-F]{24}$/
 
-if (location.pathname === '/class' || location.pathname === '/student' || classId.test(location.pathname) || studentId.test(location.pathname) || attendanceDashboard.test(location.pathname) || attendance.test(location.pathname) ) {
+if (location.pathname === '/class' || location.pathname === '/student' || location.pathname === '/teacher' || classId.test(location.pathname) || studentId.test(location.pathname) || teacherId.test(location.pathname) || attendanceDashboard.test(location.pathname) || attendance.test(location.pathname) ) {
     const pathArray = location.pathname.split('/').slice(1)
     const linkList = document.querySelector('.link-list')
 
@@ -26,10 +27,14 @@ if (location.pathname === '/class' || location.pathname === '/student' || classI
             a.innerHTML = 'Class Dashboard'
          } else if (urlSoFar === '/student') {
             a.innerHTML = 'Student Dashboard'
+         } else if (urlSoFar === '/teacher') {
+            a.innerHTML = 'Teacher Dashboard'
          } else if (classId.test(urlSoFar)) {
             a.innerHTML = 'Class'
          } else if (studentId.test(urlSoFar)) {
              a.innerHTML = 'Student'
+         } else if (teacherId.test(urlSoFar)) {
+             a.innerHTML = 'Teacher'
          } else if (attendanceDashboard.test(urlSoFar)) {
              a.innerHTML = 'Attendance Dashboard'
          } else if (attendance.test(urlSoFar)) {

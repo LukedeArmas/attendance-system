@@ -2,7 +2,7 @@ const Class = require('../models/class.js')
 const Student = require('../models/student.js')
 const Attendance = require('../models/attendance.js')
 const { checkSearch } = require('../helperFunctions.js')
-const User = require('../models/user.js')
+const Teacher = require('../models/teacher.js')
 
 
 module.exports.home = async (req, res) => {
@@ -33,7 +33,7 @@ module.exports.post = async (req, res, next) => {
 }
 
 module.exports.new = async (req, res, next) => {
-    const teachers = await User.find({ username: { $ne: 'admin' } }).sort({ firstName: 1 })
+    const teachers = await Teacher.find({ username: { $ne: 'admin' } }).sort({ firstName: 1 })
     res.render('class-pages/new', { teachers })
 }
 
@@ -64,7 +64,7 @@ module.exports.show = async (req, res, next) => {
 module.exports.edit = async (req, res) => {
     const {id} = req.params
     const singleClass = await Class.findById(id)
-    const teachers = await User.find({ username: { $ne: 'admin' } })
+    const teachers = await Teacher.find({ username: { $ne: 'admin' } })
     if (!singleClass) {
         req.flash('error', 'Class does not exist' )
         return res.redirect('/class')

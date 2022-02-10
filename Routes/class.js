@@ -13,7 +13,7 @@ router.route('/new')
     .get(isLoggedIn, isAdmin, asyncError(teacherExists), asyncError(myClass.new))
 
 router.route('/:id')
-    .get(isLoggedIn, asyncError(verifyTeacher), objectIdMiddleware, asyncError(myClass.show))
+    .get(isLoggedIn, objectIdMiddleware, asyncError(verifyTeacher), asyncError(myClass.show))
     .put(isLoggedIn, isAdmin, objectIdMiddleware, validateClass, asyncError(myClass.put))
     .delete(isLoggedIn, isAdmin, objectIdMiddleware, asyncError(myClass.delete))
     

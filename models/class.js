@@ -9,7 +9,7 @@ const replaceWhitespace = function (value) {
 const classSchema = new Schema({
     teacher: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Teacher'
     },
     className: {
         type: String,
@@ -63,7 +63,8 @@ classSchema.virtual('numStudentsInClass').get(function () {
 classSchema.index({ classCode: 1, section: 1 }, { unique: true })
 
 // Index made for searching classes
-classSchema.index({teacher: 'text', className: 'text', classCode: 'text', subject: 'text'})
+// Don't use this anymore
+// classSchema.index({teacher: 'text', className: 'text', classCode: 'text', subject: 'text'})
 
 // If we delete a Class we delete all the attendances associated with this class
 classSchema.post('findOneAndDelete', async function(doc) {

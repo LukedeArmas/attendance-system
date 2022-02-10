@@ -1,7 +1,7 @@
 const classSearchInput = document.querySelector('#classSearch')
 
 if (classSearchInput) {
-    const classTableCells = document.querySelector('tbody').children
+const classTableCells = document.querySelector('tbody').children
     classSearchInput.addEventListener('input', () => {
     for (let tableCell of classTableCells) {
         const classCode = tableCell.querySelector('td.classCode').innerText.toLowerCase()
