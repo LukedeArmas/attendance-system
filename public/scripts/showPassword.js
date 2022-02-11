@@ -1,8 +1,11 @@
-const passwordInput = document.querySelector('#password')
-const icon = document.querySelector('.icon')
+const passwordDivs = document.querySelectorAll('div.pw-div')
 
-if (icon) {
-    icon.addEventListener('click', (e) => {
-    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password'
-})
+if (passwordDivs) {
+    passwordDivs.forEach(passwordDiv => {
+        const passwordInput = passwordDiv.querySelector('input')
+        const icon = passwordDiv.querySelector('span.icon')
+        icon.addEventListener('click', (event) => {
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password'
+        })
+    })
 }

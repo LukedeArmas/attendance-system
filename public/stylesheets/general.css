@@ -78,3 +78,14 @@ div.input-group input.form-control {
 .logout {
   font-size: 1rem;
 }
+
+@media screen and (min-width: 1070px) {
+  .col-mdlg-2 {
+    flex: 0 0 auto;
+    width: 16.66666667%;
+  }
+  .col-mdlg-10 {
+    flex: 0 0 auto;
+    width: 83.33333333%;
+  }
+}

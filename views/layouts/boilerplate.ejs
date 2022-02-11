@@ -32,7 +32,7 @@
       class="navbar sticky-top navbar-light bg-light flex-md-nowrap p-0 shadow"
     >
       <span
-        class="display-1 fs-5 navbar-brand bg-light text-dark col-md-3 col-lg-2 me-0 px-3"
+        class="display-1 fs-5 navbar-brand bg-light text-dark col-md-3 col-mdlg-2 me-0 px-3"
         >UniTracker</span
       >
       <div class="navbar-nav flex-row">
@@ -61,7 +61,7 @@
       <% if (currentUser) { %>
       <nav
         id="sidebarMenu"
-        class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
+        class="col-md-3 col-mdlg-2 d-md-block bg-light sidebar collapse"
       >
         <div class="position-sticky pt-3">
           <h6
@@ -158,14 +158,15 @@
       </nav>
       <% } %>
       <main
-        class="<% if (currentUser) { %> col-md-9 ms-sm-auto col-lg-10 px-md-4 <% } %>"
+        class="<% if (currentUser) { %> col-md-9 ms-sm-auto col-mdlg-10 px-md-4 <% } %>"
       >
         <section class="container-fluid mt-3">
           <%- include('../partials/flash-error') %> <%-
           include('../partials/flash-success') %> <% if (currentUser && url !==
           '/' && (currentUser.username === 'admin' ||
-          !(/^\/student\/[0-9a-fA-F]{24}$/.test(url)))) { %> <%-
-          include('../partials/link-list.ejs') %> <% } %> <%- body -%>
+          !(/^\/student\/[0-9a-fA-F]{24}$/.test(url))) && typeof err ===
+          'undefined') { %> <%- include('../partials/link-list.ejs') %> <% } %>
+          <%- body -%>
         </section>
       </main>
     </div>
@@ -205,9 +206,12 @@
     <script src="/scripts/validateDateForm.js"></script>
     <script src="/scripts/activeNavigation.js"></script>
     <script src="/scripts/showPassword.js"></script>
+    <% if (typeof err === 'undefined') { %>
     <script src="/scripts/linkList.js"></script>
+    <% } %>
     <script src="/scripts/studentSearchBar.js"></script>
     <script src="/scripts/classSearchBar.js"></script>
     <script src="/scripts/teacherSearchBar.js"></script>
+    <script src="/scripts/validatePassword.js"></script>
   </body>
 </html>

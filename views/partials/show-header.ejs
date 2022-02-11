@@ -22,6 +22,13 @@
       href="/<%= typeName %>/<%= type._id %>/<% if (typeof attendance !== "undefined") { %>attendance/<%= attendanceDay.id %>/<% } %>edit"
       >Edit</a
     >
+    <% if (typeName === 'teacher') { %>
+    <a
+      class="btn btn-outline-secondary me-2 mb-2 mb-sm-0"
+      href="/<%= typeName %>/<%= type._id %>/updatePassword"
+      >Update Password</a
+    >
+    <% } %>
     <button
       class="btn btn-outline-danger"
       data-bs-toggle="modal"

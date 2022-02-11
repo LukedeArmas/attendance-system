@@ -82,3 +82,27 @@ module.exports.delete = async (req, res, next) => {
     req.flash('success', 'Successfully deleted teacher')
     res.redirect('/teacher')
 }
+
+module.exports.getUpdatePassword = async (req, res, next) => {
+    const { id } = req.params
+    const teacher = await Teacher.findById(id)
+    if (!teacher) {
+        req.flash('error', 'Teacher does not exist')
+        return res.redirect('/teacher')
+    }
+    res.render('teacher-pages/update-password', { teacherId: id })
+}
+
+module.exports.putUpdatePassword = async (req, res, next) => {
+    const { id } = req.params
+    const { password } = req.body
+    const teacher = await Teacher.findById(id)
+    if (!teacher) {
+        req.flash('error', 'Teacher does not exist')
+        return res.redirect('/teacher')
+    }
+    await teacher.setPassword(password)
+    await teacher.save()
+    req.flash('success', 'Successfully updated password!')
+    res.redirect(`/teacher/${id}`)
+}

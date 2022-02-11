@@ -35,38 +35,5 @@ name: `${singleClass.className}`}) %>
   </div>
   <% } %>
 </div>
-<% let num = 1 %>
-<div class="table-responsive">
-    <table class="table table-hover">
-      <thead class="thead-light">
-        <tr>
-          <th scope="col" class="px-0"></th>
-          <th scope="col">Student ID</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th class="text-center" scope="col">Attendance</th>
-          <th class="text-center" scope="col">View</th>                                
-        </tr>
-      </thead>
-      <% if (singleClass.studentsInClass.length) { %>
-      <tbody>
-        <% 
-        for (let { student, numAttendancesPresent } of singleClass.studentsInClass) { %>
-        <tr>
-          <th scope="row" class="text-center ps-0"><%= num %>.</th>
-          <td><%= student.studentId %></th>
-          <td><%= student.firstName %></td>
-          <td><%= student.lastName %></td>
-          <td class="text-center"><%= singleClass.numAttendancesTaken > 0 ? Number(Math.round( 100*(numAttendancesPresent / singleClass.numAttendancesTaken) + 'e2') + 'e-2') : 0 %>%</td>
-          <td class="text-center">
-            <a class="btn btn-outline-secondary px-3 py-1" href="/student/<%= student._id %>"
-              ><i class="fa fa-user"></i></a
-            >
-          </td>                 
-        </tr>
-        <% num++ 
-      } %>
-      </tbody>
-      <% } %>
-    </table>
-  </div>
+<%- include('../partials/student-table.ejs', {students:
+singleClass.studentsInClass, singleClass, num: 1, classShow: true}) %>

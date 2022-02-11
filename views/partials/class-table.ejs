@@ -8,7 +8,8 @@
         <th scope="col">Subject</th>
         <th scope="col" class="text-center">Section</th>
         <th scope="col" class="text-center">Year</th>
-        <% if (typeof teacherShow === 'undefined') { %>
+        <% if (typeof teacherShow === 'undefined' && (currentUser.username ===
+        'admin' || typeof classHome === 'undefined')) { %>
         <th scope="col" class="text-center">Teacher</th>
         <% } %> <% if (typeof studentShow !== 'undefined') { %>
         <th scope="col" class="text-center">Attendance</th>
@@ -26,7 +27,8 @@
         <td class="subject"><%= singleClass.subject %></td>
         <td class="text-center"><%= singleClass.section %></td>
         <td class="text-center"><%= singleClass.year %></td>
-        <% if (typeof teacherShow === 'undefined') { %>
+        <% if (typeof teacherShow === 'undefined' && (currentUser.username ===
+        'admin' || typeof classHome === 'undefined')) { %>
         <td class="teacher text-center"><%= singleClass.teacher.fullName %></td>
         <% } %> <% if (typeof studentShow !== 'undefined') { %> <% for (let
         studentEntry of singleClass.studentsInClass) { if

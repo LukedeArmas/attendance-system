@@ -3,7 +3,12 @@ include('../partials/add-header.ejs', { headerText: 'Add Teacher'}) %>
 
 <div class="row">
   <div class="col-6 offset-3">
-    <form action="/teacher" method="POST" class="validated" novalidate>
+    <form
+      action="/teacher"
+      method="POST"
+      class="validated passwordForm"
+      novalidate
+    >
       <div class="mb-3 col-sm-8 offset-sm-2">
         <label class="form-label" for="username">First Name</label>
         <input
@@ -38,6 +43,7 @@ include('../partials/add-header.ejs', { headerText: 'Add Teacher'}) %>
           required
         />
         <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Email must be in proper format.</div>
       </div>
       <div class="mb-3 col-sm-8 offset-sm-2">
         <label class="form-label" for="username">Username</label>
@@ -53,7 +59,7 @@ include('../partials/add-header.ejs', { headerText: 'Add Teacher'}) %>
       </div>
       <div class="mb-3 col-sm-8 offset-sm-2">
         <label class="form-label" for="password">Password</label>
-        <div class="input-group">
+        <div class="input-group pw-div">
           <input
             class="form-control"
             type="password"
@@ -66,6 +72,23 @@ include('../partials/add-header.ejs', { headerText: 'Add Teacher'}) %>
           ></span>
         </div>
         <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div class="mb-3 col-sm-8 offset-sm-2">
+        <label class="form-label" for="password2">Confirm Password</label>
+        <div class="input-group pw-div">
+          <input
+            class="form-control"
+            type="password"
+            name="password2"
+            id="password2"
+            required
+          />
+          <span
+            class="d-flex align-items-center far fa-eye icon input-group-text"
+          ></span>
+        </div>
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback pw-feedback">Passwords must match.</div>
       </div>
       <div class="mb-3 col-sm-8 offset-sm-2">
         <button type="submit" class="btn btn-primary">Add</button>

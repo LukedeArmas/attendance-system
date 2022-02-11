@@ -65,3 +65,25 @@ module.exports.attendanceSchema = Joi.object({
     studentsPresent: Joi.array()
 })
 
+module.exports.newTeacherSchema = Joi.object({
+  firstName: Joi.string().required().escapeHTML(),
+  lastName: Joi.string().required().escapeHTML(),
+  email: Joi.string().email().required().escapeHTML(),
+  username: Joi.string().required().escapeHTML(),
+  password: Joi.string().required().escapeHTML(),
+  password2: Joi.ref('password')
+})
+.with('password', 'password2')
+
+module.exports.editTeacherSchema = Joi.object({
+  firstName: Joi.string().required().escapeHTML(),
+  lastName: Joi.string().required().escapeHTML(),
+  email: Joi.string().email().required().escapeHTML(),
+  username: Joi.string().required().escapeHTML()
+})
+
+module.exports.passwordSchema = Joi.object({
+  password: Joi.string().required().escapeHTML(),
+  password2: Joi.ref('password')
+})
+.with('password', 'password2')

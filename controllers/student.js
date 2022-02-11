@@ -1,8 +1,9 @@
 const Student = require('../models/student.js')
 const Class = require('../models/class.js')
+const myError = require('../utils/myError.js')
 
 
-module.exports.home = async (req, res) => {
+module.exports.home = async (req, res, next) => {
     // Find all students and sort alphabetically by studentId
     const students = await Student.find().sort({ studentId: 1 })
     res.render('student-pages/home', {students})

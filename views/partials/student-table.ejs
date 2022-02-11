@@ -6,7 +6,12 @@
           <th scope="col">Student ID</th>
           <th scope="col">First</th>
           <th scope="col">Last</th>
+          <% if (typeof classShow !== 'undefined') { %>
+          <th class="text-center" scope="col">Attendance</th>
+          <% } %>
+          <% if (typeof add === 'undefined' && typeof remove === 'undefined' && typeof attendance === 'undefined' && typeof attendanceShow === 'undefined' && typeof attendanceEdit === 'undefined') { %>
           <th class="text-center" scope="col">View</th>
+          <% } %>
           <% if (typeof add !== 'undefined') { %>
           <th scope="col">Add Student</th>
             <% } %>
@@ -28,16 +33,25 @@
       <tbody>
         <% 
         for (let student of students) { %>
+          <% if (typeof classShow !== 'undefined') { 
+            numAttendancesPresent = student.numAttendancesPresent;
+            student = student.student;
+             } %>
         <tr>
           <th scope="row" class="text-center ps-0"><%= num %>.</th>
           <td class="id"><%= student.studentId %></th>
           <td class="firstName"><%= student.firstName %></td>
           <td class="lastName"><%= student.lastName %></td>
+          <% if (typeof classShow !== 'undefined') { %>
+            <td class="text-center"><%= singleClass.numAttendancesTaken > 0 ? Number(Math.round( 100*(numAttendancesPresent / singleClass.numAttendancesTaken) + 'e2') + 'e-2') : 0 %>%</td>
+          <% } %>
+          <% if (typeof add === 'undefined' && typeof remove === 'undefined' && typeof attendance === 'undefined' && typeof attendanceShow === 'undefined' && typeof attendanceEdit === 'undefined') { %>
           <td class="text-center">
             <a class="btn btn-outline-secondary px-3 py-1" href="/student/<%= student._id %>"
               ><i class="fa fa-user"></i></a
             >
           </td>
+          <% } %>
           <% if (typeof add !== 'undefined') { %>
             <td class="ps-4">
             <div class="form-check">

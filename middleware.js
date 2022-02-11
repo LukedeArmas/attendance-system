@@ -1,27 +1,69 @@
 const myError = require('./utils/myError.js')
-const {studentSchema, classSchema, attendanceSchema } = require('./joi-schemas.js')
+const {studentSchema, classSchema, attendanceSchema, newTeacherSchema, editTeacherSchema, passwordSchema } = require('./joi-schemas.js')
 const Class = require('./models/class.js')
 const Teacher = require('./models/teacher.js')
 const mongoose = require("mongoose")
 
 
 module.exports.validateStudent = (req, res, next) => {
-    const {error} = studentSchema.validate(req.body);
+    const {error} = studentSchema.validate(req.body)
     if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        return next(new myError(400, msg))
+        const msg = error.details.map(el => el.message).join(',')
+        req.flash('error', msg)
+        return res.redirect('/student')
     }
     return next()
 };
 
 module.exports.validateClass = (req, res, next) => {
-    const {error} = classSchema.validate(req.body);
+    const {error} = classSchema.validate(req.body)
     if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        return next(new myError(400, msg))
+        const msg = error.details.map(el => el.message).join(',')
+        req.flash('error', msg)
+        return res.redirect('/class')
     }
     return next()
 };
+
+module.exports.validateNewTeacher = (req, res, next) => {
+    const {error} = newTeacherSchema.validate(req.body)
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        if (msg === '"password2" must be [ref:password]') {
+            req.flash('error', 'Must confirm the same password')
+        } else {
+            req.flash('error', msg)
+        }
+        return res.redirect('/teacher/new')
+    }
+    return next()
+}
+
+module.exports.validateEditTeacher = (req, res, next) => {
+    const { id } = req.params
+    const {error} = editTeacherSchema.validate(req.body)
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        req.flash('error', msg)
+        return res.redirect(`/teacher/${id}/edit`)
+    }
+    return next()
+}
+
+module.exports.validateUpdatePassword = (req, res, next) => {
+    const { id } = req.params
+    const {error} = passwordSchema.validate(req.body)
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        if (msg === '"password2" must be [ref:password]') {
+            req.flash('error', 'Must confirm the same password')
+        } else {
+            req.flash('error', msg)
+        }
+        return res.redirect(`/teacher/${id}/updatePassword`)
+    }
+    return next()
+}
 
 module.exports.validateAddStudentToClass = async (req, res, next) => {
     const {id} = req.params

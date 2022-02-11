@@ -5,7 +5,7 @@
       <h4 class="alert-heading"><%= err.message %></h4>
       <!-- If we are in production mode we do not display the error stack to the user -->
       <% if(process.env.NODE_ENV !== "production") { %>
-      <p><%= err.stack %></p>
+      <p class="text-break"><%= err.stack %></p>
       <% } %>
       <hr />
     </div>
