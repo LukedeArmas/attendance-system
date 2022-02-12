@@ -25,7 +25,10 @@ module.exports.post = async (req, res, next) => {
     const { id } = req.params
     const { date, studentsPresent } = req.body
     const newDate = new Date(date)
-    const nowDate = new Date(Date.now())
+    // Gets today's date
+    const unformattedDate = new Date(Date.now())
+    unformattedDate.setDate(unformattedDate.getDate() - 1)
+    const nowDate = moment(unformattedDate).format('L')
     // Checks if the attendance date for this class exists already
     if (await Attendance.exists({ class: id, date: newDate })) {
         req.flash('error', 'Attendance has already been recorded for this date')
