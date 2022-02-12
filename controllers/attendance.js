@@ -148,6 +148,11 @@ module.exports.put = async (req, res, next) => {
     // Try catch handles if user tries to put information other than student object ids in the studentsPresent array
     try {
         attendanceDay.studentsPresent = studentsPresent
+        // Gets today's date
+        const unformattedDate = new Date(Date.now())
+        unformattedDate.setDate(unformattedDate.getDate() - 1)
+        const date = moment(unformattedDate).format('L')
+        attendanceDay.dateUpdated = date
         await attendanceDay.save()
         // Update the numAttendancesPresent property of every student (after we update the attendance record)
         for (let studentEntry of singleClass.studentsInClass) {
