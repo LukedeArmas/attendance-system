@@ -84,8 +84,9 @@ module.exports.new = async (req, res, next) => {
         notValidDates = attendances.map(entry => moment(entry.date).format('L') )
     }
     // Gets today's date
-    const unformattedDate = Date.now()
+    const unformattedDate = new Date(Date.now())
     const date = moment(unformattedDate).format('L')
+    console.log(date)
     res.render('attendance-pages/new', {singleClass, date, notValidDates})
 }
 
