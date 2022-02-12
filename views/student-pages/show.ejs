@@ -5,3 +5,7 @@ name: `${student.firstName} ${student.lastName}`}) %>
 <p class="h4 mb-3">Currently Enrolled Classes:</p>
 <%- include('../partials/class-table.ejs', {classes: classes, student: student,
 num: 1, studentShow: true}) %>
+
+<script>
+  let currentUser = <%- JSON.stringify(currentUser) %>
+</script>

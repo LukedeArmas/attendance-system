@@ -1,13 +1,14 @@
 <% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/home-header.ejs', {headerText: `Add Students:
-${singleClass.className}`, searchType: 'Student'}) %>
+include('../partials/home-header.ejs', {headerText: `<span class="text-nowrap"
+  >Add Students:</span
+>
+<span class="text-nowrap">${singleClass.className}</span>`, searchType:
+'Student'}) %>
 <form
   action="/class/<%= singleClass._id %>/addStudent?_method=PUT"
   method="POST"
   enctype="raw"
 >
   <%- include('../partials/student-table.ejs', {students, num: 1, add: true}) %>
-  <button class="btn btn-outline-primary mb-3" type="submit">
-    Add Students
-  </button>
+  <button class="btn btn-primary mb-3" type="submit">Add Students</button>
 </form>

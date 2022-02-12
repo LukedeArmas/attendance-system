@@ -89,3 +89,23 @@ div.input-group input.form-control {
     width: 83.33333333%;
   }
 }
+
+.btn-outline-primary {
+  color: #2470dc;
+  border-color: #2470dc;
+}
+
+.btn-primary {
+  border-color: #2470dc;
+  background-color: #2470dc;
+}
+
+.btn-outline-primary:hover {
+  border-color: #2470dc;
+  background-color: #2470dc;
+}
+
+.form-check-input:checked {
+  border-color: #2470dc;
+  background-color: #2470dc;
+}

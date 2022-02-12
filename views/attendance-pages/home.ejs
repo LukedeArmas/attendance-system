@@ -2,9 +2,11 @@
 <div
   class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
 >
-  <h1 class="h1 text-nowrap">Attendance: <%= singleClass.className %></h1>
+  <h1 class="h1">
+    Attendance: <span class="text-nowrap"><%= singleClass.className %></span>
+  </h1>
   <a
-    class="btn btn-outline-primary"
+    class="btn btn-outline-primary text-nowrap"
     href="/class/<%= singleClass._id %>/attendance/new"
     >Mark New Attendance</a
   >
@@ -15,8 +17,8 @@
 >
   <% if (attendances.length) { %>
   <p class="d-inline h4">
-    <strong class="fw-lighter">Average Class Attendance: </strong><%=
-    averageClassAttendance %>%
+    <strong class="fw-lighter">Average Class <span class="text-nowrap">Attendance: </strong><%=
+    averageClassAttendance %>%</span> 
   </p>
   <% } %>
 </div>

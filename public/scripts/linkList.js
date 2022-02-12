@@ -4,7 +4,7 @@ var teacherId = /^\/teacher\/[0-9a-fA-F]{24}$/
 var attendanceDashboard = /^\/class\/[0-9a-fA-F]{24}\/attendance$/
 var attendance = /^\/class\/[0-9a-fA-F]{24}\/attendance\/[0-9a-fA-F]{24}$/
 
-if (location.pathname === '/class' || location.pathname === '/student' || location.pathname === '/teacher' || classId.test(location.pathname) || studentId.test(location.pathname) || teacherId.test(location.pathname) || attendanceDashboard.test(location.pathname) || attendance.test(location.pathname) ) {
+if (location.pathname === '/class' || location.pathname === '/student' || location.pathname === '/teacher' || classId.test(location.pathname) || (typeof currentUser !== 'undefined' && currentUser.username === 'admin' && studentId.test(location.pathname)) || teacherId.test(location.pathname) || attendanceDashboard.test(location.pathname) || attendance.test(location.pathname) ) {
     const pathArray = location.pathname.split('/').slice(1)
     const linkList = document.querySelector('.link-list')
 

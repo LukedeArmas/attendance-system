@@ -35,6 +35,7 @@
         class="display-1 fs-5 navbar-brand bg-light text-dark col-md-3 col-mdlg-2 me-0 px-3"
         >UniTracker</span
       >
+      <% if (currentUser) { %>
       <div class="navbar-nav flex-row">
         <div class="nav-item">
           <button
@@ -55,6 +56,7 @@
           <% } %>
         </div>
       </div>
+      <% } %>
     </header>
 
     <div class="row body-container">

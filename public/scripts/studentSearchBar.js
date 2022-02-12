@@ -1,8 +1,8 @@
 const studentSearchInput = document.querySelector('#studentSearch')
+const studentTableBody = document.querySelector('tbody')
 
-
-if (studentSearchInput) {
-    const studentTableCells = document.querySelector('tbody').children
+if (studentSearchInput && studentTableBody) {
+    const studentTableCells = studentTableBody.children
     studentSearchInput.addEventListener('input', () => {
     for (let tableCell of studentTableCells) {
         const id = tableCell.querySelector('td.id').innerText.toLowerCase()

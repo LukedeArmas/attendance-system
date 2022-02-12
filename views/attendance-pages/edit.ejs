@@ -1,12 +1,9 @@
-<% layout('./layouts/boilerplate.ejs') %>
-<div
-  class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
->
-  <h1 class="h1">
-    <%= moment(attendanceDay.date).format('LL') %> Edit Attendance:
-    <span class="text-nowrap"><%= singleClass.className %></span>
-  </h1>
-</div>
+<% layout('./layouts/boilerplate.ejs') %> <%-
+include('../partials/home-header.ejs', {headerText:
+`${moment(attendanceDay.date).format('LL')}
+<span class="text-nowrap">Edit Attendance:</span>
+<span class="text-nowrap">${singleClass.className}</span>`, searchType: 'Class',
+attendanceEdit: true}) %>
 
 <form
   action="/class/<%= singleClass._id %>/attendance/<%= attendanceDay._id %>?_method=PUT"
@@ -16,7 +13,5 @@
   <%- include('../partials/student-table.ejs', {students:
   singleClass.studentsInClass.map((entry) => entry.student), num: 1,
   attendanceEdit: true, attendanceDay}) %>
-  <button class="btn btn-outline-primary mb-3" type="submit">
-    Edit Attendance
-  </button>
+  <button class="btn btn-primary mb-3" type="submit">Edit</button>
 </form>

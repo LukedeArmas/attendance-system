@@ -1,6 +1,9 @@
 <% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/home-header.ejs', {headerText: `Remove Students:
-${singleClass.className}`, searchType: 'Student'}) %>
+include('../partials/home-header.ejs', {headerText: `<span class="text-nowrap"
+  >Remove Students:</span
+>
+<span class="text-nowrap">${singleClass.className}</span>`, searchType:
+'Student'}) %>
 <form
   action="/class/<%= singleClass._id %>/removeStudent?_method=PUT"
   method="POST"

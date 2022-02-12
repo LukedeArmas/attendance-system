@@ -1,9 +1,7 @@
-<% layout('./layouts/boilerplate.ejs') %>
-<div
-  class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
->
-  <h1 class="h1 text-nowrap">Mark Attendance: <%= singleClass.className %></h1>
-</div>
+<% layout('./layouts/boilerplate.ejs') %> <%-
+include('../partials/home-header.ejs', {headerText: `Mark Attendance:
+<span class="text-nowrap">${singleClass.className}</span>`, searchType: 'Class',
+attendanceEdit: true}) %>
 
 <form
   action="/class/<%= singleClass._id %>/attendance"
@@ -34,9 +32,7 @@
   <%- include('../partials/student-table.ejs', {students:
   singleClass.studentsInClass.map((entry) => entry.student), num: 1, attendance:
   true}) %>
-  <button class="btn btn-outline-primary mb-3" type="submit">
-    Mark Attendance
-  </button>
+  <button class="btn btn-primary mb-3" type="submit">Mark Attendance</button>
 </form>
 <script>
   // We have to convert the array to JSON to pass data from EJS/server to a script

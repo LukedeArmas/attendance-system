@@ -6,14 +6,27 @@
     moment(attendanceDay.date).format('LL') %> Attendance: <% } %> <span class="text-nowrap"><%= name %></span>
   </h1>
   <div
-    class="d-flex flex-column flex-sm-row align-items-center flex-sm-nowrap btn-toolbar mb-2 mb-md-0"
+    class="d-flex
+    <% if (typeName === 'teacher') { %>
+     flex-column flex-sm-row
+     <% } else { %>
+      flex-row
+      <% } %>  
+     align-items-center flex-sm-nowrap btn-toolbar mb-2 mb-md-0"
   >
     <% if (typeName === 'class' && type.studentsInClass.length > 0 && typeof
     attendance === "undefined") { %>
     <a
-      class="btn btn-outline-primary mb-2 mb-sm-0"
+      class="btn btn-outline-primary mb-2 mb-sm-0 ms-2"
       href="/<%= typeName %>/<%= type._id %>/attendance"
       >Attendance</a
+    >
+    <% } %>
+    <% if (typeName === 'teacher') { %>
+    <a
+      class="btn btn-outline-secondary ms-2 mb-2 mb-sm-0"
+      href="/<%= typeName %>/<%= type._id %>/updatePassword"
+      >Update Password</a
     >
     <% } %>
     <% if (currentUser.username === 'admin' || typeof attendance !== "undefined") { %>
@@ -22,15 +35,9 @@
       href="/<%= typeName %>/<%= type._id %>/<% if (typeof attendance !== "undefined") { %>attendance/<%= attendanceDay.id %>/<% } %>edit"
       >Edit</a
     >
-    <% if (typeName === 'teacher') { %>
-    <a
-      class="btn btn-outline-secondary me-2 mb-2 mb-sm-0"
-      href="/<%= typeName %>/<%= type._id %>/updatePassword"
-      >Update Password</a
-    >
-    <% } %>
+
     <button
-      class="btn btn-outline-danger"
+      class="btn btn-outline-danger mb-2 mb-sm-0"
       data-bs-toggle="modal"
       data-bs-target="#deleteModal"
     >
