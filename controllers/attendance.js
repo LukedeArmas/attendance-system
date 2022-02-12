@@ -85,8 +85,8 @@ module.exports.new = async (req, res, next) => {
     }
     // Gets today's date
     const unformattedDate = new Date(Date.now())
+    unformattedDate.setDate(unformattedDate.getDate() - 1)
     const date = moment(unformattedDate).format('L')
-    console.log(date)
     res.render('attendance-pages/new', {singleClass, date, notValidDates})
 }
 
