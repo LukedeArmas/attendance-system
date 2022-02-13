@@ -115,3 +115,12 @@ div.input-group input.form-control {
     flex-direction: column !important;
   }
 }
+
+.page-link {
+  color: #212529;
+}
+
+.form-select {
+  padding-top: 0.2815rem;
+  padding-bottom: 0.2815rem;
+}

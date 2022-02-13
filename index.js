@@ -24,6 +24,7 @@ const databaseUrl = process.env.DB_URL || 'mongodb://localhost:27017/attendance'
 // const databaseUrl = 'mongodb://localhost:27017/attendance'
 const MongoStore = require('connect-mongo')
 const { isLoggedIn } = require('./middleware.js')
+const myError = require('./utils/myError')
 
 const mongoose = require('mongoose')
 mongoose.connect(databaseUrl)
@@ -116,8 +117,9 @@ app.get('/logout', (req, res, next) => {
 })
 
 app.get('*', (req, res, next) => {
-    req.flash('error', 'Page not found')
-    res.redirect('/')
+    // req.flash('error', 'Page not found')
+    // res.redirect('/')
+    return next(new myError(404, 'Page not found'))
 })
 
 app.use((err, req, res, next) => {

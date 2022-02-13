@@ -1,4 +1,5 @@
 <% layout('./layouts/boilerplate.ejs') %> <%-
 include('../partials/home-header.ejs', {headerText: 'Teacher Dashboard',
 searchType: 'Teacher'}) %> <%- include('../partials/teacher-table.ejs',
-{teachers, num: 1}) %>
+{teachers, num: ((page - 1)*pageLimit) + 1 }) %> <%-
+include('../partials/pagination.ejs', { url, page, pageLimit, count }) %>

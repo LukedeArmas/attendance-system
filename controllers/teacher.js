@@ -3,9 +3,7 @@ const Teacher = require('../models/teacher.js')
 
 
 module.exports.home = async (req, res, next) => {
-    // Find all teachers that are not the admin and sort by last name alphabetically
-    const teachers = await Teacher.find({ username: { $ne: 'admin' } }).sort({ lastName: 1 })
-    res.render('teacher-pages/home', { teachers })
+    res.render('teacher-pages/home', { teachers: res.paginatedData, pageLimit: res.pageLimit, count: res.count, page: res.page })
 }
 
 module.exports.post = async (req, res, next) => {

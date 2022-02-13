@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const asyncError = require('../utils/asyncError.js')
-const { objectIdMiddleware, isLoggedIn, isAdmin, validateNewTeacher, validateEditTeacher, validateUpdatePassword } = require('../middleware.js')
+const { objectIdMiddleware, isLoggedIn, isAdmin, validateNewTeacher, validateEditTeacher, validateUpdatePassword, pagination } = require('../middleware.js')
 const teacher = require('../controllers/teacher')
 
 
 router.route('/')
-    .get(isLoggedIn, isAdmin, asyncError(teacher.home))
+    .get(isLoggedIn, isAdmin, pagination, asyncError(teacher.home))
     .post(isLoggedIn, isAdmin, validateNewTeacher, asyncError(teacher.post))
 
 router.route('/new')

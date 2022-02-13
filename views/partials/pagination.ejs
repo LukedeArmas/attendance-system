@@ -1,0 +1,54 @@
+<nav class="d-flex justify-content-end" aria-label="...">
+  <form class="form-inline me-3" action="<%= url %> " method="GET">
+    <select
+      class="form-select"
+      name="limit"
+      id="pagenum-form"
+      onchange="this.form.submit()"
+    >
+      <option value="5" <% if (pageLimit === 5) { %> selected <% } %>>5</option>
+      <option value="10" <% if (pageLimit === 10) { %> selected <% } %>>10</option>
+      <option value="20" <% if (pageLimit === 20) { %> selected <% } %>>20</option>
+    </select>
+  </form>
+  <ul class="pagination">
+    <li class="page-item <% if (page === 1) { %>disabled<% } %>">
+      <button class="page-link left-arrow" data-page-number="<%= page - 1 %>">
+        <i class="fa fa-arrow-left"></i>
+      </button>
+    </li>
+    <li class="page-item">
+      <span class="page-link text-nowrap"
+        >Page <strong><%= page %></strong> of
+        <strong><%= Math.floor((count - 1) / pageLimit + 1) %></strong>
+      </span>
+    </li>
+    <li class="page-item <% if (page >= count / pageLimit) { %>disabled<% } %>">
+      <button class="page-link right-arrow" data-page-number="<%= page + 1 %>">
+        <i class="fa fa-arrow-right"></i>
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<script>
+  const rightArrow = document.querySelector('.right-arrow')
+  const leftArrow = document.querySelector('.left-arrow')
+
+  if (leftArrow && rightArrow) {
+    rightArrow.addEventListener('click', function() {
+      if ('URLSearchParams' in window) {
+        var searchParams = new URLSearchParams(window.location.search)
+        searchParams.set("page", rightArrow.dataset.pageNumber)
+        window.location.search = searchParams.toString()
+      }
+    })
+    leftArrow.addEventListener('click', function() {
+      if ('URLSearchParams' in window) {
+        var searchParams = new URLSearchParams(window.location.search)
+        searchParams.set("page", leftArrow.dataset.pageNumber)
+        window.location.search = searchParams.toString()
+      }
+    })
+  }
+</script>

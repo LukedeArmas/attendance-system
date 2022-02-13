@@ -7,8 +7,7 @@ const { sortAlphabetically } = require('../helperFunctions')
 
 module.exports.home = async (req, res) => {
     // If a teacher is logged in only show classes that they teach
-    const classes = req.user.username === 'admin' ? await Class.find().sort({ classCode: 1 }).populate('teacher').populate('studentsInClass') : await Class.find({ teacher: req.user._id }).sort({ classCode: 1 }).populate('teacher').populate('studentsInClass')
-    res.render('class-pages/home', { classes })
+    res.render('class-pages/home', { classes: res.paginatedData, pageLimit: res.pageLimit, count: res.count, page: res.page })
 }
 
 module.exports.post = async (req, res, next) => {

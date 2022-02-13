@@ -5,8 +5,7 @@ const myError = require('../utils/myError.js')
 
 module.exports.home = async (req, res, next) => {
     // Find all students and sort alphabetically by studentId
-    const students = await Student.find().sort({ studentId: 1 })
-    res.render('student-pages/home', {students})
+    res.render('student-pages/home', {students: res.paginatedData, pageLimit: res.pageLimit, count: res.count, page: res.page})
 }
 
 module.exports.post = async (req, res) => {

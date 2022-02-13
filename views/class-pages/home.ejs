@@ -1,4 +1,5 @@
 <% layout('./layouts/boilerplate.ejs') %> <%-
 include('../partials/home-header.ejs', {headerText: 'Class Dashboard',
 searchType: 'Class'}) %> <%- include('../partials/class-table.ejs', {classes,
-num: 1, classHome: true }) %>
+num: ((page - 1)*pageLimit) + 1, classHome: true }) %> <%-
+include('../partials/pagination.ejs', { url, page, pageLimit, count }) %>
