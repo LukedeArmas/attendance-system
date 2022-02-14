@@ -30,14 +30,14 @@
         </tr>
       </thead>
       <% if (students.length) { %>
-      <tbody>
+      <tbody class="<% if (typeof clientPagination !== 'undefined') { %>client-pagination<% } %>">
         <% 
         for (let student of students) { %>
           <% if (typeof classShow !== 'undefined') { 
             numAttendancesPresent = student.numAttendancesPresent;
             student = student.student;
              } %>
-        <tr>
+        <tr class="<% if (typeof clientPagination !== 'undefined') { %>hide<% } %>">
           <th scope="row" class="text-center ps-0"><%= num %>.</th>
           <td class="id"><%= student.studentId %></th>
           <td class="firstName"><%= student.firstName %></td>

@@ -18,9 +18,13 @@
         <% } %>
       </tr>
     </thead>
-    <tbody class="table">
+    <tbody
+      class="table <% if (typeof clientPagination !== 'undefined') { %>client-pagination<% } %>"
+    >
       <% for (let singleClass of classes) { %>
-      <tr>
+      <tr
+        class="<% if (typeof clientPagination !== 'undefined') { %>hide<% } %>"
+      >
         <th scope="row" class="text-center"><%= num %>.</th>
         <td class="classCode"><%= singleClass.classCode %></td>
         <td class="name"><%= singleClass.className %></td>

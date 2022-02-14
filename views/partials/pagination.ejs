@@ -12,24 +12,85 @@
     </select>
   </form>
   <ul class="pagination">
-    <li class="page-item <% if (page === 1) { %>disabled<% } %>">
-      <button class="page-link left-arrow" data-page-number="<%= page - 1 %>">
+    <li class="page-item left-item <% if (page === 1) { %>disabled<% } %>">
+      <button class="page-link <% if (typeof clientPagination === 'undefined') { %> left-arrow<% } else { %>client-left-arrow<% } %>" data-page-number="<%= page - 1 %>">
         <i class="fa fa-arrow-left"></i>
       </button>
     </li>
     <li class="page-item">
       <span class="page-link text-nowrap"
-        >Page <strong><%= page %></strong> of
+        >Page <strong id="page-num"><%= page %></strong> of
         <strong><%= Math.floor((count - 1) / pageLimit + 1) %></strong>
       </span>
     </li>
-    <li class="page-item <% if (page >= count / pageLimit) { %>disabled<% } %>">
-      <button class="page-link right-arrow" data-page-number="<%= page + 1 %>">
+    <li class="page-item right-item <% if (page >= count / pageLimit) { %>disabled<% } %>">
+      <button class="page-link <% if (typeof clientPagination === 'undefined') { %> right-arrow<% } else { %>client-right-arrow<% } %>" data-page-number="<%= page + 1 %>">
         <i class="fa fa-arrow-right"></i>
       </button>
     </li>
   </ul>
 </nav>
+
+<script>
+  const pageLimit = <%- JSON.stringify(pageLimit) %>
+  const tableBody = document.querySelector('tbody.client-pagination')
+  if (tableBody && tableBody.children.length) {
+    let tableCells = tableBody.children
+    let count = tableCells.length
+    let currentPosition = 0
+    for (let i=currentPosition; i < pageLimit; i++) {
+      tableCells[i].classList.toggle('hide')
+    }
+
+    const rightArrow = document.querySelector('.client-right-arrow')
+    const leftArrow = document.querySelector('.client-left-arrow')
+    const leftArrowListItem = document.querySelector('.left-item')
+    const rightArrowListItem = document.querySelector('.right-item')
+    const pageNumShow = document.querySelector('#page-num')
+    
+    rightArrow.addEventListener('click', function(e) {
+      pageNumShow.innerHTML = (parseInt(pageNumShow.innerHTML) + 1).toString()
+      leftArrowListItem.classList.remove('disabled')
+      for (let i=currentPosition; i < currentPosition + pageLimit; i++) {
+        tableCells[i].classList.toggle('hide')
+      }
+      currentPosition += pageLimit
+      if (currentPosition + pageLimit > count) {
+        rightArrowListItem.classList.add('disabled')
+        for (let i=currentPosition; i < count; i++) {
+        tableCells[i].classList.toggle('hide')
+      }
+      } else {
+        for (let i=currentPosition; i < currentPosition + pageLimit; i++) {
+        tableCells[i].classList.toggle('hide')
+      }
+      }
+    })
+
+    leftArrow.addEventListener('click', function(e) {
+      pageNumShow.innerHTML = (parseInt(pageNumShow.innerHTML) - 1).toString()
+      rightArrowListItem.classList.remove('disabled')
+      if (currentPosition + pageLimit > count) {
+        for (let i=currentPosition; i < count; i++) {
+          tableCells[i].classList.add('hide')
+        }
+      } else {
+        for (let i=currentPosition; i < currentPosition + pageLimit; i++) {
+        tableCells[i].classList.toggle('hide')
+        }
+      }
+      currentPosition -= pageLimit
+      if (currentPosition === 0) {
+        leftArrowListItem.classList.add('disabled')
+      } 
+      for (let i=currentPosition; i < currentPosition + pageLimit; i++) {
+        tableCells[i].classList.toggle('hide')
+      }
+    })
+
+  }
+</script>
+
 
 <script>
   const rightArrow = document.querySelector('.right-arrow')

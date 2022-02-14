@@ -7,5 +7,7 @@ name: teacher.fullName}) %>
   <strong>Email: </strong> <%= teacher.email %>
 </p>
 <p class="h4 mb-3">Classes:</p>
-<%- include('../partials/class-table.ejs', { classes, num: 1, teacherShow: true
-}) %>
+<%- include('../partials/class-table.ejs', { classes, num: 1, teacherShow: true,
+clientPagination: true }) %> <% if (count > 0) { %> <%-
+include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,
+clientPagination: true }) %> <% } %>

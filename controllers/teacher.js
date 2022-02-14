@@ -40,7 +40,7 @@ module.exports.show = async (req, res, next) => {
     }
     // Find all classes the teacher teaches
     const classes = await Class.find({ teacher: teacher._id })
-    res.render('teacher-pages/show', { teacher, classes })
+    res.render('teacher-pages/show', { teacher, classes, count: classes.length })
 }
 
 module.exports.edit = async (req, res, next) => {

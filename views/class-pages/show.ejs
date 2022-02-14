@@ -36,4 +36,7 @@ name: `${singleClass.className}`}) %>
   <% } %>
 </div>
 <%- include('../partials/student-table.ejs', {students:
-singleClass.studentsInClass, singleClass, num: 1, classShow: true}) %>
+singleClass.studentsInClass, singleClass, num: 1, classShow: true,
+clientPagination: true }) %> <% if (count > 0) { %> <%-
+include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,
+clientPagination: true }) %> <% } %>

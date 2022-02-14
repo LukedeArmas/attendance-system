@@ -50,7 +50,7 @@ module.exports.show = async (req, res, next) => {
         }
     })
     singleClass.studentsInClass = sortAlphabetically(singleClass.studentsInClass)
-    res.render('class-pages/show', {singleClass})
+    res.render('class-pages/show', {singleClass, count: singleClass.studentsInClass.length })
 }
 
 module.exports.edit = async (req, res) => {

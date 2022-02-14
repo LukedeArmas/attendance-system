@@ -124,3 +124,7 @@ div.input-group input.form-control {
   padding-top: 0.2815rem;
   padding-bottom: 0.2815rem;
 }
+
+.hide {
+  display: none;
+}
