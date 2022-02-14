@@ -2,8 +2,8 @@
   class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
 >
   <h1 class="h1">
-    <% if (typeof attendance !== 'undefined') { %> <%=
-    moment(attendanceDay.date).format('LL') %> Attendance: <% } %> <span class="text-nowrap"><%= name %></span>
+    <% if (typeof attendance !== 'undefined') { %> <span class="text-nowrap"><%=
+    moment(attendanceDay.date).format('LL') %></span> Attendance: <% } %> <span class="<% if (typeof attendance !== 'undefined') { %>text-nowrap<% } %>"><%= name %></span>
   </h1>
   <div
     class="d-flex

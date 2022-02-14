@@ -4,7 +4,7 @@
       class="form-select"
       name="limit"
       id="pagenum-form"
-      onchange="this.form.submit()"
+      <% if (typeof clientPagination === 'undefined') { %>  onchange="this.form.submit()" <% } %> 
     >
       <option value="5" <% if (pageLimit === 5) { %> selected <% } %>>5</option>
       <option value="10" <% if (pageLimit === 10) { %> selected <% } %>>10</option>
@@ -20,7 +20,7 @@
     <li class="page-item">
       <span class="page-link text-nowrap"
         >Page <strong id="page-num"><%= page %></strong> of
-        <strong><%= Math.floor((count - 1) / pageLimit + 1) %></strong>
+        <strong id="page-total-num"><%= Math.floor((count - 1) / pageLimit + 1) %></strong>
       </span>
     </li>
     <li class="page-item right-item <% if (page >= count / pageLimit) { %>disabled<% } %>">
@@ -32,7 +32,7 @@
 </nav>
 
 <script>
-  const pageLimit = <%- JSON.stringify(pageLimit) %>
+  let pageLimit = <%- JSON.stringify(pageLimit) %>
   const tableBody = document.querySelector('tbody.client-pagination')
   if (tableBody && tableBody.children.length) {
     let tableCells = tableBody.children
@@ -47,7 +47,37 @@
     const leftArrowListItem = document.querySelector('.left-item')
     const rightArrowListItem = document.querySelector('.right-item')
     const pageNumShow = document.querySelector('#page-num')
-    
+    const pageLimitSelect = document.querySelector("#pagenum-form")
+
+
+    pageLimitSelect.addEventListener("change", function(e) {
+      pageLimit = parseInt(pageLimitSelect.value) 
+      pageNumShow.innerHTML = 1
+      document.querySelector("#page-total-num").innerHTML = (Math.ceil(count / pageLimit)).toString()
+      currentPosition = 0
+      leftArrowListItem.classList.add('disabled')
+      if (pageLimit > count) {
+        rightArrowListItem.classList.add('disabled')
+        for (let i=0; i < count; i++) {
+          if (tableCells[i].classList.contains("hide")) {
+            tableCells[i].classList.toggle('hide')
+          }
+        }
+      } else {
+        rightArrowListItem.classList.remove('disabled')
+        for (let i=0; i < pageLimit; i++) {
+          if (tableCells[i].classList.contains("hide")) {
+            tableCells[i].classList.toggle('hide')
+          }
+        }
+        for (let i=pageLimit; i < count; i++) {
+          if (!(tableCells[i].classList.contains("hide"))) {
+            tableCells[i].classList.toggle('hide')
+          }
+        }   
+      }
+    })
+
     rightArrow.addEventListener('click', function(e) {
       pageNumShow.innerHTML = (parseInt(pageNumShow.innerHTML) + 1).toString()
       leftArrowListItem.classList.remove('disabled')
