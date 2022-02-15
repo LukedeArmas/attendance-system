@@ -18,7 +18,7 @@ module.exports.home = async (req, res, next) => {
         return a + 100*(b.numStudentsPresent /
         singleClass.numStudentsInClass) 
     }, 0) / attendances.length) + 'e2') + 'e-2')
-    res.render('attendance-pages/home', {singleClass, attendances, moment, averageClassAttendance})
+    res.render('attendance-pages/home', {singleClass, attendances, moment, averageClassAttendance, count: attendances.length })
 }
 
 module.exports.post = async (req, res, next) => {
@@ -27,7 +27,7 @@ module.exports.post = async (req, res, next) => {
     const newDate = new Date(date)
     // Gets today's date
     const unformattedDate = new Date(Date.now())
-    unformattedDate.setDate(unformattedDate.getDate() - 1)
+    unformattedDate.setDate(unformattedDate.getDate())
     const nowDate = moment(unformattedDate).format('L')
     // Checks if the attendance date for this class exists already
     if (await Attendance.exists({ class: id, date: newDate })) {
@@ -88,9 +88,9 @@ module.exports.new = async (req, res, next) => {
     }
     // Gets today's date
     const unformattedDate = new Date(Date.now())
-    unformattedDate.setDate(unformattedDate.getDate() - 1)
+    unformattedDate.setDate(unformattedDate.getDate())
     const date = moment(unformattedDate).format('L')
-    res.render('attendance-pages/new', {singleClass, date, notValidDates})
+    res.render('attendance-pages/new', {singleClass, date, notValidDates, count: singleClass.studentsInClass.length })
 }
 
 module.exports.show = async (req, res, next) => {
@@ -113,7 +113,7 @@ module.exports.show = async (req, res, next) => {
         req.flash('error', 'Attendance record does not exist' )
         return res.redirect(`/class/${id}/attendance`)
     }
-    res.render('attendance-pages/show', { singleClass, attendanceDay, moment })
+    res.render('attendance-pages/show', { singleClass, attendanceDay, moment, count: singleClass.studentsInClass.length })
 }
 
 module.exports.edit = async (req, res, next) => {
@@ -136,7 +136,7 @@ module.exports.edit = async (req, res, next) => {
         req.flash('error', 'Attendance record does not exist' )
         return res.redirect(`/class/${id}/attendance`)
     }
-    res.render('attendance-pages/edit', { singleClass, attendanceDay, moment })
+    res.render('attendance-pages/edit', { singleClass, attendanceDay, moment, count: singleClass.studentsInClass.length })
 }
 
 module.exports.put = async (req, res, next) => {
@@ -153,7 +153,7 @@ module.exports.put = async (req, res, next) => {
         attendanceDay.studentsPresent = studentsPresent
         // Gets today's date
         const unformattedDate = new Date(Date.now())
-        unformattedDate.setDate(unformattedDate.getDate() - 1)
+        unformattedDate.setDate(unformattedDate.getDate())
         const date = moment(unformattedDate).format('L')
         attendanceDay.dateUpdated = date
         await attendanceDay.save()

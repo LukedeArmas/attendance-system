@@ -50,14 +50,14 @@
         }
 
         // We make the link of the current url active (blue colored)
-        $(function(){
-            $('.link-list a').each(function(){
-                var $this = $(this);
-                if($this.attr('href') === location.pathname){
-                    $this.addClass('link-active');
+        const links = document.querySelectorAll('.link-list a')
+        if (links) {
+            links.forEach((link) => {
+                if (link.getAttribute('href') === location.pathname) {
+                    link.classList.add('link-active')
                 }
             })
-        })
+        }
     }
 })()
 

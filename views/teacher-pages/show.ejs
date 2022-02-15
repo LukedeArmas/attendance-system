@@ -6,7 +6,19 @@ name: teacher.fullName}) %>
   <br />
   <strong>Email: </strong> <%= teacher.email %>
 </p>
-<p class="h4 mb-3">Classes:</p>
+
+<div
+  class="d-flex justify-content-center justify-content-md-between flex-wrap flex-lg-nowrap align-items-center pt-3 pb-2 mb-1"
+>
+  <p class="h4">Classes:</p>
+  <div
+    class="d-flex align-items-center flex-nowrap btn-toolbar mb-2 mb-md-0 ms-3"
+  >
+    <%- include('../partials/search-bar.ejs', { type: 'Class', searchType:
+    'Class' }) %>
+  </div>
+</div>
+
 <%- include('../partials/class-table.ejs', { classes, num: 1, teacherShow: true,
 clientPagination: true }) %> <% if (count > 0) { %> <%-
 include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,

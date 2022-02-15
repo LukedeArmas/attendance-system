@@ -3,7 +3,7 @@
   class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
 >
   <h1 class="h1">
-    Attendance: <span class="text-nowrap"><%= singleClass.className %></span>
+    Attendance: <span><%= singleClass.className %></span>
   </h1>
   <a
     class="btn btn-outline-primary text-nowrap ms-2"
@@ -35,10 +35,10 @@
         <th scope="col" class="text-center">View</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="client-pagination">
       <% for (let attendanceDay of attendances.sort(function(a,b) { return new
       Date(b.date) - new Date(a.date) })) { %>
-      <tr>
+      <tr class="hide">
         <th scope="row" class="text-center ps-0"><%= num++ %>.</th>
         <td><%= moment(attendanceDay.date).format('LL') %></td>
         <td><%= moment(attendanceDay.dateUpdated).format('LL') %></td>
@@ -59,3 +59,7 @@
     </tbody>
   </table>
 </div>
+
+ <% if (count > 0) { %> <%-
+include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,
+clientPagination: true }) %> <% } %>

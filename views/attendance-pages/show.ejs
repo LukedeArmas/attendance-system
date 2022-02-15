@@ -15,4 +15,6 @@ attendanceDay}) %>
 
 <%- include('../partials/student-table.ejs', {students:
 singleClass.studentsInClass.map((entry) => entry.student), num: 1,
-attendanceShow: true, attendanceDay}) %>
+attendanceShow: true, attendanceDay, clientPagination: true }) %> <% if (count >
+0) { %> <%- include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5,
+count, clientPagination: true }) %> <% } %>

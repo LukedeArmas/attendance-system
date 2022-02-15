@@ -117,9 +117,8 @@ app.get('/logout', (req, res, next) => {
 })
 
 app.get('*', (req, res, next) => {
-    // req.flash('error', 'Page not found')
-    // res.redirect('/')
-    return next(new myError(404, 'Page not found'))
+    req.flash('error', 'Page not found')
+    res.redirect('/')
 })
 
 app.use((err, req, res, next) => {

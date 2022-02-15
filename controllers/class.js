@@ -139,7 +139,7 @@ module.exports.removeStudentGet = async (req, res) => {
         return res.redirect('/class')
     }
     singleClass.studentsInClass = sortAlphabetically(singleClass.studentsInClass)
-    res.render('class-pages/remove-students', {singleClass})
+    res.render('class-pages/remove-students', {singleClass, count: singleClass.studentsInClass.length })
 }
 
 module.exports.removeStudentPut = async (req, res, next) => {

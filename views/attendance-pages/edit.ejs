@@ -2,8 +2,8 @@
 include('../partials/home-header.ejs', {headerText:
 `${moment(attendanceDay.date).format('LL')}
 <span class="text-nowrap">Edit Attendance:</span>
-<span class="text-nowrap">${singleClass.className}</span>`, searchType: 'Class',
-attendanceEdit: true}) %>
+<span>${singleClass.className}</span>`, searchType: 'Class', attendanceEdit:
+true}) %>
 
 <form
   action="/class/<%= singleClass._id %>/attendance/<%= attendanceDay._id %>?_method=PUT"
@@ -12,6 +12,9 @@ attendanceEdit: true}) %>
 >
   <%- include('../partials/student-table.ejs', {students:
   singleClass.studentsInClass.map((entry) => entry.student), num: 1,
-  attendanceEdit: true, attendanceDay}) %>
+  attendanceEdit: true, attendanceDay, clientPagination: true }) %> <% if (count
+  > 0) { %> <%- include('../partials/pagination.ejs', { url, page: 1, pageLimit:
+  5, count, clientPagination: true }) %> <% } %>
+
   <button class="btn btn-primary mb-3" type="submit">Edit</button>
 </form>

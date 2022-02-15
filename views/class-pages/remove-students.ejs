@@ -11,6 +11,9 @@ include('../partials/home-header.ejs', {headerText: `<span class="text-nowrap"
   <!-- We have to map the studentsInClass array so it only includes students and not attendance percentage -->
   <%- include('../partials/student-table.ejs', {students:
   singleClass.studentsInClass.map((entry) => entry.student), num: 1, remove:
-  true}) %>
-  <button class="btn btn-outline-danger" type="submit">Remove Students</button>
+  true, clientPagination: true }) %> <% if (count > 0) { %> <%-
+  include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,
+  clientPagination: true }) %> <% } %>
+
+  <button class="btn btn-danger mb-3" type="submit">Remove Students</button>
 </form>

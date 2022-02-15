@@ -24,7 +24,7 @@
             monthLength[1] = 29
 
         return day > 0 && day <= monthLength[month - 1]
-    };
+    }
 
     if (dateForm) {
         dateForm.addEventListener(

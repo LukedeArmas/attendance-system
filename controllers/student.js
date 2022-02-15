@@ -45,7 +45,7 @@ module.exports.show = async (req, res, next) => {
     // Find all classes the student is a member of
     // This is how you query for documents that have an array of embedded documents where at least one of the sub documents contains our match
     const classes = await Class.find({ 'studentsInClass.student': { $eq: student } }).populate('teacher')
-    res.render('student-pages/show', {student, classes})
+    res.render('student-pages/show', {student, classes, count: classes.length })
 }
 
 module.exports.edit = async (req, res) => {

@@ -3,7 +3,7 @@
 >
   <h1 class="h1">
     <% if (typeof attendance !== 'undefined') { %> <span class="text-nowrap"><%=
-    moment(attendanceDay.date).format('LL') %></span> Attendance: <% } %> <span class="<% if (typeof attendance !== 'undefined') { %>text-nowrap<% } %>"><%= name %></span>
+    moment(attendanceDay.date).format('LL') %></span> Attendance: <% } %> <span class="<% if (typeof attendance !== 'undefined') { %><% } %>"><%= name %></span>
   </h1>
   <div
     class="d-flex

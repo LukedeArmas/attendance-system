@@ -6,6 +6,7 @@
     // We only use this script if a class search bar exists
     if (classSearchInput) {
         const classTableCells = document.querySelector('tbody').children
+        console.log(classTableCells)
         classSearchInput.addEventListener('input', () => {
             for (let tableCell of classTableCells) {
                 const classCode = tableCell.querySelector('td.classCode').innerText.toLowerCase()

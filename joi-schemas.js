@@ -62,7 +62,8 @@ module.exports.attendanceSchema = Joi.object({
     });
     return errors;
   }),
-    studentsPresent: Joi.array()
+    studentsPresent: Joi.array(),
+    limit: Joi.number()
 })
 
 module.exports.newTeacherSchema = Joi.object({

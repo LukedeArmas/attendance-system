@@ -97,6 +97,7 @@ module.exports.validateRemoveStudentFromClass = async (req, res, next) => {
 }
 
 module.exports.validateAttendance = async (req, res, next) => {
+    console.log(req.body)
     const {error} = attendanceSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
@@ -173,26 +174,17 @@ module.exports.pagination = async (req, res, next) => {
     let page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 5
     const skipIndex = (page - 1) * limit
-    // const extendedUrl = req.route.path === '/' ? '' : req.route.path
-    // const route = req.baseUrl + extendedUrl
-    // console.log(route)
+    // If else statements or for whether we paginate through a student, class, or teacher table. So we have to get the data corresponding to that table
     try {
         if (req.baseUrl === '/student') {
             var count = await Student.find().count()
-            if (page > (count - 1) / limit + 1 || page < 1) {
-                req.flash('error', 'Page does not exist')
-                return res.redirect('/')
-            }
             var myData = await Student.find()
                 .sort({ studentId: 1 })
                 .limit(limit)
                 .skip(skipIndex)
         } else if (req.baseUrl === '/class') {
+            // If admin is logged in we get all classes, if teacher is logged in we get all classes that teacher teaches
             var count = req.user.username === 'admin' ? await Class.find().count() : await Class.find({ teacher: req.user._id }).count()
-            if (page > (count - 1) / limit + 1 || page < 1) {
-                req.flash('error', 'Page does not exist')
-                return res.redirect('/')
-            }
             var myData = req.user.username === 'admin' 
                 ? await Class.find()
                     .sort({ classCode: 1 })
@@ -208,24 +200,27 @@ module.exports.pagination = async (req, res, next) => {
                     .populate('studentsInClass')
         } else if (req.baseUrl === '/teacher') {
             var count = await Teacher.find({ username: { $ne: 'admin' } }).count()
-            if (page > (count - 1) / limit + 1 || page < 1) {
-                req.flash('error', 'Page does not exist')
-                return res.redirect('/')
-            }
             // Find all teachers that are not the admin and sort by last name alphabetically
             var myData = await Teacher.find({ username: { $ne: 'admin' } })
                 .sort({ lastName: 1 })
                 .limit(limit)
                 .skip(skipIndex)
         }
-
+        if (page > Math.ceil(count / limit)) {
+            req.flash('error', 'Page does not exist')
+            return res.redirect('/')
+        }
         res.paginatedData = myData
         res.count = count
         res.pageLimit = limit
         res.page = page
         return next()
     } catch (e) {
+        if (e.message.includes('Skip value must be non-negative, but received:')) {
+            req.flash('error', 'Page does not exist')
+        } else {
         req.flash('error', e.message)
+        }
         return res.redirect('/')
     }
 }
