@@ -10,6 +10,9 @@
 
     // We only add the link list if the url matches any of these
     if (location.pathname === '/class' || location.pathname === '/student' || location.pathname === '/teacher' || classId.test(location.pathname) || (typeof currentUser !== 'undefined' && currentUser.username === 'admin' && studentId.test(location.pathname)) || teacherId.test(location.pathname) || attendanceDashboard.test(location.pathname) || attendance.test(location.pathname) ) {
+
+        // DOM Initializations
+
         const pathArray = location.pathname.split('/').slice(1)
         const linkList = document.querySelector('.link-list')
 
@@ -21,7 +24,8 @@
         a.classList.add('sidebar-heading')
         a.setAttribute('href', '/')
 
-        // We go through the pieces of the url and add the associated link to the list if the url piece matches any of the indicated sub urls
+        // We go through the pieces of the url, adding the pieces to our urlSoFar as we go through the loop
+        // We also add the associated link to the list if the urlSoFar matches any of the indicated urls where a link is needed
         for (let subUrl of pathArray) {
             urlSoFar = urlSoFar + '/' + subUrl
             let a = document.createElement('a')

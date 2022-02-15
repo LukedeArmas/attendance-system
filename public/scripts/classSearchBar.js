@@ -5,9 +5,14 @@
 
     // We only use this script if a class search bar exists
     if (classSearchInput) {
+
+        // DOM Initializations
+
         const classTableCells = document.querySelector('tbody').children
-        console.log(classTableCells)
-        classSearchInput.addEventListener('input', () => {
+
+        // Callback Functions
+
+        function classSearchCallback() {
             for (let tableCell of classTableCells) {
                 const classCode = tableCell.querySelector('td.classCode').innerText.toLowerCase()
                 const name = tableCell.querySelector('td.name').innerText.toLowerCase()
@@ -21,7 +26,12 @@
                 // This indicates which classes were hidden by this search script, which is later used in conjunction with the client pagination script
                 tableCell.classList.toggle('search-hidden', !isVisible)
             }
-        })
+        }
+
+        // Event Listeners
+
+        // Shows and hides classes whenever search input changes
+        classSearchInput.addEventListener('input', classSearchCallback)
     }
 })()
 

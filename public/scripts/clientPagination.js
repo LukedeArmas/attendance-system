@@ -3,7 +3,11 @@
 
     // We only execute this script if a client pagination table exists and has table cells
     const tableBody = document.querySelector('tbody.client-pagination')
+
     if (tableBody && tableBody.children.length) {
+
+        // DOM initializations
+
         let originalTableCells = tableBody.children
         let tableCells = tableBody.children
         let count = tableCells.length
@@ -15,10 +19,10 @@
         for (let i=currentPosition; i < amountInitialHide; i++) {
         tableCells[i].classList.toggle('hide')
         }
-
-        const rightArrow = document.querySelector('.client-right-arrow')
+        // The left and right arrow buttons
         const leftArrow = document.querySelector('.client-left-arrow')
-        // Selecting the left and right arrow list items allows us to toggle whether they are enabled or disabled
+        const rightArrow = document.querySelector('.client-right-arrow')
+        // Selecting the left and right arrow list items allows us to toggle whether they are enabled or disabled (by adding or removing classes to or from them)
         const leftArrowListItem = document.querySelector('.left-item')
         const rightArrowListItem = document.querySelector('.right-item')
         // The current page in the table we are on
@@ -29,10 +33,9 @@
         const pageLimitSelect = document.querySelector("#pagenum-form")
 
 
-        // Allows the student search functionality to properly work with the client side pagination
-        const studentSearchInput = document.querySelector('#studentSearch')
-        if (studentSearchInput) {
-            studentSearchInput.addEventListener('input', function(e) {
+        // Callback Functions
+
+        function searchInputCallback() {
             // We disable the left arrow button because when a user inputs into the search bar we are automatically going back to page 1
             leftArrowListItem.classList.add('disabled')
             // Our array of table cells (that we are allowed to work with) now becomes only the table cells that were not hidden by the search
@@ -59,45 +62,10 @@
             } else {
                 rightArrowListItem.classList.add('disabled')
             }
-            })
         }
 
-        // Allows the class search functionality to properly work with the client side pagination
-        const classSearchInput = document.querySelector('#classSearch')
-        if (classSearchInput) {
-            classSearchInput.addEventListener('input', function(e) {
-            // We disable the left arrow button because when a user inputs into the search bar we are automatically going back to page 1
-            leftArrowListItem.classList.add('disabled')
-            // Our array of table cells (that we are allowed to work with) now becomes only the table cells that were not hidden by the search
-            tableCells = [...originalTableCells].filter(entry => !(entry.classList.contains('search-hidden')))
-            // The new table cell count (only including the cells not hidden by the search)
-            count = tableCells.length
-            // Since we are on page 1 again we only show the table cells up until the page limit and then hide the others
-            for (let i=0; i < count; i++) {
-                if (i < pageLimit) {
-                    tableCells[i].classList.remove('hide')
-                } else {
-                    tableCells[i].classList.add('hide')
-                }
-            }
-            // We go back to position 0 of the table cell array because we are going back to page 1
-            currentPosition = 0
-            // We set the current page and total number of pages properly
-            pageNumShow.innerHTML = 1
-            // We have to account for no matches in the search and set the total pages to 1 (it would be zero instead) in this case
-            pageTotalShow.innerHTML = (Math.ceil(count / pageLimit)) !== 0 ? (Math.ceil(count / pageLimit)).toString() : '1'
-            // If we have more table cells than the page limit we enable the right arrow button, otherwise we disable it 
-            if (count > pageLimit) {
-                rightArrowListItem.classList.remove('disabled')
-            } else {
-                rightArrowListItem.classList.add('disabled')
-            }
-            })
-        }
-
-        // Allows the user to change the page limit of the number of table cells
-        pageLimitSelect.addEventListener("change", function(e) {
-            // We change the page limit to be what the user selected
+        function pageLimitCallBack() {
+             // We change the page limit to be what the user selected
             pageLimit = parseInt(pageLimitSelect.value) 
             // We set the current page and total number of pages properly
             pageNumShow.innerHTML = 1
@@ -131,10 +99,10 @@
                     }
                 }   
             }
-        })
+        }
 
-        // Shows the next page of table cells
-        rightArrow.addEventListener('click', function(e) {
+        function rightArrowCallback(e) {
+            // Prevents from submitting form
             e.preventDefault()
             // Add 1 to the current page and enable the left arrow button
             pageNumShow.innerHTML = (parseInt(pageNumShow.innerHTML) + 1).toString()
@@ -160,10 +128,10 @@
                     tableCells[i].classList.toggle('hide')
                 }
             }
-        })
+        }
 
-        // Shows the previous page of table cells
-        leftArrow.addEventListener('click', function(e) {
+        function leftArrowCallback(e) {
+            // Prevents from submitting form
             e.preventDefault()
             // Subtract 1 to the current page and enable the right arrow button
             pageNumShow.innerHTML = (parseInt(pageNumShow.innerHTML) - 1).toString()
@@ -192,6 +160,32 @@
             for (let i=currentPosition; i < currentPosition + pageLimit; i++) {
                 tableCells[i].classList.toggle('hide')
             }
-        })
+        }
+
+
+        // Event Listeners
+
+        // Allows the student search functionality to properly work with the client side pagination
+        // Only runs if the Student search bar is present
+        const studentSearchInput = document.querySelector('#studentSearch')
+        if (studentSearchInput) {
+            studentSearchInput.addEventListener('input', searchInputCallback)
+        }
+
+        // Allows the class search functionality to properly work with the client side pagination
+        // Only runs if the Class search bar is present
+        const classSearchInput = document.querySelector('#classSearch')
+        if (classSearchInput) {
+            classSearchInput.addEventListener('input', searchInputCallback)
+        }
+
+        // Allows the user to change the page limit of the number of table cells
+        pageLimitSelect.addEventListener("change", pageLimitCallBack)
+
+        // Shows the next page of table cells after clicking the right arrow
+        rightArrow.addEventListener('click', rightArrowCallback)
+
+        // Shows the previous page of table cells after clicking left arrow
+        leftArrow.addEventListener('click', leftArrowCallback)
     }
 })()

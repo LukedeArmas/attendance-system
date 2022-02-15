@@ -2,12 +2,17 @@
     'use strict'
 
     const studentSearchInput = document.querySelector('#studentSearch')
-    const studentTableBody = document.querySelector('tbody')
 
-    // We only use this script if a student search bar and table exist
-    if (studentSearchInput && studentTableBody) {
-        const studentTableCells = studentTableBody.children
-        studentSearchInput.addEventListener('input', () => {
+    // We only use this script if a student search bar exists
+    if (studentSearchInput) {
+
+        // DOM Initializations
+
+        const studentTableCells = document.querySelector('tbody').children
+
+        // Callback Functions
+
+        function studentSearchCallback() {
             for (let tableCell of studentTableCells) {
                 const id = tableCell.querySelector('td.id').innerText.toLowerCase()
                 const firstName = tableCell.querySelector('td.firstName').innerText.toLowerCase()
@@ -20,7 +25,12 @@
                 // This indicates which students were hidden by this search script, which is later used in conjunction with the client pagination script
                 tableCell.classList.toggle('search-hidden', !isVisible)
             }
-        })
+        }
+
+        // Event Listeners
+
+        // Shows and hides students whenever search inputs
+        studentSearchInput.addEventListener('input', studentSearchCallback)
     }
 })()
 

@@ -29,8 +29,8 @@
             <% } %>                                  
         </tr>
       </thead>
-      <% if (students.length) { %>
       <tbody class="<% if (typeof clientPagination !== 'undefined') { %>client-pagination<% } %>">
+      <% if (students.length) { %>
         <% 
         for (let student of students) { %>
           <% if (typeof classShow !== 'undefined') { 
@@ -126,7 +126,7 @@
         </tr>
         <% num++ 
       } %>
-      </tbody>
       <% } %>
+      </tbody>
     </table>
   </div>

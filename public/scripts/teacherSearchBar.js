@@ -5,9 +5,15 @@
 
     // We only use this script if a teacher search bar exists
     if (teacherSearchInput) {
+
+        // DOM Initializations
+
         const teacherTableCells = document.querySelector('tbody').children
-        teacherSearchInput.addEventListener('input', () => {
-            for (let tableCell of teacherTableCells) {
+
+        // Callback Functions
+
+        function teacherSearchCallback() {
+             for (let tableCell of teacherTableCells) {
                 const firstName = tableCell.querySelector('td.firstName').innerText.toLowerCase()
                 const lastName = tableCell.querySelector('td.lastName').innerText.toLowerCase()
                 const userName = tableCell.querySelector('td.userName').innerText.toLowerCase()
@@ -18,7 +24,12 @@
                 // We hide the teacher if they don't meet the search criteria, if they do we unhide them
                 tableCell.classList.toggle('hide', !isVisible)
             }
-        })
+        }
+
+        // Event Listeners
+
+        // Shows and hides teachers whenever search input changes
+        teacherSearchInput.addEventListener('input', teacherSearchCallback)
     }
 })()
 

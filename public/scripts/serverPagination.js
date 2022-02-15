@@ -1,28 +1,42 @@
 (function() {
     'use strict'
 
-    // We get the left and right button so we can add click listeners to them
-    const rightArrow = document.querySelector('.right-arrow')
+    // DOM Initializations
+
+    // These are the left and right arrow buttons
     const leftArrow = document.querySelector('.left-arrow')
+    const rightArrow = document.querySelector('.right-arrow')
+    const pageLimitSelect = document.querySelector('#pagenum-form')
 
-    // We have a submit on click event listener already included in the html if the user either clicks the left arrow, right arrow, or changes the limit per page
+    // IMPORTANT!!!
+    // We have a submit on change event listener already included in the html if the user changes the limit per page
 
-    if (leftArrow && rightArrow) {
-        rightArrow.addEventListener('click', function() {
-            // We add 1 to the page number (included in the page number data on the arrow) and attach it is as a query string which will automatically be submitted
+    // The left and right arrow buttons must be present for this to run 
+    if (leftArrow && rightArrow && pageLimitSelect) {
+
+        // Callback Functions
+
+        // We either add or subtract 1 to the page number (included in the page number data on the arrow) and attach it is as a query string which will automatically be submitted
+        function arrowCallback(e) {
             if ('URLSearchParams' in window) {
                 var searchParams = new URLSearchParams(window.location.search)
-                searchParams.set("page", rightArrow.dataset.pageNumber)
+                searchParams.set("page", e.currentTarget.dataset.pageNumber)
                 window.location.search = searchParams.toString()
             }
-        })
-        leftArrow.addEventListener('click', function() {
-            // We subtract 1 to the page number (included in the page number data on the arrow) and attach it is as a query string which will automatically be submitted
-            if ('URLSearchParams' in window) {
-                var searchParams = new URLSearchParams(window.location.search)
-                searchParams.set("page", leftArrow.dataset.pageNumber)
-                window.location.search = searchParams.toString()
-            }
+        }
+
+
+        // Event Listeners
+
+        // Goes to next page of table cells when we click right arrow
+        rightArrow.addEventListener('click', arrowCallback)
+
+        // Goes to previous page of table cells when we click left arrow
+        leftArrow.addEventListener('click', arrowCallback)
+
+        // Changes the amount of table cells shown to match limit per page
+        pageLimitSelect.addEventListener('change', function(e) {
+            e.target.form.submit()
         })
     }
 })()
