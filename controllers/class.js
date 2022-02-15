@@ -107,7 +107,7 @@ module.exports.addStudentGet = async (req, res) => {
     }
     // Find all students that are not already in the class (because we only want to add students who are not currently in the class)
     const students = await Student.find({ _id: {$nin: singleClass.studentsInClass.map(entry => entry.student) }}).sort({ studentId: 1 })
-    res.render('class-pages/add-students', {singleClass, students })
+    res.render('class-pages/add-students', {singleClass, students, count: students.length })
 }
 
 module.exports.addStudentPut = async (req, res, next) => {

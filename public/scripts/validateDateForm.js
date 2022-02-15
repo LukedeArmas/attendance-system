@@ -1,10 +1,10 @@
 (function () {
-    "use strict"
+    'use strict'
 
     var dateForm = document.querySelector('#attendanceForm')
     var dateInput = document.querySelector('#date')
 
-
+    // Checks if date is in valid form
     function checkDate(dateString)
     {
         if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateString))

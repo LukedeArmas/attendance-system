@@ -9,6 +9,10 @@ include('../partials/home-header.ejs', {headerText: `<span class="text-nowrap"
   method="POST"
   enctype="raw"
 >
-  <%- include('../partials/student-table.ejs', {students, num: 1, add: true}) %>
+  <%- include('../partials/student-table.ejs', {students, num: 1, add: true,
+  clientPagination: true}) %> <% if (count > 0) { %> <%-
+  include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,
+  clientPagination: true }) %> <% } %>
+
   <button class="btn btn-primary mb-3" type="submit">Add Students</button>
 </form>

@@ -1,5 +1,5 @@
 (function () {
-    "use strict"
+    'use strict'
 
     var passwordForm = document.querySelector("form.passwordForm")
 
@@ -7,6 +7,7 @@
         const password = passwordForm.querySelector('input#password')
         const password2 = passwordForm.querySelector('input#password2')
         const passwordFeedback = document.querySelector('div.pw-feedback')
+        // Checks if passwords are equal to each other (Password and Confirm Password)
         passwordForm.addEventListener("submit", function (event) {
             if (password.value !== password2.value) {
                 event.preventDefault()
@@ -25,6 +26,7 @@
         false
         )
 
+        // Removes invalid display and feedback when user begins typing again
         password.addEventListener('input', function(event) {
             if (password.classList.contains("is-invalid")) {
                 passwordFeedback.style.display = 'none'
@@ -32,6 +34,7 @@
                 password.classList.add("is-valid")
             }
         })
+        // Removes invalid display and feedback when user begins typing again
         password2.addEventListener('input', function(event) {
             if (password2.classList.contains("is-invalid")) {
                 passwordFeedback.style.display = 'none'

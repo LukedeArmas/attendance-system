@@ -1,8 +1,13 @@
-$(function(){
-    $('#sidebarMenu li a').each(function(){
-        var $this = $(this);
-        if($this.attr('href') === location.pathname){
-            $this.addClass('active');
-        }
+(function() {
+    'use strict'
+
+    $(function(){
+        $('#sidebarMenu li a').each(function(){
+            var $this = $(this)
+            if($this.attr('href') === location.pathname){
+                $this.addClass('active')
+            }
+        })
     })
-})
+})()
+

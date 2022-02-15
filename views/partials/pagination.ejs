@@ -1,5 +1,9 @@
 <nav class="d-flex justify-content-end" aria-label="...">
+  <% if (typeof clientPagination === 'undefined') { %> 
   <form class="form-inline me-3" action="<%= url %> " method="GET">
+    <% } else { %>
+      <div class="form-inline me-3">
+      <% } %>  
     <select
       class="form-select"
       name="limit"
@@ -10,7 +14,11 @@
       <option value="10" <% if (pageLimit === 10) { %> selected <% } %>>10</option>
       <option value="20" <% if (pageLimit === 20) { %> selected <% } %>>20</option>
     </select>
+  <% if (typeof clientPagination === 'undefined') { %> 
   </form>
+  <% } else { %>
+  </div>
+    <% } %> 
   <ul class="pagination">
     <li class="page-item left-item <% if (page === 1) { %>disabled<% } %>">
       <button class="page-link <% if (typeof clientPagination === 'undefined') { %> left-arrow<% } else { %>client-left-arrow<% } %>" data-page-number="<%= page - 1 %>">
@@ -18,7 +26,7 @@
       </button>
     </li>
     <li class="page-item">
-      <span class="page-link text-nowrap"
+      <span class="page-link-no-hover text-nowrap"
         >Page <strong id="page-num"><%= page %></strong> of
         <strong id="page-total-num"><%= Math.floor((count - 1) / pageLimit + 1) %></strong>
       </span>
@@ -33,113 +41,4 @@
 
 <script>
   let pageLimit = <%- JSON.stringify(pageLimit) %>
-  const tableBody = document.querySelector('tbody.client-pagination')
-  if (tableBody && tableBody.children.length) {
-    let tableCells = tableBody.children
-    let count = tableCells.length
-    let currentPosition = 0
-    for (let i=currentPosition; i < pageLimit; i++) {
-      tableCells[i].classList.toggle('hide')
-    }
-
-    const rightArrow = document.querySelector('.client-right-arrow')
-    const leftArrow = document.querySelector('.client-left-arrow')
-    const leftArrowListItem = document.querySelector('.left-item')
-    const rightArrowListItem = document.querySelector('.right-item')
-    const pageNumShow = document.querySelector('#page-num')
-    const pageLimitSelect = document.querySelector("#pagenum-form")
-
-
-    pageLimitSelect.addEventListener("change", function(e) {
-      pageLimit = parseInt(pageLimitSelect.value) 
-      pageNumShow.innerHTML = 1
-      document.querySelector("#page-total-num").innerHTML = (Math.ceil(count / pageLimit)).toString()
-      currentPosition = 0
-      leftArrowListItem.classList.add('disabled')
-      if (pageLimit > count) {
-        rightArrowListItem.classList.add('disabled')
-        for (let i=0; i < count; i++) {
-          if (tableCells[i].classList.contains("hide")) {
-            tableCells[i].classList.toggle('hide')
-          }
-        }
-      } else {
-        rightArrowListItem.classList.remove('disabled')
-        for (let i=0; i < pageLimit; i++) {
-          if (tableCells[i].classList.contains("hide")) {
-            tableCells[i].classList.toggle('hide')
-          }
-        }
-        for (let i=pageLimit; i < count; i++) {
-          if (!(tableCells[i].classList.contains("hide"))) {
-            tableCells[i].classList.toggle('hide')
-          }
-        }   
-      }
-    })
-
-    rightArrow.addEventListener('click', function(e) {
-      pageNumShow.innerHTML = (parseInt(pageNumShow.innerHTML) + 1).toString()
-      leftArrowListItem.classList.remove('disabled')
-      for (let i=currentPosition; i < currentPosition + pageLimit; i++) {
-        tableCells[i].classList.toggle('hide')
-      }
-      currentPosition += pageLimit
-      if (currentPosition + pageLimit > count) {
-        rightArrowListItem.classList.add('disabled')
-        for (let i=currentPosition; i < count; i++) {
-        tableCells[i].classList.toggle('hide')
-      }
-      } else {
-        for (let i=currentPosition; i < currentPosition + pageLimit; i++) {
-        tableCells[i].classList.toggle('hide')
-      }
-      }
-    })
-
-    leftArrow.addEventListener('click', function(e) {
-      pageNumShow.innerHTML = (parseInt(pageNumShow.innerHTML) - 1).toString()
-      rightArrowListItem.classList.remove('disabled')
-      if (currentPosition + pageLimit > count) {
-        for (let i=currentPosition; i < count; i++) {
-          tableCells[i].classList.add('hide')
-        }
-      } else {
-        for (let i=currentPosition; i < currentPosition + pageLimit; i++) {
-        tableCells[i].classList.toggle('hide')
-        }
-      }
-      currentPosition -= pageLimit
-      if (currentPosition === 0) {
-        leftArrowListItem.classList.add('disabled')
-      } 
-      for (let i=currentPosition; i < currentPosition + pageLimit; i++) {
-        tableCells[i].classList.toggle('hide')
-      }
-    })
-
-  }
-</script>
-
-
-<script>
-  const rightArrow = document.querySelector('.right-arrow')
-  const leftArrow = document.querySelector('.left-arrow')
-
-  if (leftArrow && rightArrow) {
-    rightArrow.addEventListener('click', function() {
-      if ('URLSearchParams' in window) {
-        var searchParams = new URLSearchParams(window.location.search)
-        searchParams.set("page", rightArrow.dataset.pageNumber)
-        window.location.search = searchParams.toString()
-      }
-    })
-    leftArrow.addEventListener('click', function() {
-      if ('URLSearchParams' in window) {
-        var searchParams = new URLSearchParams(window.location.search)
-        searchParams.set("page", leftArrow.dataset.pageNumber)
-        window.location.search = searchParams.toString()
-      }
-    })
-  }
 </script>
