@@ -1,6 +1,6 @@
 <% layout('./layouts/boilerplate.ejs') %>
 <%- include('../partials/headers/home-header.ejs', {
-  headerText: `${moment(attendanceDay.date).format('LL')} <span class="text-nowrap">Attendance:</span> <span>${singleClass.className}</span>`, 
+  headerText: `${moment(attendanceDay.date).format('LL')} Attendance: <span class="text-sm-nowrap">${singleClass.className}</span>`, 
   search: false 
 }) %>
 

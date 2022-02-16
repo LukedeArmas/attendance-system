@@ -143,3 +143,10 @@ div.input-group input.form-control {
   border: 1px solid #dee2e6;
   padding: 0.375rem 0.75rem;
 }
+
+
+@media screen and (min-width: 500px) {
+  .text-sm-nowrap {
+    white-space: nowrap !important;
+  }
+}

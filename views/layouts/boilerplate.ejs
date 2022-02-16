@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/images/attendance-image.png" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
@@ -162,11 +163,11 @@
         class="<% if (currentUser) { %> col-md-9 ms-sm-auto col-mdlg-10 px-md-4 <% } %>"
       >
         <section class="container-fluid mt-3">
-          <%- include('../partials/flash/flash-error') %> <%-
-          include('../partials/flash/flash-success') %> <% if (currentUser && url !==
-          '/' && (currentUser.username === 'admin' ||
-          !(/^\/student\/[0-9a-fA-F]{24}$/.test(url))) && typeof err ===
-          'undefined') { %> <%- include('../partials/link-list.ejs') %> <% } %>
+          <%- include('../partials/flash/flash-error') %> 
+          <%- include('../partials/flash/flash-success') %> 
+          <% if (currentUser && url !== '/' && (currentUser.username === 'admin' || !(/^\/student\/[0-9a-fA-F]{24}$/.test(url))) && typeof err === 'undefined') { %> 
+            <%- include('../partials/link-list.ejs') %> 
+          <% } %>
           <%- body -%>
         </section>
       </main>

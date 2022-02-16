@@ -10,7 +10,7 @@
   buttons,
   deleteButton: true,
   deleteRequest: `/class/${singleClass.id}/attendance/${attendanceDay.id}?_method=DELETE`,
-  headerText: `<span class="text-nowrap">${moment(attendanceDay.date).format('LL')}</span> Attendance: ${singleClass.className}` 
+  headerText: `<span class="text-nowrap">${moment(attendanceDay.date).format('LL')}</span> Attendance: <span class="text-sm-nowrap">${singleClass.className}</span>` 
 }) %>
 <%- include('../partials/headers/sub-header.ejs', {
   subHeaderText: `<strong class="fw-lighter">Class Attendance: </strong>${Number(Math.round(100*(attendanceDay.numStudentsPresent / singleClass.numStudentsInClass) +'e2') + 'e-2')}%`,
