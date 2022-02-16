@@ -1,13 +1,19 @@
 <% layout('./layouts/boilerplate.ejs') %>
 
-<% let buttons = [{ 
-  text: 'Edit', 
-  colorClass: 'btn-outline-secondary', 
-  link: `/student/${student._id}/edit` 
-}] %>
+<% let showDeleteButton = false; 
+let buttons = [];
+if (currentUser.username === 'admin') {
+  showDeleteButton = true;
+  buttons = [{ 
+    text: 'Edit', 
+    colorClass: 'btn-outline-secondary', 
+    link: `/student/${student._id}/edit` 
+  }]; 
+}
+%>
  
 <%- include('../partials/headers/show-header.ejs', { 
-  deleteButton: true, 
+  deleteButton: showDeleteButton, 
   deleteRequest: `/student/${student.id}/?_method=DELETE`, 
   buttons, 
   headerText: `${student.firstName} ${student.lastName}`
