@@ -39,14 +39,13 @@
         >
           <%= singleClass.teacher.fullName %>
         </td>
-        <% if (typeof studentShow !== 'undefined') { %> <% for (let studentEntry
-        of singleClass.studentsInClass) { if
-        (studentEntry.student._id.toString() === student._id.toString()) { %>
-        <td class="text-center">
-          <%= singleClass.numAttendancesTaken > 0 ? Number(Math.round(
-          100*(studentEntry.numAttendancesPresent /
-          singleClass.numAttendancesTaken) + 'e2') + 'e-2') : 0 %>%
-        </td>
+        <% if (typeof studentShow !== 'undefined') { %> 
+          <% for (let studentEntry of singleClass.studentsInClass) { 
+            if (studentEntry.student._id.toString() === student._id.toString()) { %>
+              <td class="text-center">
+                <%= singleClass.numAttendancesTaken > 0 ? Number(Math.round(100*(studentEntry.numAttendancesPresent /
+                singleClass.numAttendancesTaken) + 'e2') + 'e-2') : 0 %>%
+              </td>
         <% } } } else { %>
         <td class="text-center">
           <a
