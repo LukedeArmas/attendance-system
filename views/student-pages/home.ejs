@@ -1,5 +1,16 @@
-<% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/home-header.ejs', {headerText: 'Student Dashboard',
-searchType: 'Student'}) %> <%- include('../partials/student-table.ejs',
-{students, num: ((page - 1)*pageLimit) + 1 }) %> <%-
-include('../partials/pagination.ejs', { url, page, pageLimit, count }) %>
+<% layout('./layouts/boilerplate.ejs') %>
+<%- include('../partials/headers/home-header.ejs', {
+    headerText: 'Student Dashboard', 
+    searchType: 'Student', 
+    search: true
+}) %> 
+<%- include('../partials/tables/student-table.ejs', {
+    students, 
+    num: ((page - 1)*pageLimit) + 1 
+}) %> 
+<%- include('../partials/pagination.ejs', { 
+    url, 
+    page, 
+    pageLimit, 
+    count 
+}) %>

@@ -110,7 +110,7 @@ div.input-group input.form-control {
   background-color: #2470dc;
 }
 
-@media screen and (max-width: 372px) {
+@media screen and (max-width: 389px) {
   .flex-xxs-column {
     flex-direction: column !important;
   }

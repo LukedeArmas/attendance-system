@@ -22,10 +22,6 @@
       href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css"
-    />
     <link rel="stylesheet" href="/stylesheets/sidebar.css" />
     <link rel="stylesheet" href="/stylesheets/general.css" />
     <title>Attendance Management System</title>
@@ -166,8 +162,8 @@
         class="<% if (currentUser) { %> col-md-9 ms-sm-auto col-mdlg-10 px-md-4 <% } %>"
       >
         <section class="container-fluid mt-3">
-          <%- include('../partials/flash-error') %> <%-
-          include('../partials/flash-success') %> <% if (currentUser && url !==
+          <%- include('../partials/flash/flash-error') %> <%-
+          include('../partials/flash/flash-success') %> <% if (currentUser && url !==
           '/' && (currentUser.username === 'admin' ||
           !(/^\/student\/[0-9a-fA-F]{24}$/.test(url))) && typeof err ===
           'undefined') { %> <%- include('../partials/link-list.ejs') %> <% } %>
@@ -204,8 +200,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
     <script src="/scripts/sidebar.js"></script>
     <script src="/scripts/validateForm.js"></script>
     <script src="/scripts/datePicker.js"></script>

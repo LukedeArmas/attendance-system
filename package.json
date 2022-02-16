@@ -21,6 +21,7 @@
     "express-mongo-sanitize": "^2.2.0",
     "express-session": "^1.17.2",
     "feather-icons": "^4.28.0",
+    "helmet": "^5.0.2",
     "joi": "^17.4.2",
     "method-override": "^3.0.0",
     "moment": "^2.29.1",

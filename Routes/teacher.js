@@ -6,7 +6,7 @@ const teacher = require('../controllers/teacher')
 
 
 router.route('/')
-    .get(isLoggedIn, isAdmin, pagination, asyncError(teacher.home))
+    .get(isLoggedIn, isAdmin, asyncError(pagination), asyncError(teacher.home))
     .post(isLoggedIn, isAdmin, validateNewTeacher, asyncError(teacher.post))
 
 router.route('/new')

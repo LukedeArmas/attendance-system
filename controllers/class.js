@@ -113,7 +113,7 @@ module.exports.addStudentGet = async (req, res) => {
 module.exports.addStudentPut = async (req, res, next) => {
     const {id} = req.params
     const {studentList} = req.body
-    const singleClass = await Class.findById(id)
+    const singleClass = res.singleClass
     // Add students that were submitted by the admin into the class
     const students = await Student.find({_id: {$in: studentList}})
     for (let i=0; i < students.length; i++) {
@@ -142,10 +142,10 @@ module.exports.removeStudentGet = async (req, res) => {
     res.render('class-pages/remove-students', {singleClass, count: singleClass.studentsInClass.length })
 }
 
-module.exports.removeStudentPut = async (req, res, next) => {
+module.exports.removeStudentPut = async (req, res, next) => {  
     const {id} = req.params
     const {studentList} = req.body
-    const singleClass = await Class.findById(id)
+    const singleClass = res.singleClass
     // Remove students from all the attendances of the Class that include the students
     const removeStudentAttendances = await Attendance.find({ class: singleClass._id, studentsPresent: {  $in: studentList } } )
     for (let attendance of removeStudentAttendances) {

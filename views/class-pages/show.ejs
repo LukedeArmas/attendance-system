@@ -1,42 +1,80 @@
-<% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/show-header.ejs', {typeName: 'class', type: singleClass,
-name: `${singleClass.className}`}) %>
+<% layout('./layouts/boilerplate.ejs') %>
 
-<p>
-  <strong>Teacher:</strong> <%= singleClass.teacher.fullName %>
-  <br />
-  <strong>Class Code: </strong> <%= singleClass.classCode %>
-  <br />
-  <strong>Section: </strong> <%= singleClass.section %>
-  <br />
-  <strong>Subject: </strong> <%= singleClass.subject %>
-  <br />
-  <strong>Year: </strong> <%= singleClass.year %>
-  <br />
-</p>
-<div class="d-flex flex-wrap justify-content-between align-items-center">
-  <p class="h4 mb-3">Students:</p>
-  <% if (currentUser.username === 'admin') { %>
+<% let showHeaderButtons = [] %> 
+<% let showHeaderDelete = false %> 
+<% if (currentUser.username === 'admin') { %>
+  <% showHeaderDelete = true %> 
+  <% showHeaderButtons = [{ 
+    text: 'Edit', 
+    colorClass: 'btn-outline-secondary', 
+    link: `/class/${singleClass.id}/edit` 
+  }] %> 
+<% } %>
+<% if (singleClass.studentsInClass.length > 0) { %> 
+  <% showHeaderButtons = [{ 
+    text: 'Attendance', 
+    colorClass: 'btn-outline-primary', 
+    link: `/class/${singleClass.id}/attendance` 
+  }, ...showHeaderButtons] %> 
+<% } %>
+
+<%- include('../partials/headers/show-header.ejs', { 
+  deleteButton: showHeaderDelete, 
+  deleteRequest: `/class/${singleClass.id}/?_method=DELETE`, 
+  buttons: showHeaderButtons, 
+  headerText: singleClass.className 
+}) %>
+<%- include('../partials/info-display.ejs', { 
+  displayArray: [
+    { key: 'Teacher:', value: singleClass.teacher.fullName }, 
+    { key: 'Class Code:', value: singleClass.classCode }, 
+    { key: 'Section:', value: singleClass.section }, 
+    { key: 'Subject:', value: singleClass.subject }, 
+    { key: 'Year:', value: singleClass.year }] 
+}) %>
+
+<% if (currentUser.username === 'admin') { %>
   <div
-    class="d-flex flex-xxs-column align-items-center justify-content-end justify-content-md-between btn-toolbar mb-2"
+    class="d-flex justify-content-center justify-content-sm-end mb-2"
   >
-    <a
-      class="btn btn-outline-primary mx-2 mb-2 mb-sm-0 align-middle"
-      href="/class/<%= singleClass._id %>/addStudent"
-      >Add Students</a
-    >
+    <% let subHeaderButtons = [{ 
+      text: 'Add Students', 
+      colorClass: 'btn-outline-primary', 
+      link: `/class/${singleClass._id}/addStudent` 
+    }] %> 
     <% if (singleClass.studentsInClass.length > 0) { %>
-    <a
-      class="btn btn-outline-danger me-sm-2 mb-2 mb-sm-0"
-      href="/class/<%= singleClass._id %>/removeStudent"
-      >Remove Students</a
-    >
+      <% subHeaderButtons = [...subHeaderButtons, { 
+        text: 'Remove Students', 
+        colorClass: 'btn-outline-danger', 
+        link: `/class/${singleClass._id}/removeStudent` 
+      }] %> 
     <% } %>
+    <%- include('../partials/buttons/button-toolbar.ejs', { 
+      buttons: subHeaderButtons, 
+      deleteButton: false 
+    }) %> 
   </div>
-  <% } %>
-</div>
-<%- include('../partials/student-table.ejs', {students:
-singleClass.studentsInClass, singleClass, num: 1, classShow: true,
-clientPagination: true }) %> <% if (count > 0) { %> <%-
-include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,
-clientPagination: true }) %> <% } %>
+<% } %>
+
+<%- include('../partials/headers/sub-header.ejs', { 
+  searchType: 'Student', 
+  subHeaderText: 'Students:', 
+  search: true 
+}) %> 
+<%- include('../partials/tables/student-table.ejs', {
+  students: singleClass.studentsInClass, 
+  singleClass, 
+  num: 1, 
+  classShow: true, 
+  clientPagination: true 
+}) %>
+<% if (count > 0) { %>
+  <%- include('../partials/pagination.ejs', { 
+    url, 
+    page: 1, 
+    pageLimit: 5, 
+    count, 
+    clientPagination: true 
+  }) %>
+<% } %>
+

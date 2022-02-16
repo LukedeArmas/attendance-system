@@ -1,20 +1,34 @@
-<% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/show-header.ejs', {typeName: 'class', type: singleClass,
-name: `${singleClass.className}`, attendance: true, attendanceDay:
-attendanceDay}) %>
+<% layout('./layouts/boilerplate.ejs') %>
 
-<div
-  class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center mb-3"
->
-  <p class="h4">
-    <strong class="fw-lighter">Class Attendance: </strong><%= Number(Math.round(
-    100*(attendanceDay.numStudentsPresent / singleClass.numStudentsInClass) +
-    'e2') + 'e-2') %>%
-  </p>
-</div>
+<% let buttons = [{
+   text: 'Edit', 
+   colorClass: 'btn-outline-secondary', 
+   link: `/class/${singleClass.id}/attendance/${attendanceDay.id}/edit` 
+}] %> 
 
-<%- include('../partials/student-table.ejs', {students:
-singleClass.studentsInClass.map((entry) => entry.student), num: 1,
-attendanceShow: true, attendanceDay, clientPagination: true }) %> <% if (count >
-0) { %> <%- include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5,
-count, clientPagination: true }) %> <% } %>
+<%- include('../partials/headers/show-header.ejs', {
+  buttons,
+  deleteButton: true,
+  deleteRequest: `/class/${singleClass.id}/attendance/${attendanceDay.id}?_method=DELETE`,
+  headerText: `<span class="text-nowrap">${moment(attendanceDay.date).format('LL')}</span> Attendance: ${singleClass.className}` 
+}) %>
+<%- include('../partials/headers/sub-header.ejs', {
+  subHeaderText: `<strong class="fw-lighter">Class Attendance: </strong>${Number(Math.round(100*(attendanceDay.numStudentsPresent / singleClass.numStudentsInClass) +'e2') + 'e-2')}%`,
+  search: false 
+  }) %> 
+<%- include('../partials/tables/student-table.ejs', {
+  students: singleClass.studentsInClass.map((entry) => entry.student), 
+  num: 1, 
+  attendanceShow: true, 
+  attendanceDay, 
+  clientPagination: true 
+}) %> 
+<% if (count > 0) { %> 
+  <%- include('../partials/pagination.ejs', {
+    url, 
+    page: 1, 
+    pageLimit: 5, 
+    count, 
+    clientPagination: true 
+  }) %> 
+<% } %>

@@ -1,24 +1,41 @@
-<% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/show-header.ejs', {type: student, typeName: 'student',
-name: `${student.firstName} ${student.lastName}`}) %>
-<p><strong>Student ID: </strong> <%= student.studentId %></p>
+<% layout('./layouts/boilerplate.ejs') %>
 
-<div
-  class="d-flex justify-content-center justify-content-md-between flex-wrap flex-lg-nowrap align-items-center pt-3 pb-2 mb-1"
->
-  <p class="h4">Currently Enrolled Classes:</p>
-  <div
-    class="d-flex align-items-center flex-nowrap btn-toolbar mb-2 mb-md-0 ms-3"
-  >
-    <%- include('../partials/search-bar.ejs', { type: 'Class', searchType:
-    'Class' }) %>
-  </div>
-</div>
-
-<%- include('../partials/class-table.ejs', {classes: classes, student: student,
-num: 1, studentShow: true, clientPagination: true }) %> <% if (count > 0) { %>
-<%- include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,
-clientPagination: true }) %> <% } %>
+<% let buttons = [{ 
+  text: 'Edit', 
+  colorClass: 'btn-outline-secondary', 
+  link: `/student/${student._id}/edit` 
+}] %>
+ 
+<%- include('../partials/headers/show-header.ejs', { 
+  deleteButton: true, 
+  deleteRequest: `/student/${student.id}/?_method=DELETE`, 
+  buttons, 
+  headerText: `${student.firstName} ${student.lastName}`
+}) %>
+<%- include('../partials/info-display.ejs', { 
+  displayArray: [{ key: 'StudentID:', value: student.studentId }] 
+}) %>
+<%- include('../partials/headers/sub-header.ejs', { 
+  searchType: 'Class', 
+  subHeaderText: 'Currently Enrolled Classes:', 
+  search: true 
+}) %> 
+<%- include('../partials/tables/class-table.ejs', {
+  classes: classes, 
+  student: student, 
+  num: 1, 
+  studentShow: true, 
+  clientPagination: true 
+}) %>
+<% if (count > 0) { %> 
+  <%- include('../partials/pagination.ejs', { 
+    url, 
+    page: 1, 
+    pageLimit: 5, 
+    count, 
+    clientPagination: true 
+  }) %> 
+<% } %>
 
 <script>
   let currentUser = <%- JSON.stringify(currentUser) %>

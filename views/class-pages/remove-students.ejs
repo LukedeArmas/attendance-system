@@ -1,19 +1,28 @@
-<% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/home-header.ejs', {headerText: `<span class="text-nowrap"
-  >Remove Students:</span
->
-<span class="text-nowrap">${singleClass.className}</span>`, searchType:
-'Student'}) %>
+<% layout('./layouts/boilerplate.ejs') %>
+<%- include('../partials/headers/home-header.ejs', {
+  headerText: `<span class="text-nowrap">Remove Students: </span><span class="text-nowrap">${singleClass.className}</span>`, 
+  searchType: 'Student', 
+  search: true 
+}) %>
+
 <form
   action="/class/<%= singleClass._id %>/removeStudent?_method=PUT"
   method="POST"
 >
-  <!-- We have to map the studentsInClass array so it only includes students and not attendance percentage -->
-  <%- include('../partials/student-table.ejs', {students:
-  singleClass.studentsInClass.map((entry) => entry.student), num: 1, remove:
-  true, clientPagination: true }) %> <% if (count > 0) { %> <%-
-  include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,
-  clientPagination: true }) %> <% } %>
-
+  <%- include('../partials/tables/student-table.ejs', {
+    students: singleClass.studentsInClass.map((entry) => entry.student), 
+    num: 1, 
+    remove: true, 
+    clientPagination: true 
+  }) %> 
+  <% if (count > 0) { %> 
+    <%- include('../partials/pagination.ejs', { 
+      url, 
+      page: 1, 
+      pageLimit: 5, 
+      count, 
+      clientPagination: true 
+    }) %>
+  <% } %>
   <button class="btn btn-danger mb-3" type="submit">Remove Students</button>
 </form>

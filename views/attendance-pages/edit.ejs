@@ -1,20 +1,22 @@
-<% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/home-header.ejs', {headerText:
-`${moment(attendanceDay.date).format('LL')}
-<span class="text-nowrap">Edit Attendance:</span>
-<span>${singleClass.className}</span>`, searchType: 'Class', attendanceEdit:
-true}) %>
+<% layout('./layouts/boilerplate.ejs') %>
+<%- include('../partials/headers/home-header.ejs', {
+  headerText: `${moment(attendanceDay.date).format('LL')} <span class="text-nowrap">Attendance:</span> <span>${singleClass.className}</span>`, 
+  search: false 
+}) %>
 
 <form
   action="/class/<%= singleClass._id %>/attendance/<%= attendanceDay._id %>?_method=PUT"
   method="POST"
   enctype="raw"
 >
-  <%- include('../partials/student-table.ejs', {students:
-  singleClass.studentsInClass.map((entry) => entry.student), num: 1,
-  attendanceEdit: true, attendanceDay, clientPagination: true }) %> <% if (count
-  > 0) { %> <%- include('../partials/pagination.ejs', { url, page: 1, pageLimit:
-  5, count, clientPagination: true }) %> <% } %>
-
+  <%- include('../partials/tables/student-table.ejs', {
+    students: singleClass.studentsInClass.map((entry) => entry.student), 
+    num: 1, 
+    attendanceEdit: true, 
+    attendanceDay,clientPagination: true 
+  }) %>
+  <% if (count > 0) { %>
+    <%- include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count, clientPagination: true }) %> 
+  <% } %>
   <button class="btn btn-primary mb-3" type="submit">Edit</button>
 </form>

@@ -1,0 +1,49 @@
+<div
+  class="d-flex flex-xxs-column align-items-center flex-sm-nowrap btn-toolbar mb-2 mb-md-0"
+>
+  <% for (let button of buttons) { %> 
+    <%- include('./button.ejs', { 
+      text: button.text, 
+      colorClass: button.colorClass, 
+      link: button.link 
+    }) %> 
+  <% } %> 
+  <% if (deleteButton === true) { %>
+  <button
+    class="btn btn-outline-danger mb-2 mb-sm-0 mx-1"
+    data-bs-toggle="modal"
+    data-bs-target="#deleteModal"
+  >
+    Delete
+  </button>
+  <form action="<%= deleteRequest %>" method="POST">
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">
+              Delete <%- headerText %>
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">Are you sure you want to delete?</div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <% } %>
+</div>

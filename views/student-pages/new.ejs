@@ -1,5 +1,5 @@
 <% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/add-header.ejs', { headerText: 'Add Student'}) %>
+include('../partials/headers/add-header.ejs', { headerText: 'Add Student'}) %>
 <div class="row">
   <div class="col-10 offset-1 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
     <form class="validated" action="/student" method="POST" novalidate>

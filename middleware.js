@@ -1,5 +1,5 @@
 const myError = require('./utils/myError.js')
-const {studentSchema, classSchema, attendanceSchema, newTeacherSchema, editTeacherSchema, passwordSchema } = require('./joi-schemas.js')
+const {studentSchema, classSchema, attendanceSchema, studentListSchema, editAttendanceSchema, newTeacherSchema, editTeacherSchema, passwordSchema } = require('./joi-schemas.js')
 const Class = require('./models/class.js')
 const Teacher = require('./models/teacher.js')
 const Student = require('./models/student.js')
@@ -68,6 +68,12 @@ module.exports.validateUpdatePassword = (req, res, next) => {
 
 module.exports.validateAddStudentToClass = async (req, res, next) => {
     const {id} = req.params
+    const {error} = studentListSchema.validate(req.body)
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        req.flash('error', msg)
+        return res.redirect(`/class/${id}`)
+    }
     const {studentList} = req.body
     const singleClass = await Class.findById(id)
     if (!studentList) {
@@ -78,11 +84,19 @@ module.exports.validateAddStudentToClass = async (req, res, next) => {
     if (studentList.every(elementId => !(singleClass.studentsInClass.map((entry) => entry.student.toString()).includes(elementId))) === false) {
         return next(new myError(400, "Cannot add student multiple times to the same class"))
     }
+
+    res.singleClass = singleClass
     return next()
 }
 
 module.exports.validateRemoveStudentFromClass = async (req, res, next) => {
     const {id} = req.params
+    const {error} = studentListSchema.validate(req.body)
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        req.flash('error', msg)
+        return res.redirect(`/class/${id}`)
+    }
     const {studentList} = req.body
     const singleClass = await Class.findById(id)
     if (!studentList) {
@@ -93,21 +107,31 @@ module.exports.validateRemoveStudentFromClass = async (req, res, next) => {
     if (studentList.every(elementId => singleClass.studentsInClass.map((entry) => entry.student.toString()).includes(elementId)) === false) {
         return next(new myError(400, "Cannot remove students who are not a member of the class"))
     }
+
+    res.singleClass = singleClass
     return next()
 }
 
-module.exports.validateAttendance = async (req, res, next) => {
-    console.log(req.body)
-    const {error} = attendanceSchema.validate(req.body);
+module.exports.validateAttendance = (req, res, next) => {
+    const {error} = attendanceSchema.validate(req.body)
     if (error) {
-        const msg = error.details.map(el => el.message).join(',');
+        const msg = error.details.map(el => el.message).join(',')
+        return next(new myError(400, msg))
+    }
+    return next()
+}
+
+module.exports.validateEditAttendance = (req, res, next) => {
+    const {error} = editAttendanceSchema.validate(req.body)
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
         return next(new myError(400, msg))
     }
     return next()
 }
 
 // Checks if mongoose object Id is in valid form
-module.exports.objectIdMiddleware = function (req, res, next) {
+module.exports.objectIdMiddleware = (req, res, next) => {
     try {
         var paramKeys = Object.keys(req.params)
         var validKeys = paramKeys.filter(function (key) {
@@ -160,9 +184,9 @@ module.exports.isAdmin = (req, res, next) => {
 }
 
 module.exports.teacherExists = async (req, res, next) => {
-    const teachers = await Teacher.find({ username: { $ne: 'admin' } })
+    const teacherCount = await Teacher.find({ username: { $ne: 'admin' } }).count()
     // Checks if a teacher exists, that's not the admin, before we can add a class
-    if (teachers.length < 1) {
+    if (teacherCount < 1) {
         req.flash('error', 'A teacher must be added before a class can be added')
         return res.redirect('/')
     }

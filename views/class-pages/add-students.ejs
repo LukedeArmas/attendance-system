@@ -1,18 +1,18 @@
-<% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/home-header.ejs', {headerText: `<span class="text-nowrap"
-  >Add Students:</span
->
-<span class="text-nowrap">${singleClass.className}</span>`, searchType:
-'Student'}) %>
+<% layout('./layouts/boilerplate.ejs') %>
+<%- include('../partials/headers/home-header.ejs', {
+  headerText: `<span class="text-nowrap">Add Students:</span> <span class="text-nowrap">${singleClass.className}</span>`, 
+  searchType: 'Student', 
+  search: true 
+}) %>
+
 <form
   action="/class/<%= singleClass._id %>/addStudent?_method=PUT"
   method="POST"
   enctype="raw"
 >
-  <%- include('../partials/student-table.ejs', {students, num: 1, add: true,
-  clientPagination: true}) %> <% if (count > 0) { %> <%-
-  include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,
-  clientPagination: true }) %> <% } %>
-
+  <%- include('../partials/tables/student-table.ejs', {students, num: 1, add: true, clientPagination: true}) %> 
+  <% if (count > 0) { %> 
+    <%- include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count, clientPagination: true }) %> 
+  <% } %>
   <button class="btn btn-primary mb-3" type="submit">Add Students</button>
 </form>

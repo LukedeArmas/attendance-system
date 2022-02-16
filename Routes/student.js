@@ -6,7 +6,7 @@ const student = require('../controllers/student')
 
 
 router.route('/')
-    .get(isLoggedIn, isAdmin, pagination, asyncError(student.home))
+    .get(isLoggedIn, isAdmin, asyncError(pagination), asyncError(student.home))
     .post(isLoggedIn, isAdmin, validateStudent, asyncError(student.post))
 
 router.route('/new')

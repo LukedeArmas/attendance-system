@@ -1,0 +1,12 @@
+<div
+  class="d-flex justify-content-center justify-content-md-between flex-wrap flex-lg-nowrap align-items-center pt-3 pb-2 mb-1"
+>
+  <p class="h4"><%- subHeaderText %></p>
+  <% if (search === true) { %> 
+    <div
+      class="d-flex align-items-center flex-nowrap btn-toolbar mb-2 mb-md-0 ms-3"
+    >
+      <%- include('../search-bar.ejs', { type: searchType }) %>
+    </div>
+  <% } %> 
+</div>

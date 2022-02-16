@@ -1,7 +1,9 @@
-<% layout('./layouts/boilerplate.ejs') %> <%-
-include('../partials/home-header.ejs', {headerText: `Mark Attendance:
-<span>${singleClass.className}</span>`, searchType: 'Class', attendanceEdit:
-true}) %>
+<% layout('./layouts/boilerplate.ejs') %>
+<%- include('../partials/headers/home-header.ejs', {
+  headerText: `Mark Attendance: <span>${singleClass.className}</span>`, 
+  searchType: 'Class', 
+  search: false 
+}) %>
 
 <form
   action="/class/<%= singleClass._id %>/attendance"
@@ -29,15 +31,25 @@ true}) %>
       </div>
     </div>
   </section>
-  <%- include('../partials/student-table.ejs', {students:
-  singleClass.studentsInClass.map((entry) => entry.student), num: 1, attendance:
-  true, clientPagination: true }) %> <% if (count > 0) { %> <%-
-  include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,
-  clientPagination: true }) %> <% } %>
-
+  
+  <%- include('../partials/tables/student-table.ejs', {
+    students: singleClass.studentsInClass.map((entry) => entry.student), 
+    num: 1, 
+    attendance: true, 
+    clientPagination: true 
+  }) %> 
+  <% if (count > 0) { %> 
+    <%- include('../partials/pagination.ejs', { 
+      url, 
+      page: 1, 
+      pageLimit: 5, 
+      count, 
+      clientPagination: true 
+    }) %>
+  <% } %>
   <button class="btn btn-primary mb-3" type="submit">Mark Attendance</button>
 </form>
+
 <script>
-  // We have to convert the array to JSON to pass data from EJS/server to a script
   let invalidDates = <%- JSON.stringify(notValidDates) %>
 </script>

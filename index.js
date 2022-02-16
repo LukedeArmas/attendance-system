@@ -25,6 +25,7 @@ const databaseUrl = process.env.DB_URL || 'mongodb://localhost:27017/attendance'
 const MongoStore = require('connect-mongo')
 const { isLoggedIn } = require('./middleware.js')
 const myError = require('./utils/myError')
+const helmet = require('helmet')
 
 const mongoose = require('mongoose')
 mongoose.connect(databaseUrl)
@@ -59,6 +60,7 @@ const sessionConfig = {
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
+        secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
     },
@@ -70,6 +72,11 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig))
 app.use(flash())
+app.use(
+    helmet({
+         contentSecurityPolicy: false 
+    })
+)
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -117,8 +124,7 @@ app.get('/logout', (req, res, next) => {
 })
 
 app.get('*', (req, res, next) => {
-    req.flash('error', 'Page not found')
-    res.redirect('/')
+    return next(new myError(404, "Page not found"))
 })
 
 app.use((err, req, res, next) => {

@@ -1,65 +1,36 @@
 <% layout('./layouts/boilerplate.ejs') %>
-<div
-  class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
->
-  <h1 class="h1">
-    Attendance: <span><%= singleClass.className %></span>
-  </h1>
-  <a
-    class="btn btn-outline-primary text-nowrap ms-2"
-    href="/class/<%= singleClass._id %>/attendance/new"
-    >Mark New Attendance</a
-  >
-</div>
 
-<div
-  class="d-flex flex-column flex-lg-row justify-content-center justify-content-sm-between flex-wrap flex-md-nowrap align-items-center mb-3"
->
+<% let buttons = [ { 
+  text: 'Mark New Attendance', 
+  colorClass: 'btn-outline-primary text-nowrap', 
+  link: `/class/${singleClass.id}/attendance/new` 
+}] %> 
+
+<%- include('../partials/headers/show-header.ejs', { 
+  deleteButton: false, 
+  deleteRequest: false, 
+  buttons, 
+  headerText: `Attendance: ${singleClass.className}` 
+}) %>
+
   <% if (attendances.length) { %>
-  <p class="d-inline h4">
-    <strong class="fw-lighter">Average Class <span class="text-nowrap">Attendance: </strong><%=
-    averageClassAttendance %>%</span> 
-  </p>
-  <% } %>
-</div>
+    <%- include('../partials/headers/sub-header.ejs', { 
+      subHeaderText: `<strong class="fw-lighter">Average Class <span class="text-nowrap">Attendance: </strong>${averageClassAttendance}%</span>`, 
+      search: false 
+    })  %> 
+  <% } %> 
 
-<% var num = 1 %>
-<div class="table-responsive">
-  <table class="table table-hover">
-    <thead class="thead-light">
-      <tr>
-        <th scope="col" class="px-0"></th>
-        <th scope="col">Date</th>
-        <th scope="col">Last Updated</th>
-        <th scope="col" class="text-center">Class Attendance</th>
-        <th scope="col" class="text-center">View</th>
-      </tr>
-    </thead>
-    <tbody class="client-pagination">
-      <% for (let attendanceDay of attendances.sort(function(a,b) { return new
-      Date(b.date) - new Date(a.date) })) { %>
-      <tr class="hide">
-        <th scope="row" class="text-center ps-0"><%= num++ %>.</th>
-        <td><%= moment(attendanceDay.date).format('LL') %></td>
-        <td><%= moment(attendanceDay.dateUpdated).format('LL') %></td>
-        <td class="text-center">
-          <%= Number(Math.round( 100*(attendanceDay.numStudentsPresent /
-          singleClass.numStudentsInClass) + 'e2') + 'e-2') %>%
-        </td>
-        <td class="text-center">
-          <a
-            href="/class/<%= singleClass._id %>/attendance/<%= attendanceDay._id %>"
-            class="btn btn-outline-secondary"
-          >
-            <i class="fas fa-eye"></i>
-          </a>
-        </td>
-      </tr>
-      <% } %>
-    </tbody>
-  </table>
-</div>
-
- <% if (count > 0) { %> <%-
-include('../partials/pagination.ejs', { url, page: 1, pageLimit: 5, count,
-clientPagination: true }) %> <% } %>
+<%- include('../partials/tables/attendance-table.ejs', { 
+  attendances, 
+  num: 1, 
+  singleClass 
+}) %>
+<% if (count > 0) { %>
+  <%- include('../partials/pagination.ejs', { 
+    url, 
+    page: 1, 
+    pageLimit: 5, 
+    count, 
+    clientPagination: true 
+  }) %>
+<% } %>

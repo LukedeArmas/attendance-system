@@ -62,8 +62,18 @@ module.exports.attendanceSchema = Joi.object({
     });
     return errors;
   }),
-    studentsPresent: Joi.array(),
+    studentsPresent: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/).escapeHTML()),
     limit: Joi.number()
+})
+
+module.exports.studentListSchema = Joi.object({
+  studentList: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/).escapeHTML()),
+  limit: Joi.number()
+})
+
+module.exports.editAttendanceSchema = Joi.object({
+  studentsPresent: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/).escapeHTML()),
+  limit: Joi.number()
 })
 
 module.exports.newTeacherSchema = Joi.object({
