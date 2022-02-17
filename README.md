@@ -50,6 +50,7 @@ Teacher: username: 'ldearmas', password: '111111'
 2. Express Router: Separate Class, Student, Teacher, and Attendance routing.
 3. Reusable Views: Views are separated into reusable components/partials. State is passed top down.
 4. Authorization: Express middleware to check if logged in first, then the type of user.
+5. Agile Development: Assisted with the use of a Trello board
 
 ## Main Technologies:
 1. MongoDB: Database.
