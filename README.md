@@ -14,7 +14,7 @@ Teacher: username: 'ldearmas', password: '111111'
 
 ## Teacher features:
 1. View class dashboard of all the classes the teacher instructs.
-2. View class details along with a table of students in the class, containing the attendance mark for each student
+2. View class details along with a table of students in the class, containing the attendance mark for each student.
 3. View every student in their class, allowing the teacher to view their attendance marks in other courses.
 4. View attendance home page for the class, containing the average class percentage for the class and a table of all attendances recorded.
 5. Mark new attendance.
@@ -56,8 +56,8 @@ Teacher: username: 'ldearmas', password: '111111'
 2. Mongoose: Database modeling.
 3. Node: Back-end runtime.
 4. Express: Server framework.
-5. Joi: Server side user data validation
-6. EJS: HTML templating
-7. Bootstrap: Front-end framework
+5. Joi: Server side user data validation.
+6. EJS: HTML templating.
+7. Bootstrap: Front-end framework.
 8. Javascript: Front-end scripting.
 9. HTML/CSS: Markup and styling.
