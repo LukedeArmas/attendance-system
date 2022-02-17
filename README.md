@@ -8,8 +8,7 @@ Application Link: https://lit-mountain-98161.herokuapp.com/
 
 ## Test Accounts:
 
-Administrator: username: 'admin', password: 'admin'
-
+Administrator: username: 'admin', password: 'admin'</br>
 Teacher: username: 'ldearmas', password: '111111'
 
 ## Teacher features:
