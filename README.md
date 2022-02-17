@@ -47,10 +47,11 @@ Teacher: username: 'ldearmas', password: '111111'
 
 ## Patterns/Methodologies:
 1. Model View Controller: Mongoose models, Express/Javascript controllers, EJS views.
-2. Express Router: Separate Class, Student, Teacher, and Attendance routing.
-3. Reusable Views: Views are separated into reusable components/partials. State is passed top down.
-4. Authorization: Express middleware to check if logged in first, then the type of user.
-5. Agile Development: Assisted with the use of a Trello board
+2. Restful API: Back-end end point routing follows REST.
+3. Express Router: Separate Class, Student, Teacher, and Attendance routing.
+4. Reusable Views: Views are separated into reusable components/partials. State is passed top down.
+5. Authorization: Express middleware to check if logged in first, then the type of user.
+6. Agile Development: Assisted with the use of a Trello board
 
 ## Main Technologies:
 1. MongoDB: Database.
