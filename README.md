@@ -4,7 +4,8 @@ The following application is an attendance management system, allowing a school 
 
 The attendance management system allows the user to log in as either an administrator or a teacher, which determines which features the user will be able to use.
 
-Application Link: https://lit-mountain-98161.herokuapp.com/
+Application Link: https://lit-mountain-98161.herokuapp.com/ </br>
+Trello board: https://trello.com/b/lcn8eZ9n/attendance-system
 
 ## Test Accounts:
 
