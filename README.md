@@ -1,6 +1,6 @@
 # Attendance Management System
 
-The following application is an attendance management system, allowing a school or organization to track and organize their attendance.
+The following application allows a school or organization to track and organize their attendance.
 
 The attendance management system allows the user to log in as either an administrator or a teacher, which determines which features the user will be able to use.
 
