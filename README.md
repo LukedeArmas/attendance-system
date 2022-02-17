@@ -1,4 +1,4 @@
-# attendance-system
+# Attendance Management System
 
 The following application is an attendance management system, allowing a school or organization to track and organize their attendance.
 
