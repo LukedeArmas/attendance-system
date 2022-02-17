@@ -23,8 +23,8 @@ const passportLocal = require('passport-local')
 const databaseUrl = process.env.DB_URL || 'mongodb://localhost:27017/attendance'
 // const databaseUrl = 'mongodb://localhost:27017/attendance'
 const MongoStore = require('connect-mongo')
-const { isLoggedIn } = require('./middleware.js')
 const myError = require('./utils/myError')
+const { isLoggedIn } = require('./middleware.js')
 const helmet = require('helmet')
 
 const mongoose = require('mongoose')
@@ -49,29 +49,6 @@ app.use(
     mongoSanitize({
         replaceWith: '_'
     }))
-app.use(cookieParser())
-
-const secret = process.env.SECRET || 'temporarysecret'
-
-const sessionConfig = {
-    name: 'mySession',
-    secret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        httpOnly: true,
-        secure: true,
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-        maxAge: 1000 * 60 * 60 * 24 * 7
-    },
-    store: MongoStore.create({
-        mongoUrl: databaseUrl,
-        secret,
-        touchAfter: 24 * 60 * 60
-    })
-}
-app.use(session(sessionConfig))
-app.use(flash())
 
 const scriptSrcUrls = [
     "https://stackpath.bootstrapcdn.com/",
@@ -98,7 +75,6 @@ const fontSrcUrls = [
 ]
 const imgSrcUrls = []
 
-
 app.use(
     helmet.contentSecurityPolicy({
         directives: {
@@ -114,6 +90,30 @@ app.use(
         }
     })
 )
+
+const secret = process.env.SECRET || 'temporarysecret'
+
+const sessionConfig = {
+    name: 'mySession',
+    secret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        // If secure is set to true then the session cookie will not be set on Microsoft Edge
+        // secure: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    },
+    store: MongoStore.create({
+        mongoUrl: databaseUrl,
+        secret,
+        touchAfter: 24 * 60 * 60
+    })
+}
+app.use(session(sessionConfig))
+app.use(flash())
+
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -149,12 +149,12 @@ app.get('/login', (req, res, next) => {
     res.render('login', {login: true})
 })
 
-app.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res, next) => {
+app.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
     req.flash('success', 'Welcome Back!')
-    res.redirect('/')
+    return res.redirect('/class')
 })
 
-app.get('/logout', (req, res, next) => {
+app.get('/logout', (req, res) => {
     req.logout()
     req.flash('success', 'Goodbye!')
     res.redirect('/login')
