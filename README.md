@@ -62,3 +62,4 @@ Teacher: username: 'ldearmas', password: '111111'
 7. Bootstrap: Front-end framework.
 8. Javascript: Front-end scripting.
 9. HTML/CSS: Markup and styling.
+10. Git: Version Control.
