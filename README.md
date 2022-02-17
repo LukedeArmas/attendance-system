@@ -18,7 +18,7 @@ Teacher: username: 'ldearmas', password: '111111'
 3. View every student in their class, allowing the teacher to view their attendance marks in other courses.
 4. View attendance home page for the class, containing the average class percentage for the class and a table of all attendances recorded.
 5. Mark new attendance.
-5. Update or delete a recorded attendance.
+6. Update or delete a recorded attendance.
 
 ## Administrator features:
 1. All of the Teacher features (the administrators class dashboard will contain all classes).
