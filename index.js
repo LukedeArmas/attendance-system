@@ -13,7 +13,6 @@ const teacherRoutes = require('./Routes/teacher.js')
 const Student = require('./models/student')
 const Class = require('./models/class')
 const asyncError = require('./utils/asyncError.js')
-const mongoSanitize = require('express-mongo-sanitize')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const flash = require('connect-flash')
@@ -25,6 +24,7 @@ const databaseUrl = process.env.DB_URL || 'mongodb://localhost:27017/attendance'
 const MongoStore = require('connect-mongo')
 const myError = require('./utils/myError')
 const { isLoggedIn } = require('./middleware.js')
+const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet')
 
 const mongoose = require('mongoose')
@@ -56,7 +56,9 @@ const scriptSrcUrls = [
     "https://cdnjs.cloudflare.com/",
     "https://cdn.jsdelivr.net/",
     "https://ajax.googleapis.com/",
+    `${process.env.PORT}/site.webmanifest`
 ]
+
 const styleSrcUrls = [
     "https://cdnjs.cloudflare.com/",
     "https://kit-free.fontawesome.com/",
@@ -86,7 +88,8 @@ app.use(
             childSrc: ["blob:"],
             objectSrc: [],
             imgSrc: ["'self'", "blob:", "data:", ...imgSrcUrls],
-            fontSrc: ["'self'", ...fontSrcUrls]
+            fontSrc: ["'self'", ...fontSrcUrls],
+            manifestSrc: [`http://${process.env.PORT || 'localhost:3000'}/site.webmanifest`]
         }
     })
 )

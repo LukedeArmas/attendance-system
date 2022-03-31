@@ -4,7 +4,24 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/images/attendance-image.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
@@ -33,11 +50,11 @@
     >
       <span
         class="display-1 fs-5 navbar-brand bg-light text-dark col-md-3 col-mdlg-2 me-0 px-3"
-        >UniTracker</span
+        >Attendance System</span
       >
       <% if (currentUser) { %>
-      <div class="navbar-nav flex-row">
-        <div class="nav-item">
+      <div class="navbar-nav flex-row-reverse">
+        <div class="nav-item me-3 me-md-0">
           <button
             class="navbar-toggler d-md-none collapsed"
             type="button"
@@ -52,7 +69,7 @@
         </div>
         <div class="d-flex flex-direction-column nav-item text-nowrap">
           <% if (currentUser) { %>
-          <a class="nav-link px-3 logout" href="/logout">Logout</a>
+          <a class="nav-link px-3 logout top-logout-link hide" href="/logout">Logout</a>
           <% } %>
         </div>
       </div>
@@ -156,6 +173,25 @@
             </li>
           </ul>
           <% } %>
+          <div class='side-logout-div hide'>
+            <h6
+            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
+            >
+            <span>User</span>
+            </h6>
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  aria-current="page"
+                  href="/logout"
+                >
+                  <span data-feather="user"></span>
+                  Logout
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
       <% } %>
@@ -216,5 +252,6 @@
     <script src="/scripts/validatePassword.js"></script>
     <script src="/scripts/clientPagination.js"></script>
     <script src="/scripts/serverPagination.js"></script>
+    <script src="/scripts/showLogout.js"></script>
   </body>
 </html>
