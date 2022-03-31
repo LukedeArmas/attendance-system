@@ -77,6 +77,8 @@ const fontSrcUrls = [
 ]
 const imgSrcUrls = []
 
+const manifestSrcUrl = process.env.NODE_ENV === "production" ? 'https://lit-mountain-98161.herokuapp.com/site.webmanifest' : 'http://localhost:3000/site.webmanifest'
+
 app.use(
     helmet.contentSecurityPolicy({
         directives: {
@@ -89,7 +91,7 @@ app.use(
             objectSrc: [],
             imgSrc: ["'self'", "blob:", "data:", ...imgSrcUrls],
             fontSrc: ["'self'", ...fontSrcUrls],
-            manifestSrc: [`http://${process.env.PORT || 'localhost:3000'}/site.webmanifest`]
+            manifestSrc: [manifestSrcUrl]
         }
     })
 )

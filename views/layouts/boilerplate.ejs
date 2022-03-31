@@ -95,6 +95,19 @@
                 Monitor
               </a>
             </li>
+            <div class='side-logout-div hide'>
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  aria-current="page"
+                  href="/logout"
+                >
+                  <span data-feather="user"></span>
+                  Logout
+                </a>
+              </li>
+          </div>
           </ul>
           <% if (currentUser && currentUser.username === 'admin') { %>
           <h6
@@ -173,25 +186,6 @@
             </li>
           </ul>
           <% } %>
-          <div class='side-logout-div hide'>
-            <h6
-            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
-            >
-            <span>User</span>
-            </h6>
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  aria-current="page"
-                  href="/logout"
-                >
-                  <span data-feather="user"></span>
-                  Logout
-                </a>
-              </li>
-            </ul>
-          </div>
         </div>
       </nav>
       <% } %>
